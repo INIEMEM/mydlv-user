@@ -12,7 +12,7 @@ export default function Auth() {
   const [isLogin, setIsLogin] = useState(mode === "login");
 
   const user = JSON.parse(localStorage.getItem("user"));
-  if (user) return <Navigate to="/home" replace />;
+  if (user) return <Navigate to="/explore" replace />;
 
   useEffect(() => {
     setIsLogin(mode === "login");
@@ -21,7 +21,7 @@ export default function Auth() {
   const onFinish = (values) => {
     localStorage.setItem("user", JSON.stringify(values));
     message.success(isLogin ? "Login successful!" : "Signup successful!");
-    navigate("/home");
+    navigate("/explore");
   };
 
   const handleGoogleLogin = () => {
