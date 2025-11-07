@@ -24,7 +24,7 @@ export default function DashboardLayout() {
   const menuItems = [
     { key: "explore", icon: <HomeOutlined />, label: "Explore" },
     { key: "notifications", icon: <BellOutlined />, label: "Notifications" },
-    { key: "shopping", icon: <ShoppingOutlined />, label: "Shopping List" },
+    { key: "shopping-list", icon: <ShoppingOutlined />, label: "Shopping List" },
     { key: "rider", icon: <CarOutlined />, label: "My Rider" },
     { key: "orders", icon: <OrderedListOutlined />, label: "My Orders" },
     { key: "services", icon: <ToolOutlined />, label: "My Services" },
@@ -47,9 +47,10 @@ export default function DashboardLayout() {
         onCollapse={setCollapsed}
         breakpoint="lg"
         collapsedWidth="0"
-        className="hidden lg:block"
+        className="hidden lg:block fixed h-screen"
         theme="light"
         width={220}
+        
       >
         {/* <div className="flex justify-center items-center py-6">
           <img src={Logo} alt="Logo" className="w-32" />
@@ -65,7 +66,7 @@ export default function DashboardLayout() {
       </Sider>
 
       {/* 🟩 Main Layout */}
-      <Layout>
+      <Layout className="main-layout ml-0 lg:ml-[220px]">
         {/* Header */}
         <Header className="bg-white shadow-sm px-6 flex justify-between items-center sticky top-0 z-50">
           <img src={Logo} alt="logo" className="w-28 md:w-32" />
@@ -81,12 +82,12 @@ export default function DashboardLayout() {
         </Header>
 
         {/* Content */}
-        <Content className="p-6">
+        <Content className="p-0">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
-            className="bg-white rounded-xl shadow-sm p-4 min-h-[75vh]"
+            className=" p-4 min-h-[75vh]"
           >
             <Outlet />
           </motion.div>

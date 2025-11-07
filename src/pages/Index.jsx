@@ -5,7 +5,7 @@ import {  ToolOutlined, ClockCircleOutlined, EnvironmentOutlined } from "@ant-de
 import { motion } from "framer-motion";
 import foodHero from "../assets/food-delivery-hero.jpg";
 import handymanService from "../assets/handyman-service.jpg";
-import "@fontsource/poppins";
+// import "@fontsource/poppins";
 // 🔹 Motion Variants
 const fadeUp = {
   hidden: { opacity: 0, y: 40 },

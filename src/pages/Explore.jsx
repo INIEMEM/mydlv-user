@@ -1,23 +1,31 @@
 import React from "react";
 import { Input, Button } from "antd";
 import { motion } from "framer-motion";
-import { SearchOutlined, PlusOutlined } from "@ant-design/icons";
+import { SearchOutlined, PlusOutlined, PlusCircleFilled } from "@ant-design/icons";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { useNavigate } from "react-router-dom";
-import ResturantImages from "../assets/resturants.jpg";
-import LocalMarketsImage from "../assets/localmarket.jpg";
-import SuperMarket from "../assets/supermarket.jpg";
+import ResturantImages from "../assets/rest.png";
+import LocalMarketsImage from "../assets/local.png";
+import SuperMarket from "../assets/shop.png";
+import DrinksImage from "../assets/drinks.png";
+import PharmImage from '../assets/pharm.png';
+import CosmeticsImage from '../assets/cosmetics.png';
+import FashionImage from '../assets/fashion.png';
+import ElectronicsImage from '../assets/electronics.png';
+import ServicesImage from '../assets/services.png';
 
 const categories = [
   { name: "Restaurants", emoji: "🍽️", img: ResturantImages },
   { name: "Supermarkets", emoji: "🛒", img: SuperMarket },
   { name: "Local Markets", emoji: "🥬", img: LocalMarketsImage },
-  { name: "Pharmacies", emoji: "💊", img: "https://images.unsplash.com/photo-1584466977773-e625c37cdd50" },
-  { name: "Electronics", emoji: "⚡", img: "https://images.unsplash.com/photo-1519389950473-47ba0277781c" },
-  { name: "Fashion", emoji: "👗", img: "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c" },
-  { name: "Delivery", emoji: "🚚", img: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe" },
-  { name: "More", emoji: "➕", img: "https://images.unsplash.com/photo-1556740749-887f6717d7e4" },
+  { name: "Pharmacies", emoji: "💊", img: PharmImage },
+  { name: "Electronics", emoji: "⚡", img: ElectronicsImage },
+  { name: "Fashion", emoji: "👗", img: FashionImage },
+  { name: "Cosmetics", emoji: "🚚", img: CosmeticsImage },
+  { name: "Services", emoji: "➕", img: ServicesImage },
+  { name: "Drinks", emoji: "➕", img: DrinksImage },
+
 ];
 const bestSelling = [
   {
@@ -198,8 +206,8 @@ const moreFood = [
 ];
 
 const responsive = {
-  desktop: { breakpoint: { max: 3000, min: 1024 }, items: 3 },
-  tablet: { breakpoint: { max: 1024, min: 464 }, items: 2 },
+  desktop: { breakpoint: { max: 3000, min: 1024 }, items: 1.5 },
+  tablet: { breakpoint: { max: 1024, min: 464 }, items: 1.5 },
   mobile: { breakpoint: { max: 464, min: 0 }, items: 1 },
 };
 
@@ -208,103 +216,118 @@ export default function Explore() {
   return (
     <div className="space-y-12">
       {/* 🏷️ Page Title */}
-      <h1 className="text-2xl font-semibold text-gray-800 text-[#444]">Explore</h1>
+      {/* <h1 className="text-2xl font-semibold text-gray-800 text-[#444]">Explore</h1> */}
 
       {/* 🔍 Search Bar */}
-      <Input
-        size="large"
-        placeholder="Search for restaurants, services, or markets..."
-        prefix={<SearchOutlined className="text-gray-400" />}
-        className="max-w-xl border-gray-300 rounded-xl"
-      />
+      <div className="flex ">
+        <div className="bg-[#222] hidden md:flex  text-white p-2  items-center justify-center font-semibold">
+          Categories
+        </div>
+        <Input
+          size="large"
+          placeholder="Search for restaurants, services, or markets..."
+          // prefix={<SearchOutlined className="text-gray-400" />}
+          className="max-w-xl border-gray-300 rounded-none bg-white"
+        />
+        <Button icon={<SearchOutlined/>} className="p-5 rounded-none bg-[#222] text-white"/>
+      </div>
 
       {/* 🟩 Categories + CTA */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-6 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-8 mt-6 items-start">
         {/* LEFT */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-          {categories.map((cat, index) => (
+          {/* Categories (responsive, stable) */}
+          {/* Small screens: single grid with 3 cols */}
+          <div className="md:hidden grid grid-cols-3 gap-4">
+            {categories.map((cat, index) => (
+              <motion.div
+                key={index}
+                whileHover={{ scale: 1.05 }}
+                transition={{ type: "spring", stiffness: 200 }}
+                className="relative rounded-2xl overflow-hidden shadow-sm cursor-pointer"
+              >
+                <div className="h-36 w-full object-cover brightness-75" />
+                <div className="absolute inset-0 flex flex-col justify-center items-center text-[#222] font-semibold text-[14px]">
+                  <img src={cat.img} alt={cat.name} className="w-[80px] h-[50px] object-contain" />
+                  {cat.name}
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+      {/* Medium+ screens: explicit two-row layout */}
+      <div className="hidden md:block">
+        {/* First row: exactly 5 columns */}
+        <div className="grid grid-cols-5 gap-4">
+          {categories.slice(0, 5).map((cat, idx) => (
             <motion.div
-              key={index}
+              key={idx}
               whileHover={{ scale: 1.05 }}
               transition={{ type: "spring", stiffness: 200 }}
-              className="relative rounded-2xl overflow-hidden shadow-sm cursor-pointer"
+              className="relative rounded-2xl overflow-hidden  cursor-pointer"
             >
-              <img
-                src={cat.img}
-                alt={cat.name}
-                className="h-36 w-full object-cover brightness-75"
-              />
-              <div className="absolute inset-0 flex flex-col justify-center items-center text-white font-semibold text-lg">
-                <span className="text-3xl mb-1">{cat.emoji}</span>
+              <div className="h-36 w-full object-cover brightness-75" />
+              <div className="absolute inset-0 flex flex-col justify-center items-center text-[#222] font-semibold text-[14px]">
+                <img src={cat.img} alt={cat.name} className="w-[80px] h-[50px] object-contain" />
                 {cat.name}
               </div>
             </motion.div>
           ))}
         </div>
 
+        {/* Second row: center remaining items */}
+        <div className="mt-4 flex justify-center gap-4">
+          {categories.slice(5).map((cat, idx) => (
+            <motion.div
+              key={`second-${idx}`}
+              whileHover={{ scale: 1.05 }}
+              transition={{ type: "spring", stiffness: 200 }}
+              style={{ width: "calc((100%/5) - 0.8rem)" }} /* give same visual width as col of 5 */
+              className="relative rounded-2xl overflow-hidden  cursor-pointer"
+            >
+              <div className="h-36 w-full object-cover brightness-75" />
+              <div className="absolute inset-0 flex flex-col justify-center items-center text-[#222] font-semibold text-[14px]">
+                <img src={cat.img} alt={cat.name} className="w-[80px] h-[50px] object-contain" />
+                {cat.name}
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+
+
         {/* RIGHT */}
         <motion.div
           initial={{ opacity: 0, x: 40 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6 }}
-          className="bg-white rounded-2xl p-8 flex flex-col justify-center shadow-md border border-gray-100"
+          className=" rounded-2xl p-8 flex flex-col justify-center  "
         >
-          <h2 className="text-2xl font-semibold mb-4 leading-snug text-gray-800 text-[#444]">
-            Improve your shopping <br /> experience with <br />
-            <span className="text-[#37B34A] font-bold">AI powered</span> shopping list
+          <h2 className="text-xl font-light mb-4 leading-snug text-gray-800 text-[#444]">
+            IMPROVE YOUR SHOPPING <br /> EXPERIENCE WITH
+            AI POWERED  <span className="text-[#37B34A] font-bold">
+            <br /> SHOPPING LIST </span>
           </h2>
 
           <Button
             type="primary"
-            icon={<PlusOutlined />}
+            icon={<PlusCircleFilled color="#37B34A"/>}
             size="large"
             style={{
-              backgroundColor: "#37B34A",
-              borderColor: "#37B34A",
-              borderRadius: "10px",
+              backgroundColor: "#fff",
+              borderColor: "#fff",
+              borderRadius: "12px",
+              color: "#222",
+              
             }}
-            className="mt-2"
+            className="mt-2 shadow-md hover:shadow-lg "
+            onClick={()=> navigate('./shopping-list')}
           >
             Go to shopping list
           </Button>
         </motion.div>
       </div>
       
-      {/* 🍱 Best Selling Food Items */}
-      <section>
-        <h2 className="text-xl font-semibold text-gray-800 mb-5 text-[#444]">
-          Best Selling Food Items
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {bestSelling.map((food, i) => (
-            <motion.div
-              key={i}
-              whileHover={{ scale: 1.03 }}
-              className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4"
-            >
-              <img
-                src={food.img}
-                alt={food.title}
-                className="h-40 w-full object-cover rounded-xl mb-3"
-              />
-              <h4 className="font-semibold text-[#444]">{food.title}</h4>
-              <p className="text-[#37B34A] font-medium mt-1">{food.price}</p>
-              <Button
-                type="primary"
-                size="small"
-                style={{
-                  backgroundColor: "#37B34A",
-                  borderColor: "#37B34A",
-                  borderRadius: "8px",
-                }}
-                className="mt-3"
-              >
-                Add to Cart
-              </Button>
-            </motion.div>
-          ))}
-        </div>
-      </section>
+   
       {/* 🌀 Carousel: Discover More */}
       <div>
         <h2 className="text-xl font-semibold text-gray-800 mb-3 text-[#444]">
@@ -318,17 +341,20 @@ export default function Explore() {
           keyBoardControl
           customTransition="all 0.7s ease"
           transitionDuration={800}
+          containerClass="px-4" // add a little horizontal padding
+          itemClass="pr-4" // space between items
         >
           {featuredItems.map((item, index) => (
             <motion.div
               key={index}
               whileHover={{ scale: 1.03 }}
-              className="relative rounded-2xl overflow-hidden shadow-md mx-2 cursor-pointer"
+              className="relative rounded-2xl overflow-hidden shadow-md mx-2 cursor-pointer "
             >
               <img
                 src={item.img}
                 alt={item.title}
                 className="h-64 w-full object-cover brightness-75"
+                loading="lazy"
               />
               <div className="absolute inset-0 bg-black bg-opacity-30 flex flex-col justify-end p-4 text-white">
                 <h3 className="text-lg font-semibold">{item.title}</h3>
@@ -338,124 +364,8 @@ export default function Explore() {
           ))}
         </Carousel>
       </div>
-       {/* 🧰 Top Rated Handymen */}
-       <section>
-        <h2 className="text-xl font-semibold text-gray-800 mb-4">
-          Top Rated Handymen
-        </h2>
-
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {tophandymanServices.map((h) => (
-            <motion.div
-              key={h.id}
-              whileHover={{ scale: 1.02 }}
-              transition={{ type: "spring", stiffness: 150 }}
-              className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex flex-col"
-            >
-              <img
-                src={h.img}
-                alt={h.name}
-                className="h-40 w-full object-cover rounded-xl mb-3"
-              />
-              <div className="flex-1 flex flex-col">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h3 className="font-semibold text-gray-800">{h.name}</h3>
-                    <p className="text-sm text-gray-500">{h.role}</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-[#37B34A] font-semibold text-sm">
-                      {h.priceFrom}
-                    </p>
-                    <p className="text-xs text-gray-400">{h.distance}</p>
-                  </div>
-                </div>
-
-                <div className="mt-2 flex items-center gap-3 text-sm text-gray-600">
-                  <span className="text-yellow-400">★</span>
-                  <span>{h.rating}</span>
-                  <span className="text-gray-400">({h.jobs} jobs)</span>
-                </div>
-
-                <div className="mt-auto flex gap-2 pt-4">
-                  <Button
-                    onClick={() => navigate(`/handyman/${h.id}`)}
-                    className="flex-1 border-gray-300 rounded-lg"
-                  >
-                    View Profile
-                  </Button>
-                  <Button
-                    type="primary"
-                    onClick={() => navigate(`/hire/${h.id}`)}
-                    style={{
-                      backgroundColor: "#37B34A",
-                      borderColor: "#37B34A",
-                      borderRadius: "8px",
-                    }}
-                  >
-                    Hire
-                  </Button>
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </section>
-      {/* 🔧 Carousel: Handyman Services */}
-      <div>
-        <h2 className="text-xl font-semibold text-gray-800 mb-3 text-[#444]">
-           Handyman Services
-        </h2>
-        <Carousel
-          responsive={responsive}
-          infinite
-          autoPlay
-          autoPlaySpeed={4000}
-          keyBoardControl
-          customTransition="all 0.7s ease"
-          transitionDuration={800}
-        >
-          {handymanServices.map((service, index) => (
-            <motion.div
-              key={index}
-              whileHover={{ scale: 1.05 }}
-              className="bg-white shadow-md mx-3 p-5 rounded-2xl text-center border border-gray-100 flex flex-col justify-center items-center"
-            >
-              <img
-                src={service.img}
-                alt={service.name}
-                className="h-24 w-24 object-cover rounded-full mb-3"
-              />
-              <span className="text-2xl mb-1">{service.icon}</span>
-              <h4 className="font-semibold text-gray-600">{service.name}</h4>
-            </motion.div>
-          ))}
-        </Carousel>
-      </div>
-
-      {/* 🍔 More Food Items */}
-      <section>
-        <h2 className="text-xl font-semibold text-gray-800 mb-5 text-[#444]">
-          More Food You’ll Love
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {moreFood.map((food, i) => (
-            <motion.div
-              key={i}
-              whileHover={{ scale: 1.03 }}
-              className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4"
-            >
-              <img
-                src={food.img}
-                alt={food.title}
-                className="h-40 w-full object-cover rounded-xl mb-3"
-              />
-              <h4 className="font-semibold text-gray-600">{food.title}</h4>
-              <p className="text-[#37B34A] font-medium mt-1">{food.price}</p>
-            </motion.div>
-          ))}
-        </div>
-      </section>
+  
+ 
     </div>
   );
 }

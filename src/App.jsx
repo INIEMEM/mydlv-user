@@ -8,6 +8,7 @@ import {
   Navigate,
 } from "react-router-dom";
 
+import Context from "./context/Context";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import DashboardLayout from "./layouts/DashboardLayout";
@@ -19,12 +20,8 @@ import HandymanProfile from "./pages/HandymanProfile";
 import HireHandyman from "./pages/HireHandyman";
 import ShoppingList from "./pages/shoppingList";
 import ProductSelection from "./pages/shoppingList/ProductSelection";
-// import Notifications from "./pages/Notifications";
-// import ShoppingList from "./pages/ShoppingList";
-// import MyRider from "./pages/MyRider";
-// import MyOrders from "./pages/MyOrders";
-// import MyServices from "./pages/MyServices";
-// import Support from "./pages/Support";
+import ItemsMatchingPage from "./pages/shoppingList/shopingListdetails";
+import { CartProvider } from "./context/CartContext";
 
 function App() {
   const isLoggedIn = !!localStorage.getItem("token");
@@ -36,7 +33,7 @@ function App() {
         <Route
           path="/"
           element={
-            isLoggedIn ? <Navigate to="/explore" replace /> : <Index />
+            isLoggedIn ? <Navigate to="/explore" replace /> : <Auth />
           }
         />
 
@@ -59,20 +56,21 @@ function App() {
           <Route path="/explore" element={<Explore />} />
           <Route path="/handyman/:id" element={<HandymanProfile />} />
           <Route path="/hire/:id" element={<HireHandyman />} />
-          <Route path="/shopping" element={<ShoppingList />} />
-          <Route path="/products" element={<ProductSelection />} />
-          {/* <Route path="/notifications" element={<Notifications />} />
           <Route path="/shopping-list" element={<ShoppingList />} />
-          <Route path="/my-rider" element={<MyRider />} />
-          <Route path="/my-orders" element={<MyOrders />} />
-          <Route path="/my-services" element={<MyServices />} />
-          <Route path="/support" element={<Support />} /> */}
+          <Route path="/shopping-list/:item" element={<ItemsMatchingPage />} />
+          <Route path="/products" element={<ProductSelection />} />
         </Route>
       </>
     )
   );
 
-  return <RouterProvider router={router} />;
+  return (
+    <Context>
+      <CartProvider>
+        <RouterProvider router={router} />
+      </CartProvider>
+    </Context>
+  );
 }
 
-export default App;
+export default App; 

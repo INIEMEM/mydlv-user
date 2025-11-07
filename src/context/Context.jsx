@@ -29,8 +29,7 @@ const Context = (props) => {
       baseUrl,
       user,
       setUser,
-      baseUrl2,
-      baseUrl23
+      
     }
   return (
     <MainContext.Provider value={contextValue}>{props.children}</MainContext.Provider> 
