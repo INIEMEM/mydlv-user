@@ -43,7 +43,7 @@ export default function ShoppingList() {
   };
 
   return (
-    <div className="p-4 md:p-1  min-h-screen">
+    <div className="p-0 md:p-1  min-h-screen">
       <div className="max-w-6xl mx-auto">
         {/* Mobile Tabs */}
         <div className="flex gap-2 mb-4 lg:hidden">
@@ -51,8 +51,8 @@ export default function ShoppingList() {
             onClick={() => setActiveTab('create')}
             className={`flex-1 py-2 px-4 rounded font-medium text-sm ${
               activeTab === 'create'
-                ? 'bg-gray-900 text-white'
-                : 'bg-white text-gray-700 border border-gray-300'
+                ? 'bg-[#333] text-white'
+                : ' text-gray-700 border border-gray-300'
             }`}
           >
             Create Shopping List
@@ -61,9 +61,9 @@ export default function ShoppingList() {
             onClick={() => setActiveTab('saved')}
             className={`flex-1 py-2 px-4 rounded font-medium text-sm ${
               activeTab === 'saved'
-                ? 'bg-gray-900 text-white'
-                : 'bg-white text-gray-700 border border-gray-300'
-            }`}
+                ? 'bg-[#333] text-white'
+                : ' text-gray-700 border border-gray-300'
+            }`} 
           >
             Saved List
           </button>
@@ -71,9 +71,9 @@ export default function ShoppingList() {
 
         <div className="flex flex-col lg:flex-row gap-6">
           {/* Shopping List Form */}
-          <div className={`flex-1 ${activeTab === 'create' ? 'block' : 'hidden'} lg:block`}>
+          <div className={`flex-1 ${activeTab === 'create' ? 'block' : 'hidden'}  lg:block`}>
             <div className="   p-4 md:p-6">
-              <div className="mb-4">
+              <div className="mb-4 bg-[#222] text-center p-2 text-white rounded hidden md:block">
                 <h3 className="text-sm md:text-base font-semibold mb-1">
                   Shop Better | Create a your shopping list
                 </h3>
@@ -88,11 +88,11 @@ export default function ShoppingList() {
                     onChange={(e) => setCurrentItem(e.target.value)}
                     onKeyPress={(e) => e.key === 'Enter' && addItem()}
                     placeholder="Type item and press Enter..."
-                    className="flex-1 px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:border-green-500"
+                    className="flex-1 px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none  bg-transparent"
                   />
                   <button
                     onClick={addItem}
-                    className="px-3 md:px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 text-sm flex items-center justify-center"
+                    className="px-3 md:px-4 py-2 bg-[#444] text-white rounded hover:bg-[#222] text-sm flex items-center justify-center"
                   >
                     <Plus size={16} />
                   </button>
@@ -101,7 +101,7 @@ export default function ShoppingList() {
                 {/* Scrollable Items List */}
                 <div className="border border-gray-200 rounded h-48 md:h-64 overflow-y-auto bg-gray-50">
                   {items.length === 0 ? (
-                    <div className="flex items-center justify-center h-full text-gray-400 text-xs md:text-sm px-4 text-center">
+                    <div className="flex items-center justify-center h-full text-gray-400 text-xs md:text-sm px-4 text-center ">
                       Start adding items to your list
                     </div>
                   ) : (
@@ -162,8 +162,8 @@ export default function ShoppingList() {
           </div>
 
           {/* Saved Lists Sidebar */}
-          <div className={`w-full lg:w-64 ${activeTab === 'saved' ? 'block' : 'hidden'} lg:block`}>
-            <div className="bg-gray-800 text-white px-4 py-2 rounded-t text-sm font-medium">
+          <div className={`w-full lg:w-64 ${activeTab === 'saved' ? 'block' : 'hidden'} lg:block `}>
+            <div className="bg-[#222] text-center text-white px-4 py-2 rounded-t text-sm font-medium hidden md:block">
               Saved shopping List
             </div>
             <div className="rounded-b p-3 space-y-2 max-h-96 lg:max-h-none overflow-y-auto">
@@ -173,11 +173,11 @@ export default function ShoppingList() {
                 </div>
               ) : (
                 savedLists.map((list) => (
-                  <div key={list.id} className=" rounded p-3">
-                    <div className="flex items-center justify-between mb-2">
+                  <div key={list.id} className="flex gap-3 rounded p-3">
+                    <div className="flex flex-3 w-[120px] items-center justify-between mb-2">
                       <span className="text-sm font-medium break-words">{list.name}</span>
                     </div>
-                    <button className="w-full bg-gray-900 text-white py-1.5 rounded text-xs hover:bg-gray-800">
+                    <button className="w-full flex-1 bg-[#333] text-white h-[30px] rounded text-xs hover:bg-gray-800">
                       View
                     </button>
                   </div>

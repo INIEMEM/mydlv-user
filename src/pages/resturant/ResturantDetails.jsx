@@ -199,7 +199,7 @@ export default function RestaurantDetailsPage() {
   return (
     <div className="min-h-screen">
       {/* Breadcrumb */}
-      <div className="border-b border-gray-200 px-4 py-3">
+      <div className="border-b border-gray-200 px- py-3">
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center gap-2 text-sm">
             <button className="text-green-600 font-medium hover:text-green-700 flex items-center gap-1">
@@ -217,9 +217,9 @@ export default function RestaurantDetailsPage() {
         <div className="flex-1 min-w-0">
           {/* Restaurant Header */}
           <div className="border-b border-gray-200">
-            <div className="px-4 py-6">
+            <div className="px- py-6">
               <div className="flex gap-4">
-                <div className="w-24 h-24 bg-gray-200 rounded-lg overflow-hidden flex-shrink-0">
+                <div className="w-20 h-20 md:w-24 md:h-24 bg-gray-200 rounded-lg overflow-hidden flex-shrink-0">
                   <img 
                     src={restaurantData.img} 
                     alt={restaurantData.name}
@@ -229,7 +229,7 @@ export default function RestaurantDetailsPage() {
                 
                 <div className="flex-1">
                   <div className="flex items-start justify-between mb-2">
-                    <h1 className="text-xl font-bold text-gray-900">
+                    <h1 className="md:text-xl text-lg font-bold text-gray-900">
                       {restaurantData.name}
                     </h1>
                     <button
@@ -287,7 +287,7 @@ export default function RestaurantDetailsPage() {
           {/* Category Tabs */}
           <div className="border-b border-gray-200">
             <div className="overflow-x-auto">
-              <div className="flex gap-2 px-4 py-3 min-w-max">
+              <div className="flex gap-2 px- py-3 min-w-max">
                 {categories.map((category) => (
                   <button
                     key={category}
@@ -306,7 +306,7 @@ export default function RestaurantDetailsPage() {
           </div>
 
           {/* Menu Items */}
-          <div className="p-4">
+          <div className="">
             {Object.entries(filteredMenu).map(([category, items]) => (
               <div key={category} className="mb-8">
                 <h2 className="text-lg font-bold text-gray-900 mb-4">{category}</h2>
@@ -317,10 +317,10 @@ export default function RestaurantDetailsPage() {
                     return (
                       <div
                         key={item.id}
-                        className="rounded-xl border border-gray-200 overflow-hidden hover:shadow-md transition-shadow"
+                        className="rounded-xl  border border-gray-200 overflow-hidden hover:shadow-md transition-shadow"
                       >
-                        <div className="flex gap-3 p-4">
-                          <div className="w-24 h-24 bg-gray-200 rounded-lg overflow-hidden flex-shrink-0">
+                        <div className="flex gap-3 p">
+                          <div className="md:w-24 md:h-24 w-16 h-16 bg-gray-200 rounded-lg overflow-hidden flex-shrink-0">
                             <img 
                               src={item.image} 
                               alt={item.name}
@@ -336,7 +336,7 @@ export default function RestaurantDetailsPage() {
                               {item.description}
                             </p>
                             <div className="flex items-center justify-between">
-                              <span className="text-lg font-bold text-gray-900">
+                              <span className="text-sm font-bold text-gray-900">
                                 ₦{item.price.toLocaleString()}
                               </span>
                               <button

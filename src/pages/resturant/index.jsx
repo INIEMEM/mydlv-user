@@ -145,48 +145,88 @@ export default function RestaurantListing() {
 
   return (
     <div className="min-h-screen ">
-      {/* Breadcrumb & Search Section */}
-      <div className=" top-0 z-10">
+      {/* Breadcrumb & Search Section - MOBILE OPTIMIZED */}
+      <div className="top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 py-4">
-          {/* Breadcrumb */}
-          <div className="flex items-center gap-2 text-sm mb-4">
-            <span className="text-green-600 font-medium cursor-pointer">Explore</span>
-            <span className="text-gray-400">›</span>
-            <span className="text-gray-800 font-medium">Restaurant</span>
+          {/* Breadcrumb with Filter on Mobile */}
+          <div className="flex items-center justify-between gap-2 text-sm mb-4">
+            <div className="flex items-center gap-2">
+              <span className="text-green-600 font-medium cursor-pointer">Explore</span>
+              <span className="text-gray-400">›</span>
+              <span className="text-gray-800 font-medium">Restaurant</span>
+            </div>
+            {/* Filter button visible only on mobile */}
+            <div className="flex sm:hidden items-center gap-2">
+              {activeFilterCount > 0 && (
+                <Button
+                  size="middle"
+                  className="bg-gray-200 text-[#222] rounded-md px-3"
+                >
+                  {activeFilterCount}
+                </Button>
+              )}
+              <Button
+                size="middle"
+                icon={<FilterOutlined />}
+                onClick={() => setFilterDrawerOpen(true)}
+                className="bg-[#222] text-white rounded-md px-4 hover:bg-[#333]"
+              >
+                Filter
+              </Button>
+            </div>
           </div>
 
-          {/* Search Bar */}
-          <div className="flex  ">
-            <Button
-              size="large"
-              className="bg-[#222] text-white rounded-none px-6 hover:bg-[#333]"
-            >
-              Restaurant
-            </Button>
-            <Input
-              size="large"
-              placeholder="Search"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              suffix={<SearchOutlined className="text-gray-400" />}
-              className="flex-1 rounded-none"
-            />
-            {activeFilterCount > 0 && (
+          {/* Search Bar - Responsive Layout */}
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-0">
+            {/* Desktop Layout (hidden on mobile) */}
+            <div className="hidden sm:flex flex-1">
               <Button
                 size="large"
-                className="bg-transparent text-[#222] rounded-none px-4 hover:bg-green-700"
+                className="bg-[#222] text-white rounded-none px-6 hover:bg-[#333]"
               >
-                {activeFilterCount}
+                Restaurant
               </Button>
-            )}
-            <Button
-              size="large"
-              icon={<FilterOutlined />}
-              onClick={() => setFilterDrawerOpen(true)}
-              className="bg-[#222] text-white rounded-none px-6 hover:bg-[#333]"
-            >
-              Filter
-            </Button>
+              <Input
+                size="large"
+                placeholder="Search"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                suffix={<SearchOutlined className="text-gray-400" />}
+                className="flex-1 rounded-none"
+              />
+              {activeFilterCount > 0 && (
+                <Button
+                  size="large"
+                  className="bg-transparent text-[#222] rounded-none px-4 hover:bg-green-700"
+                >
+                  {activeFilterCount}
+                </Button>
+              )}
+              <Button
+                size="large"
+                icon={<FilterOutlined />}
+                onClick={() => setFilterDrawerOpen(true)}
+                className="bg-[#222] text-white rounded-none px-6 hover:bg-[#333]"
+              >
+                Filter
+              </Button>
+            </div>
+
+            {/* Mobile Layout (visible only on mobile) */}
+            <div className="flex sm:hidden w-full">
+              <Input
+                size="large"
+                placeholder="Search"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="flex-1 rounded-l-md rounded-r-none"
+              />
+              <Button
+                size="large"
+                icon={<SearchOutlined />}
+                className="bg-[#222] text-white rounded-r-md rounded-l-none px-4 hover:bg-[#333] border-l-0"
+              />
+            </div>
           </div>
 
           {/* Results count */}
@@ -283,10 +323,6 @@ export default function RestaurantListing() {
                         <span>From {vendor.priceFrom}</span>
                       </div>
                     </div>
-
-                    {/* <div className="mt-2 text-xs text-gray-400">
-                      📍 {vendor.distance} away
-                    </div> */}
                   </div>
                 </motion.div>
               ))}
@@ -378,10 +414,6 @@ export default function RestaurantListing() {
                         <span>From {vendor.priceFrom}</span>
                       </div>
                     </div>
-
-                    {/* <div className="mt-2 text-xs text-gray-400">
-                      📍 {vendor.distance} away
-                    </div> */}
                   </div>
                 </motion.div>
               ))}
@@ -395,14 +427,6 @@ export default function RestaurantListing() {
             <h2 className="text-lg font-semibold text-gray-800">
               All Products
             </h2>
-            {/* <div className="flex gap-2">
-              <Button size="small" className="rounded-full border-gray-300">
-                <span className="text-lg">🌐</span>
-              </Button>
-              <Button size="small" className="rounded-full border-gray-300">
-                <span className="text-lg">🗺️</span>
-              </Button>
-            </div> */}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
@@ -459,10 +483,6 @@ export default function RestaurantListing() {
                       <span>From {vendor.priceFrom}</span>
                     </div>
                   </div>
-
-                  {/* <div className="mt-2 text-xs text-gray-400">
-                    📍 {vendor.distance} away
-                  </div> */}
                 </div>
               </motion.div>
             ))}

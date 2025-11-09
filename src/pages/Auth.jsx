@@ -119,7 +119,7 @@ export default function Auth() {
                 transition={{ duration: 0.3 }}
               >
                 <h2 className="text-2xl md:text-4xl font-semibold mb-6 text-center text-[#2B2B2B]">
-                  {isLogin ? "Welcome Back " : "Let's get you started!"}
+                  {isLogin ? "Welcome back, User " : "Let's get you started!"}
                 </h2>
 
                 {/* Social Buttons */}
@@ -300,16 +300,24 @@ export default function Auth() {
                 </p>
 
                 <div className="space-y-4">
-                  <div>
+                  <div className="">
                     <label className="block text-sm font-medium mb-2 text-gray-700">
                       {isLogin ? "Passcode" : "Create Passcode"}
                     </label>
-                    <Input.OTP
-                      length={4}
-                      value={passcode}
-                      onChange={setPasscode}
-                      size="large"
-                    />
+                    <div className="w-full">
+                      <Input.OTP
+                        length={4}
+                        value={passcode}
+                        onChange={setPasscode}
+                        size="large"
+                        style={{
+                          // gap: '12px'
+                          // width: '96px'
+                          width: '100%'
+                        }}
+                        // className="large-otp"
+                      />
+                    </div>
                   </div>
 
                   {!isLogin && (
@@ -322,6 +330,7 @@ export default function Auth() {
                         value={confirmPasscode}
                         onChange={setConfirmPasscode}
                         size="large"
+                        
                       />
                     </div>
                   )}

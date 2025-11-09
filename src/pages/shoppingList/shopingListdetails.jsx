@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { ArrowLeft, Heart, ShoppingCart, Plus, Check, Bike } from 'lucide-react';
 import { Cart } from '../../components/carts/CartsComponent';
 import { useCart } from '../../context/CartContext';
-
+import { useNavigate } from 'react-router-dom';
 export default function ItemsMatchingPage() {
   const [cartOpen, setCartOpen] = useState(false);
   const [addedItems, setAddedItems] = useState({});
   const { getCartItemCount, addToCart } = useCart();
-
+  const navigate = useNavigate()
   const shoppingListItems = [
     'Yams 2 tubers',
     'Palm oil one keg',
@@ -124,14 +124,14 @@ export default function ItemsMatchingPage() {
       {/* Header */}
       <div className=" px-4 py-3 sticky top-0 z-10 ">
         <div className="flex items-center justify-between max-w-7xl mx-auto">
-          <button className="flex items-center gap-2 text-gray-700 hover:text-gray-900">
+          <button onClick={()=> navigate('../shopping-list')} className="flex items-center gap-2 text-[#222] hover:text-gray-900">
             <ArrowLeft size={20} />
-            <span className="text-sm font-medium">Back to shopping list</span>
+            <span className="text-[16px] font-medium">Back to shopping list</span>
           </button>
           
           <button 
             onClick={() => setCartOpen(!cartOpen)}
-            className="lg:hidden bg-gray-900 text-white px-4 py-2 rounded text-sm font-medium flex items-center gap-2"
+            className="hidden lg:hidden bg-gray-900 text-white px-4 py-2 rounded text-sm font-medium flex items-center gap-2"
           >
             <ShoppingCart size={16} />
             Cart ({getCartItemCount('shoppingList')})
@@ -162,9 +162,9 @@ export default function ItemsMatchingPage() {
                     <div className="flex-1 min-w-0">
                       <h3 className="font-semibold text-base text-gray-900">{item}</h3>
                     </div>
-                    <button className="flex-shrink-0 w-12 h-12 bg-green-50 rounded-full flex items-center justify-center hover:bg-green-100 transition-colors">
+                    {/* <button className="flex-shrink-0 w-12 h-12 bg-green-50 rounded-full flex items-center justify-center hover:bg-green-100 transition-colors">
                       <Heart size={20} className={product.liked ? 'fill-green-500 text-green-500' : 'text-gray-400'} />
-                    </button>
+                    </button> */}
                   </div>
 
                   {/* Vendor Cards - Horizontal Scroll */}

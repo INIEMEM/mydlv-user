@@ -220,16 +220,16 @@ export default function Explore() {
 
       {/* 🔍 Search Bar */}
       <div className="flex ">
-        <div className="bg-[#222] hidden md:flex  text-white p-2  items-center justify-center font-semibold">
+        <div className="bg-[#222] hidden md:flex  text-white p-2  items-center justify-center font-semibold rounded-tl-lg rounded-bl-lg">
           Categories
         </div>
         <Input
           size="large"
-          placeholder="Search for restaurants, services, or markets..."
+          placeholder="Search Categories"
           // prefix={<SearchOutlined className="text-gray-400" />}
-          className="max-w-xl border-gray-300 rounded-none bg-white"
+          className="max-w-xl border-gray-300 rounded-none rounded-tl-lg rounded-bl-lg lg:rounded-none bg-white"
         />
-        <Button icon={<SearchOutlined/>} className="p-5 rounded-none bg-[#222] text-white"/>
+        <Button icon={<SearchOutlined/>} className="p-5  rounded-none bg-[#222] text-white rounded-tr-lg rounded-br-lg"/>
       </div>
 
       {/* 🟩 Categories + CTA */}
@@ -243,6 +243,7 @@ export default function Explore() {
                 key={index}
                 whileHover={{ scale: 1.05 }}
                 transition={{ type: "spring", stiffness: 200 }}
+                onClick={()=> navigate(`./${cat?.link}`)} 
                 className="relative rounded-2xl overflow-hidden shadow-sm cursor-pointer"
               >
                 <div className="h-36 w-full object-cover brightness-75" />
@@ -311,7 +312,7 @@ export default function Explore() {
 
           <Button
             type="primary"
-            icon={<PlusCircleFilled color="#37B34A"/>}
+            icon={<PlusCircleFilled color="#37B34A" className="text-[#37B34A]"/>}
             size="large"
             style={{
               backgroundColor: "#fff",

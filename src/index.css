@@ -11,3 +11,51 @@
 {
   margin-left: 220px;
 } */
+
+/* .ant-input-otp .ant-input {
+  flex: 1;
+  text-align: center;
+} */
+
+/* .ant-input-otp {
+  display: flex !important;
+  justify-content: space-between !important;
+  width: 100px !important;
+  gap: 16px !important; 
+}
+
+.ant-input-otp .ant-input {
+  flex: 1 !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  text-align: center !important;
+  height: 60px !important; 
+  font-size: 20px !important;
+  border-radius: 12px !important;
+} */
+
+/* .large-otp .ant-otp-input {
+  width: 56px !important;
+  height: 56px !important;
+  font-size: 24px !important;
+  border-radius: 8px !important;
+}
+
+.large-otp {
+  gap: 12px !important;
+} */
+
+.react-multi-carousel-item button {
+  z-index: 1 !important;
+}
+
+/* Or target specifically the arrow buttons */
+.react-multiple-carousel__arrow {
+  z-index: 1 !important;
+}
+
+/* If you want to target left and right separately */
+.react-multiple-carousel__arrow--left,
+.react-multiple-carousel__arrow--right {
+  z-index: 1 !important;
+}

@@ -116,13 +116,13 @@ export default function MyOrdersPage() {
               )}
               
               <div className="flex gap-2 mt-3">
-                <button className="px-4 py-1.5 bg-gray-800 text-white text-sm rounded hover:bg-gray-700">
+                <button className="px-4 h-[40px] bg-gray-800 text-white text-[10px] md:text-xs rounded hover:bg-gray-700">
                   Edit choices
                 </button>
-                <button className="px-4 py-1.5 bg-green-600 text-white text-sm rounded hover:bg-green-700">
+                <button className="px-4 h-[40px] bg-green-600 text-white text-[10px] rounded hover:bg-green-700">
                   Add new order
                 </button>
-                <button className="px-4 py-1.5 border border-gray-300 text-sm rounded hover:bg-gray-50">
+                <button className="px-4 h-[40px] border border-gray-300 text-[10px] rounded hover:bg-gray-50">
                   Save order →
                 </button>
               </div>
@@ -216,7 +216,7 @@ export default function MyOrdersPage() {
             {/* Map */}
             <button 
               onClick={() => openMapModal(order)}
-              className="w-full bg-gray-100 overflow-hidden h-64 flex items-center justify-center cursor-pointer hover:opacity-90 transition-opacity relative"
+              className="w-full bg-gray-100 overflow-hidden h-64 flex items-center justify-center cursor-pointer hover:opacity-90 transition-opacity relative hidden"
             >
               <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200">
                 {/* Map-like background */}
@@ -295,10 +295,10 @@ export default function MyOrdersPage() {
             </div>
 
             {/* See Rider Button */}
-            <button className="w-full py-2.5 border border-gray-300 rounded hover:bg-gray-50 flex items-center justify-center gap-2 mt-4">
+            {/* <button className="w-full py-2.5 border border-gray-300 rounded hover:bg-gray-50 flex items-center justify-center gap-2 mt-4">
               <span className="text-lg">👁️</span>
               <span className="font-medium">See Rider</span>
-            </button>
+            </button> */}
           </div>
         </div>
       ))}
@@ -368,14 +368,14 @@ export default function MyOrdersPage() {
   );
 
   return (
-    <div className="min-h-screen  p-6">
+    <div className="min-h-screen  ">
       <div className="max-w-4xl mx-auto">
         {/* Tabs */}
         <div className=" rounded-lg shadow-sm mb-6">
           <div className="flex border-b">
             <button
               onClick={() => setActiveTab('cart')}
-              className={`flex-1 py-4 text-center font-medium transition-colors ${
+              className={`flex-1 py-2 text-[10px] text-center font-medium transition-colors ${
                 activeTab === 'cart'
                   ? 'bg-[#333] text-white'
                   : 'text-gray-600 hover:bg-gray-50'
@@ -385,7 +385,7 @@ export default function MyOrdersPage() {
             </button>
             <button
               onClick={() => setActiveTab('active')}
-              className={`flex-1 py-4 text-center font-medium transition-colors ${
+              className={`flex-1 py-2 text-[10px] text-center font-medium transition-colors ${
                 activeTab === 'active'
                   ? 'bg-[#333] text-white'
                   : 'text-gray-600 hover:bg-gray-50'
@@ -395,7 +395,7 @@ export default function MyOrdersPage() {
             </button>
             <button
               onClick={() => setActiveTab('completed')}
-              className={`flex-1 py-4 text-center font-medium transition-colors ${
+              className={`flex-1 py-2 text-[10px] text-center font-medium transition-colors ${
                 activeTab === 'completed'
                   ? 'bg-[#333] text-white'
                   : 'text-gray-600 hover:bg-gray-50'
@@ -405,7 +405,7 @@ export default function MyOrdersPage() {
             </button>
             <button
               onClick={() => setActiveTab('saved')}
-              className={`flex-1 py-4 text-center font-medium transition-colors ${
+              className={`flex-1 py-2 text-[10px]  text-center font-medium transition-colors ${
                 activeTab === 'saved'
                   ? 'bg-[#333] text-white'
                   : 'text-gray-600 hover:bg-gray-50'
