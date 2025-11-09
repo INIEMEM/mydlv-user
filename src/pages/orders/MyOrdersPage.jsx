@@ -73,7 +73,7 @@ export default function MyOrdersPage() {
   };
 
   const renderCartTab = () => (
-    <div className="space-y-4 flex">
+    <div className="space-y-4 md:flex">
       <div className='overflow-y-auto max-h-[calc(100vh-300px)]'>
       {cartOrders.map((order) => (
         <div key={order.id} className=" rounded-lg p-4 shadow-sm">
@@ -377,7 +377,7 @@ export default function MyOrdersPage() {
               onClick={() => setActiveTab('cart')}
               className={`flex-1 py-4 text-center font-medium transition-colors ${
                 activeTab === 'cart'
-                  ? 'bg-gray-800 text-white'
+                  ? 'bg-[#333] text-white'
                   : 'text-gray-600 hover:bg-gray-50'
               }`}
             >
@@ -387,7 +387,7 @@ export default function MyOrdersPage() {
               onClick={() => setActiveTab('active')}
               className={`flex-1 py-4 text-center font-medium transition-colors ${
                 activeTab === 'active'
-                  ? 'bg-gray-800 text-white'
+                  ? 'bg-[#333] text-white'
                   : 'text-gray-600 hover:bg-gray-50'
               }`}
             >
@@ -397,7 +397,7 @@ export default function MyOrdersPage() {
               onClick={() => setActiveTab('completed')}
               className={`flex-1 py-4 text-center font-medium transition-colors ${
                 activeTab === 'completed'
-                  ? 'bg-gray-800 text-white'
+                  ? 'bg-[#333] text-white'
                   : 'text-gray-600 hover:bg-gray-50'
               }`}
             >
@@ -407,7 +407,7 @@ export default function MyOrdersPage() {
               onClick={() => setActiveTab('saved')}
               className={`flex-1 py-4 text-center font-medium transition-colors ${
                 activeTab === 'saved'
-                  ? 'bg-gray-800 text-white'
+                  ? 'bg-[#333] text-white'
                   : 'text-gray-600 hover:bg-gray-50'
               }`}
             >

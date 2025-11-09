@@ -65,7 +65,7 @@ function App() {
               <Route path=":resturant" element={<RestaurantDetailsPage/>}/>
             </Route>
           </Route>
-          <Route path="my-orders" element={<AppLayout/>}>
+          <Route path="orders" element={<AppLayout/>}>
             <Route index element={<MyOrdersPage/>}/>
           </Route>
           <Route path="/handyman/:id" element={<HandymanProfile />} />
