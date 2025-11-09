@@ -1,7 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
-
-// Cart Context
 const CartContext = createContext();
 
 export const useCart = () => {
@@ -12,33 +10,73 @@ export const useCart = () => {
   return context;
 };
 
-// Cart Provider Component
 export const CartProvider = ({ children }) => {
-  const [carts, setCarts] = useState({
-    shoppingList: [],
-    restaurant: [],
-    grocery: [],
-    pharmacy: [],
-    fashion: [],
-    electronics: [],
+  // Initialize state from localStorage or use default empty carts
+  const [carts, setCarts] = useState(() => {
+    try {
+      const savedCarts = localStorage.getItem('mydlv-carts');
+      if (savedCarts) {
+        return JSON.parse(savedCarts);
+      }
+    } catch (error) {
+      console.error('Error loading cart from localStorage:', error);
+    }
+    
+    // Default empty carts if nothing in localStorage
+    return {
+      shoppingList: [],
+      restaurant: [],
+      grocery: [],
+      pharmacy: [],
+      fashion: [],
+      electronics: [],
+    };
   });
+
+  // Save to localStorage whenever carts state changes
+  useEffect(() => {
+    try {
+      localStorage.setItem('mydlv-carts', JSON.stringify(carts));
+    } catch (error) {
+      console.error('Error saving cart to localStorage:', error);
+    }
+  }, [carts]);
 
   const addToCart = (cartType, item) => {
     setCarts(prev => {
+      // If item is marked as duplicate, always add as new item
+      if (item.isDuplicate) {
+        const newItem = {
+          ...item,
+          quantity: item.quantity || 1,
+          addedAt: item.addedAt || Date.now()
+        };
+        return {
+          ...prev,
+          [cartType]: [...prev[cartType], newItem]
+        };
+      }
+
+      // For non-duplicate items, check if exists and increment
       const existingItemIndex = prev[cartType].findIndex(
         cartItem => cartItem.id === item.id && cartItem.vendorId === item.vendorId
       );
 
       if (existingItemIndex > -1) {
-        // Update quantity if item exists
+        // Item exists - increment quantity
         const updatedCart = [...prev[cartType]];
-        updatedCart[existingItemIndex].quantity += 1;
+        updatedCart[existingItemIndex].quantity += (item.quantity || 1);
         return { ...prev, [cartType]: updatedCart };
       } else {
-        // Add new item
+        // New item - add with specified quantity or default to 1
+        const newItem = {
+          ...item,
+          quantity: item.quantity || 1,
+          addedAt: item.addedAt || Date.now()
+        };
         return {
           ...prev,
-          [cartType]: [...prev[cartType], { ...item, quantity: 1, addedAt: Date.now() }]
+          [cartType]: [...prev[cartType], newItem]
         };
       }
     });
@@ -71,6 +109,17 @@ export const CartProvider = ({ children }) => {
     }));
   };
 
+  const clearAllCarts = () => {
+    setCarts({
+      shoppingList: [],
+      restaurant: [],
+      grocery: [],
+      pharmacy: [],
+      fashion: [],
+      electronics: [],
+    });
+  };
+
   const getCartTotal = (cartType) => {
     return carts[cartType].reduce(
       (sum, item) => sum + (item.price * item.quantity),
@@ -82,14 +131,23 @@ export const CartProvider = ({ children }) => {
     return carts[cartType].reduce((sum, item) => sum + item.quantity, 0);
   };
 
+  const getTotalItemsAllCarts = () => {
+    return Object.values(carts).reduce(
+      (total, cart) => total + cart.reduce((sum, item) => sum + item.quantity, 0),
+      0
+    );
+  };
+
   const value = {
     carts,
     addToCart,
     removeFromCart,
     updateQuantity,
     clearCart,
+    clearAllCarts,
     getCartTotal,
     getCartItemCount,
+    getTotalItemsAllCarts,
   };
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

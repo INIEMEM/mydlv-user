@@ -14,9 +14,9 @@ import CosmeticsImage from '../assets/cosmetics.png';
 import FashionImage from '../assets/fashion.png';
 import ElectronicsImage from '../assets/electronics.png';
 import ServicesImage from '../assets/services.png';
-
+// import { useNavigate } from "react-router-dom";
 const categories = [
-  { name: "Restaurants", emoji: "🍽️", img: ResturantImages },
+  { name: "Restaurants", emoji: "🍽️", img: ResturantImages, link: 'resturants' },
   { name: "Supermarkets", emoji: "🛒", img: SuperMarket },
   { name: "Local Markets", emoji: "🥬", img: LocalMarketsImage },
   { name: "Pharmacies", emoji: "💊", img: PharmImage },
@@ -264,6 +264,7 @@ export default function Explore() {
               whileHover={{ scale: 1.05 }}
               transition={{ type: "spring", stiffness: 200 }}
               className="relative rounded-2xl overflow-hidden  cursor-pointer"
+              onClick={()=> navigate(`./${cat?.link}`)}
             >
               <div className="h-36 w-full object-cover brightness-75" />
               <div className="absolute inset-0 flex flex-col justify-center items-center text-[#222] font-semibold text-[14px]">

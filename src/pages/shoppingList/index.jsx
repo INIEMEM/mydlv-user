@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { X, Plus } from 'lucide-react';
-
+import { useNavigate } from 'react-router-dom';
 export default function ShoppingList() {
   const [items, setItems] = useState([]);
   const [currentItem, setCurrentItem] = useState('');
@@ -11,7 +11,7 @@ export default function ShoppingList() {
   const [showSaveModal, setShowSaveModal] = useState(false);
   const [listTitle, setListTitle] = useState('');
   const [activeTab, setActiveTab] = useState('create'); // 'create' or 'saved'
-
+  const navigate = useNavigate();
   const addItem = () => {
     if (currentItem.trim()) {
       setItems([...items, { id: Date.now(), text: currentItem.trim() }]);
@@ -38,7 +38,8 @@ export default function ShoppingList() {
 
   const handleViewItems = () => {
     // Navigate to items matching page
-    alert('Redirecting to food items page...');
+    // alert('Redirecting to food items page...');
+    navigate('./1')
   };
 
   return (

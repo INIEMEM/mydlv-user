@@ -22,6 +22,10 @@ import ShoppingList from "./pages/shoppingList";
 import ProductSelection from "./pages/shoppingList/ProductSelection";
 import ItemsMatchingPage from "./pages/shoppingList/shopingListdetails";
 import { CartProvider } from "./context/CartContext";
+import AppLayout from "./layouts/RootLayout";
+import RestaurantListing from "./pages/resturant";
+import RestaurantDetailsPage from "./pages/resturant/ResturantDetails";
+import MyOrdersPage from "./pages/orders/MyOrdersPage";
 
 function App() {
   const isLoggedIn = !!localStorage.getItem("token");
@@ -53,7 +57,17 @@ function App() {
             </ProtectedRoute>
           }
         >
-          <Route path="/explore" element={<Explore />} />
+          <Route path="explore" element={<AppLayout/>}>
+
+            <Route index element={<Explore />} />
+            <Route path="resturants" element={<AppLayout/>}>
+              <Route index element={<RestaurantListing/>}/>
+              <Route path=":resturant" element={<RestaurantDetailsPage/>}/>
+            </Route>
+          </Route>
+          <Route path="my-orders" element={<AppLayout/>}>
+            <Route index element={<MyOrdersPage/>}/>
+          </Route>
           <Route path="/handyman/:id" element={<HandymanProfile />} />
           <Route path="/hire/:id" element={<HireHandyman />} />
           <Route path="/shopping-list" element={<ShoppingList />} />
