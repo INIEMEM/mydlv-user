@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Input, Button } from "antd";
 import { motion } from "framer-motion";
 import { SearchOutlined, PlusOutlined, PlusCircleFilled } from "@ant-design/icons";
@@ -14,6 +14,8 @@ import CosmeticsImage from '../assets/cosmetics.png';
 import FashionImage from '../assets/fashion.png';
 import ElectronicsImage from '../assets/electronics.png';
 import ServicesImage from '../assets/services.png';
+import { useLocation } from "react-router-dom";
+import axios from "axios";
 // import { useNavigate } from "react-router-dom";
 const categories = [
   { name: "Restaurants", emoji: "🍽️", img: ResturantImages, link: 'resturants' },
@@ -213,6 +215,38 @@ const responsive = {
 
 export default function Explore() {
   const navigate = useNavigate();
+  const location = useLocation();
+
+useEffect(() => {
+  const params = new URLSearchParams(location.search);
+  const code = params.get("code");
+
+  if (code) {
+    // Send the code to your backend to exchange for user/token
+    axios
+      .get(`https://mydlv.onrender.com/api/v1/auth/google/profile?code=${code}`)
+      .then((res) => {
+        if (res.data.success) {
+          localStorage.setItem("user", JSON.stringify(res.data.user));
+          localStorage.setItem("token", res.data.token);
+          message.success("Google login successful!");
+        } else {
+          message.error("Google login failed");
+        }
+
+        // Remove query params from URL
+        navigate("/explore", { replace: true });
+      })
+      .catch((err) => {
+        console.error("Google login error:", err);
+        message.error("Error during Google login");
+        navigate("/explore", { replace: true });
+      });
+  }
+}, [location, navigate]);
+
+  
+  
   return (
     <div className="space-y-12">
       {/* 🏷️ Page Title */}
@@ -238,7 +272,7 @@ export default function Explore() {
           {/* Categories (responsive, stable) */}
           {/* Small screens: single grid with 3 cols */}
           <div className="md:hidden grid grid-cols-3 gap-4">
-            {categories.map((cat, index) => (
+            {categories?.map((cat, index) => (
               <motion.div
                 key={index}
                 whileHover={{ scale: 1.05 }}
@@ -248,7 +282,7 @@ export default function Explore() {
               >
                 <div className="h-36 w-full object-cover brightness-75" />
                 <div className="absolute inset-0 flex flex-col justify-center items-center text-[#222] font-semibold text-[14px]">
-                  <img src={cat.img} alt={cat.name} className="w-[80px] h-[50px] object-contain" />
+                  <img src={cat?.img} alt={cat?.name} className="w-[80px] h-[50px] object-contain" />
                   {cat.name}
                 </div>
               </motion.div>

@@ -96,6 +96,7 @@ export default function RestaurantListing() {
   const [selectedDistance, setSelectedDistance] = useState([]);
   const [nearYouScroll, setNearYouScroll] = useState(0);
   const [hotScroll, setHotScroll] = useState(0);
+  const [allProductsScroll, setAllProductsScroll] = useState(0);
   const navigate = useNavigate()
   const toggleFavorite = (id) => {
     setFavorites((prev) =>
@@ -142,7 +143,10 @@ export default function RestaurantListing() {
     const newScroll = hotScroll + (direction === 'left' ? -300 : 300);
     setHotScroll(Math.max(0, newScroll));
   };
-
+  const scrollAllProducts = (direction) => {
+    const newScroll = allProductsScroll + (direction === "left" ? -300 : 300);
+    setAllProductsScroll(Math.max(0, newScroll));
+  };
   return (
     <div className="min-h-screen ">
       {/* Breadcrumb & Search Section - MOBILE OPTIMIZED */}
@@ -182,7 +186,7 @@ export default function RestaurantListing() {
             <div className="hidden sm:flex flex-1">
               <Button
                 size="large"
-                className="bg-[#222] text-white rounded-none px-6 hover:bg-[#333]"
+                className="bg-[#222] text-white rounded-none rounded-tl-lg rounded-bl-lg px-6 hover:bg-[#333] hover:!text-[#fff] hover:!border-none hover:!bg-[#333]"
               >
                 Restaurant
               </Button>
@@ -191,13 +195,17 @@ export default function RestaurantListing() {
                 placeholder="Search"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                suffix={<SearchOutlined className="text-gray-400" />}
-                className="flex-1 rounded-none"
+                // suffix={<SearchOutlined className="text-gray-400" />}
+                className="flex-1  rounded-none rounded-tl-lg rounded-bl-lg lg:rounded-none  hover:!border-none"
               />
-              {activeFilterCount > 0 && (
+              <Button 
+                className="bg-[#222] h-[40px] rounded-none rounded-tr-lg rounded-br-lg hover:!text-[#fff] hover:!border-none hover:!bg-[#333]"
+                icon={<SearchOutlined className="text-gray-400 " />}
+              />
+              {  (
                 <Button
                   size="large"
-                  className="bg-transparent text-[#222] rounded-none px-4 hover:bg-green-700"
+                  className="bg-transparent text-[#222] rounded-none rounded-tl-lg rounded-bl-lg px-4 hover:bg-green-700 md"
                 >
                   {activeFilterCount}
                 </Button>
@@ -206,7 +214,8 @@ export default function RestaurantListing() {
                 size="large"
                 icon={<FilterOutlined />}
                 onClick={() => setFilterDrawerOpen(true)}
-                className="bg-[#222] text-white rounded-none px-6 hover:bg-[#333]"
+                className="bg-[#222] text-white rounded-none px-6 hover:!bg-[#333] outline-none rounded-none rounded-tr-lg rounded-br-lg hover:!text-[#fff] hover:!border-none"
+                type="default"
               >
                 Filter
               </Button>
@@ -247,13 +256,13 @@ export default function RestaurantListing() {
             <div className="flex gap-2">
               <button 
                 onClick={() => scrollNearYou('left')}
-                className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50"
+                className="w-6 h-6 rounded-lg border border-gray-300 flex items-center justify-center hover:bg-[#333] bg-[#111] text-[#fff]"
               >
                 ←
               </button>
               <button 
                 onClick={() => scrollNearYou('right')}
-                className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50"
+                className="w-6 h-6 rounded-lg border border-gray-300 flex items-center justify-center hover:bg-[#333] bg-[#111] text-[#fff]"
               >
                 →
               </button>
@@ -272,7 +281,7 @@ export default function RestaurantListing() {
                 <motion.div
                   key={vendor.id}
                   whileHover={{ y: -4 }}
-                  className=" rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all cursor-pointer"
+                  className=" rounded-2xl overflow-hidden  hover:shadow-sm transition-all cursor-pointer"
                   style={{ minWidth: '280px', maxWidth: '280px' }}
                   onClick={()=>navigate(`./${vendor.id}`)}
                 >
@@ -280,9 +289,9 @@ export default function RestaurantListing() {
                     <img
                       src={vendor.img}
                       alt={vendor.name}
-                      className="w-full h-40 object-cover"
+                      className="w-full h-40 object-cover rounded-2xl"
                     />
-                    <button
+                    {/* <button
                       onClick={(e) => {
                         e.stopPropagation();
                         toggleFavorite(vendor.id);
@@ -294,7 +303,7 @@ export default function RestaurantListing() {
                       ) : (
                         <HeartOutlined className="text-gray-600" />
                       )}
-                    </button>
+                    </button> */}
                   </div>
 
                   <div className="p-4">
@@ -308,7 +317,7 @@ export default function RestaurantListing() {
                           {vendor.rating}
                         </span>
                         <span className="text-yellow-500 text-xs">
-                        <StarFilled className="text-yellow-500 text-xs" />
+                        <StarFilled className="text-green-500 text-xs" />
                         </span>
                       </div>
                     </div>
@@ -339,13 +348,13 @@ export default function RestaurantListing() {
             <div className="flex gap-2">
               <button 
                 onClick={() => scrollHot('left')}
-                className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50"
+                className="w-6 h-6 rounded-lg border border-gray-300 flex items-center justify-center hover:bg-[#333] bg-[#111] text-[#fff]"
               >
                 ←
               </button>
               <button 
                 onClick={() => scrollHot('right')}
-                className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50"
+                className="w-6 h-6 rounded-lg border border-gray-300 flex items-center justify-center hover:bg-[#333] bg-[#111] text-[#fff]"
               >
                 →
               </button>
@@ -364,16 +373,16 @@ export default function RestaurantListing() {
                 <motion.div
                   key={vendor.id}
                   whileHover={{ y: -4 }}
-                  className=" rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all cursor-pointer"
+                  className=" rounded-2xl overflow-hidden hover:shadow-sm transition-all cursor-pointer"
                   style={{ minWidth: '280px', maxWidth: '280px' }}
                 >
                   <div className="relative">
                     <img
                       src={vendor.img}
                       alt={vendor.name}
-                      className="w-full h-40 object-cover"
+                      className="w-full h-40 object-cover rounded-2xl"
                     />
-                    <button
+                    {/* <button
                       onClick={(e) => {
                         e.stopPropagation();
                         toggleFavorite(vendor.id);
@@ -385,7 +394,7 @@ export default function RestaurantListing() {
                       ) : (
                         <HeartOutlined className="text-gray-600" />
                       )}
-                    </button>
+                    </button> */}
                   </div>
 
                   <div className="p-4">
@@ -399,7 +408,7 @@ export default function RestaurantListing() {
                           {vendor.rating}
                         </span>
                         <span className="text-yellow-500 text-xs">
-                        <StarFilled className="text-yellow-500 text-xs" />
+                        <StarFilled className="text-green-500 text-xs" />
                         </span>
                       </div>
                     </div>
@@ -424,76 +433,85 @@ export default function RestaurantListing() {
         {/* All Products section */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-gray-800">
-              All Products
-            </h2>
+            <h2 className="text-lg font-semibold text-gray-800">All Products</h2>
+            <div className="flex gap-2">
+              <button 
+                onClick={() => scrollAllProducts('left')}
+                className="w-6 h-6 rounded-lg border border-gray-300 flex items-center justify-center hover:bg-[#333] bg-[#111] text-[#fff]"
+              >
+                ←
+              </button>
+              <button 
+                onClick={() => scrollAllProducts('right')}
+                className="w-6 h-6 rounded-lg border border-gray-300 flex items-center justify-center hover:bg-[#333] bg-[#111] text-[#fff]"
+              >
+                →
+              </button>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {filteredVendors.map((vendor) => (
-              <motion.div
-                key={vendor.id}
-                whileHover={{ y: -4 }}
-                className=" rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all cursor-pointer"
-              >
-                <div className="relative">
-                  <img
-                    src={vendor.img}
-                    alt={vendor.name}
-                    className="w-full h-40 object-cover"
-                  />
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      toggleFavorite(vendor.id);
-                    }}
-                    className="absolute top-3 right-3 bg-white rounded-full p-2 shadow-md hover:scale-110 transition-transform"
-                  >
-                    {favorites.includes(vendor.id) ? (
-                      <HeartFilled className="text-red-500" />
-                    ) : (
-                      <HeartOutlined className="text-gray-600" />
-                    )}
-                  </button>
-                </div>
+          <div className="overflow-x-hidden pb-2">
+            <div
+              className="flex gap-4 transition-transform duration-300 ease-in-out"
+              style={{
+                minWidth: "max-content",
+                transform: `translateX(-${allProductsScroll}px)`
+              }}
+            >
+              {filteredVendors.map((vendor) => (
+                <motion.div
+                  key={vendor.id}
+                  whileHover={{ y: -4 }}
+                  className="rounded-2xl overflow-hidden hover:shadow-sm transition-all cursor-pointer"
+                  style={{ minWidth: "280px", maxWidth: "280px" }}
+                >
+                  <div className="relative">
+                    <img
+                      src={vendor.img}
+                      alt={vendor.name}
+                      className="w-full h-40 object-cover rounded-2xl"
+                    />
+                  </div>
 
-                <div className="p-4">
-                  <div className="flex items-start justify-between mb-2">
-                    <h3 className="font-semibold text-gray-800 text-base">
-                      {vendor.name}
-                    </h3>
-                    <div className="flex items-center gap-1  px-2 py-1 rounded-md">
-                      
-                      <span className="text-sm font-medium text-gray-800">
-                        {vendor.rating}
-                      </span>
-                      <span className="text-yellow-500 text-xs">
-                        <StarFilled className="text-yellow-500 text-xs" />
+                  <div className="p-4">
+                    <div className="flex items-start justify-between mb-2">
+                      <h3 className="font-semibold text-gray-800 text-base">
+                        {vendor.name}
+                      </h3>
+                      <div className="flex items-center gap-1 px-2 py-1 rounded-md">
+                        <span className="text-sm font-medium text-gray-800">
+                          {vendor.rating}
                         </span>
+                        <span className="text-yellow-500 text-xs">
+                          <StarFilled className="text-green-500 text-xs" />
+                        </span>
+                      </div>
                     </div>
-                  </div>
 
-                  <div className="flex items-center justify-between gap-3 text-xs text-gray-500">
-                    <div className="flex items-center gap-1">
-                    <ClockCircleOutlined className="text-gray-500" />
-                      <span>{vendor.deliveryTime}</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                    <Bike size={12} className="" />
-                      <span>From {vendor.priceFrom}</span>
+                    <div className="flex items-center justify-between gap-3 text-xs text-gray-500">
+                      <div className="flex items-center gap-1">
+                        <ClockCircleOutlined className="text-gray-500" />
+                        <span>{vendor.deliveryTime}</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Bike size={12} />
+                        <span>From {vendor.priceFrom}</span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </motion.div>
-            ))}
+                </motion.div>
+              ))}
+            </div>
           </div>
 
           {filteredVendors.length === 0 && (
             <div className="text-center py-12">
-              <p className="text-gray-500 text-lg">No vendors found matching your criteria</p>
-              <Button 
+              <p className="text-gray-500 text-lg">
+                No vendors found matching your criteria
+              </p>
+              <Button
                 onClick={resetFilters}
-                className="mt-4"
+                className="mt-4 bg-green-600 hover:!bg-green-700 text-white"
                 type="primary"
               >
                 Reset Filters
@@ -501,6 +519,7 @@ export default function RestaurantListing() {
             </div>
           )}
         </div>
+
       </div>
 
       {/* Filter Drawer */}

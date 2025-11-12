@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Star, Clock, Bike, Heart, Plus, Check, Search, ShoppingCart } from 'lucide-react';
+import { ArrowLeft, Star, Clock, Bike, Heart, Plus, Check, Search, ShoppingCart, MenuIcon, HeartPlus, HeartMinus } from 'lucide-react';
 import { useCart } from '../../context/CartContext';
 import { Cart } from '../../components/carts/CartsComponent';
 import CheckoutModal from '../../components/carts/CheckoutModal';
@@ -214,12 +214,12 @@ export default function RestaurantDetailsPage() {
 
       <div className="flex max-w-7xl mx-auto">
         {/* Main Content */}
-        <div className="flex-1 min-w-0">
+        <div className="flex-1 min-w-0 ">
           {/* Restaurant Header */}
           <div className="border-b border-gray-200">
-            <div className="px- py-6">
+            <div className="px- py-6 ">
               <div className="flex gap-4">
-                <div className="w-20 h-20 md:w-24 md:h-24 bg-gray-200 rounded-lg overflow-hidden flex-shrink-0">
+                <div className="w-20 h-26 md:w-24 md:h-24 bg-gray-200 rounded-lg overflow-hidden flex-shrink-0">
                   <img 
                     src={restaurantData.img} 
                     alt={restaurantData.name}
@@ -229,10 +229,10 @@ export default function RestaurantDetailsPage() {
                 
                 <div className="flex-1">
                   <div className="flex items-start justify-between mb-2">
-                    <h1 className="md:text-xl text-lg font-bold text-gray-900">
+                    <h1 className="md:text-xl text-md font-bold text-gray-900">
                       {restaurantData.name}
                     </h1>
-                    <button
+                    {/* <button
                       onClick={() => setIsFavorite(!isFavorite)}
                       className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors"
                     >
@@ -240,10 +240,10 @@ export default function RestaurantDetailsPage() {
                         size={20} 
                         className={isFavorite ? 'fill-red-500 text-red-500' : 'text-gray-600'}
                       />
-                    </button>
+                    </button> */}
                   </div>
 
-                  <div className="flex items-center gap-4 text-sm text-gray-600 mb-2">
+                  <div className="flex items-center gap-1 text-sm text-gray-600 mb-2">
                     <div className="flex items-center gap-1">
                       <Bike size={14} />
                       <span>From {restaurantData.priceFrom}</span>
@@ -253,8 +253,9 @@ export default function RestaurantDetailsPage() {
                       <span>{restaurantData.deliveryTime}</span>
                     </div>
                     <div className="flex items-center gap-1">
-                      <Star size={14} className="fill-yellow-400 text-yellow-400" />
+                      
                       <span className="font-medium text-gray-900">{restaurantData.rating}</span>
+                      <Star size={14} className="fill-green-500 text-green-500" />
                     </div>
                   </div>
 
@@ -276,9 +277,9 @@ export default function RestaurantDetailsPage() {
                 placeholder="Search"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className="w-full px-4 py-2 pr-10 border border-gray-300 rounded-none rounded-tl-lg rounded-bl-lg  focus:outline-none focus:ring-2 focus:ring-green-50 focus:border-transparent"
               />
-              <div className='bg-[#222] p-2'>
+              <div className='bg-[#222] p-2 rounded-none rounded-tr-lg rounded-br-lg '>
                 <Search className="" size={20} color='white'/>
               </div>
             </div>
@@ -288,13 +289,16 @@ export default function RestaurantDetailsPage() {
           <div className="border-b border-gray-200">
             <div className="overflow-x-auto">
               <div className="flex gap-2 px- py-3 min-w-max">
+                <div className='bg-[#222] p-2'>
+                  <MenuIcon size={20} color='white'/>
+                </div>
                 {categories.map((category) => (
                   <button
                     key={category}
                     onClick={() => setActiveCategory(category)}
-                    className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${
+                    className={`px-4 py-2 rounded-tl-lg rounded-tr-lg text-sm font-medium whitespace-nowrap transition-colors ${
                       activeCategory === category
-                        ? 'bg-gray-900 text-white'
+                        ? 'bg-[#222] text-white'
                         : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                     }`}
                   >
@@ -317,10 +321,10 @@ export default function RestaurantDetailsPage() {
                     return (
                       <div
                         key={item.id}
-                        className="rounded-xl  border border-gray-200 overflow-hidden hover:shadow-md transition-shadow"
+                        className="rounded-xl p-2  border border-gray-700 overflow-hidden hover:shadow-sm transition-shadow"
                       >
                         <div className="flex gap-3 p">
-                          <div className="md:w-24 md:h-24 w-16 h-16 bg-gray-200 rounded-lg overflow-hidden flex-shrink-0">
+                          <div className="md:w-24 md:h-24 w-16 h-18 bg-gray-200 rounded-lg overflow-hidden flex-shrink-0">
                             <img 
                               src={item.image} 
                               alt={item.name}
@@ -341,7 +345,7 @@ export default function RestaurantDetailsPage() {
                               </span>
                               <button
                                 onClick={() => handleAddToCart(item)}
-                                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1 ${
+                                className={`px-1 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1 ${
                                   isAdded
                                     ? 'bg-green-500 text-white'
                                     : 'bg-green-50 text-green-600 hover:bg-green-100 border border-green-200'
@@ -350,12 +354,12 @@ export default function RestaurantDetailsPage() {
                                 {isAdded ? (
                                   <>
                                     <Check size={12} />
-                                    Added
+                                    <HeartMinus size={12} />
                                   </>
                                 ) : (
                                   <>
-                                    <Plus size={12} />
-                                    Add
+                                    {/* <Plus size={12} /> */}
+                                    <HeartPlus size={12} />
                                   </>
                                 )}
                               </button>

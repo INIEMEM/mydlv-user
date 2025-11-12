@@ -13,7 +13,6 @@ import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import DashboardLayout from "./layouts/DashboardLayout";
 import ProtectedRoute from "./routes/ProtectedRoute";
-
 // Pages inside Dashboard
 import Explore from "./pages/Explore";
 import HandymanProfile from "./pages/HandymanProfile";

@@ -89,10 +89,10 @@ const CustomizeOrderModal = ({ isOpen, onClose, item, restaurantData, onAddToCar
     <div className="fixed inset-0 bg-black bg-opacity-50 z-[60] flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden flex flex-col">
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-200">
-          <h2 className="text-lg font-bold text-gray-900">
+        <div className="flex items-center  justify-end p-4 border-b border-gray-200">
+          {/* <h2 className="text-lg font-bold text-gray-900">
             {item?.name || "Big Boyz Combo"}
-          </h2>
+          </h2> */}
           <button
             onClick={onClose}
             className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200"
@@ -102,7 +102,8 @@ const CustomizeOrderModal = ({ isOpen, onClose, item, restaurantData, onAddToCar
         </div>
 
         {/* Content */}
-        <div className="flex-1 md:flex overflow-y-auto p-4">
+        <div className="flex-1 md:flex overflow-y-auto p-4 flex-col-reverse
+flex lg:flex-row">
           {/* Customization Options */}
           <div className="space-y-4 md:w-[400px] flex-2">
             {Object.entries(customizationOptions).map(([key, option]) => (
@@ -158,13 +159,9 @@ const CustomizeOrderModal = ({ isOpen, onClose, item, restaurantData, onAddToCar
                 <p className="text-lg font-bold text-gray-900">₦{((item?.price || 7000) * quantity).toLocaleString()}</p>
               </div>
             </div>
-          </div>
-        </div>
-
-        {/* Footer */}
-        <div className="border-t border-gray-200 p-4">
+            <div className="border-t border-gray-200 p-4">
           <div className="flex items-center justify-between mb-4">
-            <span className="text-sm text-gray-600">Quantity</span>
+            {/* <span className="text-sm text-gray-600">Quantity</span> */}
             <div className="flex items-center gap-3">
               <button
                 onClick={() => setQuantity(Math.max(1, quantity - 1))}
@@ -189,6 +186,12 @@ const CustomizeOrderModal = ({ isOpen, onClose, item, restaurantData, onAddToCar
             Add for ₦{((item?.price || 7000) * quantity).toLocaleString()}
           </button>
         </div>
+          </div>
+          
+        </div>
+
+        {/* Footer */}
+        
       </div>
     </div>
   );

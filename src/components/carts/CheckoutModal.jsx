@@ -28,11 +28,11 @@ const CheckoutModal = ({ isOpen, onClose, cartItems, subtotal, deliveryFee, serv
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
           <div>
-            <div className="flex items-center gap-2 text-sm text-gray-600 mb-1">
+            {/* <div className="flex items-center gap-2 text-sm text-gray-600 mb-1">
               <span className="text-green-600 font-medium">Restaurants</span>
               <span>›</span>
               <span>Chicken Republic</span>
-            </div>
+            </div> */}
             <h2 className="text-2xl font-bold text-gray-900">Checkout</h2>
           </div>
           <button

@@ -3,6 +3,7 @@ import { Form, Input, Button, Divider, message, Checkbox } from "antd";
 import { useNavigate, useSearchParams, Navigate } from "react-router-dom";
 import { GoogleOutlined, MobileOutlined, MailOutlined } from "@ant-design/icons";
 import { motion, AnimatePresence } from "framer-motion";
+import axios from "axios";
 
 export default function Auth() {
   const navigate = useNavigate();
@@ -95,7 +96,20 @@ export default function Auth() {
   };
 
   // Social login placeholders
-  const handleGoogleLogin = () => message.info("Google authentication coming soon!");
+  const handleGoogleLogin = async () => {
+    try {
+      const res = await axios.get("https://mydlv.onrender.com/api/v1/auth/register/google");
+      if (res.data.success && res.data.url) {
+        window.location.href = res.data.url; // Redirect user to Google login page
+      } else {
+        message.error("Failed to start Google authentication");
+      }
+    } catch (err) {
+      console.error(err);
+      message.error("An error occurred while connecting to Google");
+    }
+  };
+  
   const handleMobileLogin = () => message.info("Mobile authentication coming soon!");
 
   return (
