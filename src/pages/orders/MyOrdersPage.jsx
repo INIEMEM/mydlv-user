@@ -74,7 +74,7 @@ export default function MyOrdersPage() {
 
   const renderCartTab = () => (
     <div className="space-y-4 md:flex">
-      <div className='overflow-y-auto max-h-[calc(100vh-300px)]'>
+      <div className='overflow-y-auto max-h-[calc(100vh-300px)] w-full'>
       {cartOrders.map((order) => (
         <div key={order.id} className=" rounded-lg p-4 shadow-sm">
           <div className="flex items-start justify-between mb-3">
@@ -84,8 +84,8 @@ export default function MyOrdersPage() {
             </button>
           </div>
           
-          <div className="flex gap-4">
-            <div className="w-24 h-24 bg-gray-200 rounded-lg flex-shrink-0"></div>
+          <div className="flex gap-4 items-center">
+            <div className="w-24 h-24 bg-gray-700 rounded-lg flex-shrink-0"></div>
             
             <div className="flex-1">
               <div className="flex justify-between items-start mb-2">
@@ -133,7 +133,7 @@ export default function MyOrdersPage() {
       </div>
       
       
-      <div className=" rounded-lg p-4 shadow-sm">
+      <div className=" rounded-lg p-4 shadow-sm  w-full">
         <div className="flex justify-between mb-2">
           <span className="text-gray-600">Sub total (3 Orders)</span>
           <span className="font-semibold">₦14,400.00</span>

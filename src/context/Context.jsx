@@ -22,6 +22,7 @@ const Context = (props) => {
         sessionStorage.setItem('token', JSON.stringify(token));     
         setToken(token)
     }
+    
     const contextValue = 
     {
       setToken:saveToken,
