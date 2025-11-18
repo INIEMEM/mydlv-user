@@ -1,227 +1,248 @@
-import React, { useState } from "react";
-import { Form, Input, Button, Divider, message, Checkbox } from "antd";
+import React, { useState, useContext } from "react";
+import { Form, Input, Button, message, Checkbox } from "antd";
 import { useNavigate, useSearchParams, Navigate } from "react-router-dom";
-import { GoogleOutlined, MobileOutlined, MailOutlined } from "@ant-design/icons";
+import { GoogleOutlined, MobileOutlined } from "@ant-design/icons";
 import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
+import { MainContext } from "../context/Context";
 
 export default function Auth() {
   const navigate = useNavigate();
   const [params] = useSearchParams();
   const mode = params.get("mode") || "login";
-  const [step, setStep] = useState(1); // 1: Email, 2: OTP (signup only), 3: Passcode
+  const { baseUrl } = useContext(MainContext);
+
+  const [step, setStep] = useState(1);
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
-  const [passcode, setPasscode] = useState("");
-  const [confirmPasscode, setConfirmPasscode] = useState("");
+
+  const [loadingEmail, setLoadingEmail] = useState(false);
+  const [loadingOtp, setLoadingOtp] = useState(false);
+  const [loadingResend, setLoadingResend] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
 
   const storedUser = JSON.parse(localStorage.getItem("user") || "null");
   const isLoggedIn = storedUser && storedUser.isAuthenticated;
 
-  // Redirect if already authenticated
   if (isLoggedIn) return <Navigate to="/explore" replace />;
 
   const isLogin = mode === "login";
 
-  // STEP 1: Email submission
-  const handleEmailSubmit = (values) => {
-    setEmail(values.email);
-    
-    if (isLogin) {
-      // Login: go directly to passcode
-      setStep(3);
-    } else {
-      // Signup: go to OTP verification
-      message.success("OTP sent to your email!");
-      setStep(2);
+  // STEP 1 — EMAIL SUBMIT
+  const handleEmailSubmit = async (values) => {
+    const userEmail = values.email;
+    setEmail(userEmail);
+    setLoadingEmail(true);
+
+    try {
+      if (isLogin) {
+        const res = await axios.post(`${baseUrl}auth/login-attempt`, {
+          email: userEmail,
+        });
+
+        if (res.data.success) {
+          message.success("OTP sent to your email.");
+          setStep(2);
+        }
+      } else {
+        const res = await axios.post(`${baseUrl}auth/register`, {
+          email: userEmail,
+          address: 'no 362 nwaniba road, uyo, nigeria'
+        });
+
+        if (res.data.success) {
+          message.success("OTP sent to your email.");
+          setStep(2);
+        }
+      }
+    } catch (error) {
+      console.log(error?.response?.data?.error);
+      message.error("Something went wrong. Try again.");
+    } finally {
+      setLoadingEmail(false);
     }
   };
 
-  // STEP 2: OTP Verification (Signup only)
-  const handleOTPSubmit = () => {
+  // STEP 2 — OTP SUBMIT
+  const handleOTPSubmit = async () => {
     if (otp.length !== 6) {
-      message.warning("Please enter the 6-digit OTP");
+      message.warning("Enter the 6-digit OTP");
       return;
     }
-    
-    // In production, verify OTP with backend
-    message.success("Email verified successfully!");
-    setStep(3);
-  };
 
-  // STEP 3: Passcode (Login) or Set Passcode (Signup)
-  const handlePasscodeSubmit = () => {
-    if (isLogin) {
-      // LOGIN FLOW
-      if (passcode.length !== 4) {
-        message.warning("Please enter your 4-digit passcode");
-        return;
-      }
+    setLoadingOtp(true);
 
-      const savedUser = JSON.parse(localStorage.getItem("user") || "null");
-      if (!savedUser || savedUser.email !== email || savedUser.passcode !== passcode) {
-        message.error("Invalid email or passcode!");
-        return;
-      }
-
-      // Successful login
-      savedUser.isAuthenticated = true;
-      localStorage.setItem("user", JSON.stringify(savedUser));
-      localStorage.setItem("token", "dummy-token-" + Date.now());
-      message.success("Login successful!");
-      navigate("/explore");
-    } else {
-      // SIGNUP FLOW
-      if (passcode.length !== 4 || confirmPasscode.length !== 4) {
-        message.warning("Please enter 4-digit passcodes");
-        return;
-      }
-
-      if (passcode !== confirmPasscode) {
-        message.error("Passcodes do not match!");
-        return;
-      }
-
-      // Save new user
-      const newUser = {
-        email,
-        passcode,
-        isAuthenticated: true,
-      };
-      localStorage.setItem("user", JSON.stringify(newUser));
-      localStorage.setItem("token", "dummy-token-" + Date.now());
-      message.success("Account created successfully!");
-      navigate("/explore");
-    }
-  };
-
-  // Social login placeholders
-  const handleGoogleLogin = async () => {
     try {
-      const res = await axios.get("https://mydlv.onrender.com/api/v1/auth/register/google");
-      if (res.data.success && res.data.url) {
-        window.location.href = res.data.url; // Redirect user to Google login page
+      if (!isLogin) {
+        const res = await axios.post(`${baseUrl}auth/verify`, {
+          token: otp,
+        });
+
+        if (res.data.success) {
+          message.success("Account verified. Logging you in...");
+          // localStorage.setItem(
+          //   "user",
+          //   JSON.stringify({ email, isAuthenticated: true })
+          // );
+          setStep(1); 
+          navigate("/auth?mode=login"); 
+        }
       } else {
-        message.error("Failed to start Google authentication");
+        const res = await axios.post(`${baseUrl}auth/login`, {
+          token: otp,
+        });
+
+        if (res.data.success) {
+          message.success("Login successful!");
+          localStorage.setItem(
+            "user",
+            JSON.stringify({ email, isAuthenticated: true })
+          );
+          localStorage.setItem("token", res.data.token);
+          navigate("/explore");
+        }
       }
-    } catch (err) {
-      console.error(err);
-      message.error("An error occurred while connecting to Google");
+    } catch (error) {
+      console.log(error);
+      message.error("Invalid OTP. Try again.");
+    } finally {
+      setLoadingOtp(false);
     }
   };
-  
-  const handleMobileLogin = () => message.info("Mobile authentication coming soon!");
+
+  // RESEND OTP
+  const resendOtp = async () => {
+    setLoadingResend(true);
+
+    try {
+      await axios.post(`${baseUrl}auth/sendotp`, { email });
+      message.success("OTP resent!");
+    } catch (err) {
+      message.error("Could not resend OTP.");
+    } finally {
+      setLoadingResend(false);
+    }
+  };
+
+  // GOOGLE LOGIN
+  const handleGoogleLogin = async () => {
+    setGoogleLoading(true);
+
+    try {
+      const res = await axios.get(
+        "https://mydlv.onrender.com/api/v1/auth/register/google"
+      );
+      if (res.data.success && res.data.url) window.location.href = res.data.url;
+    } catch {
+      message.error("Google login failed.");
+      setGoogleLoading(false);
+    }
+  };
 
   return (
     <div className="flex flex-col md:flex-row h-screen bg-gray-50">
-      {/* Form Section */}
-      <div className="flex flex-1 items-center justify-center p-6 bg-[#DDDCDC]">
+      <div className="flex flex-1 items-center justify-center  md:p-6 bg-[#DDDCDC]">
         <motion.div
           className="w-full max-w-md rounded-2xl p-8"
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
         >
           <AnimatePresence mode="wait">
-            {/* STEP 1: Email Input */}
+            
+            {/* STEP 1 — EMAIL */}
             {step === 1 && (
               <motion.div
-                key="step1"
+                key="email"
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.3 }}
               >
-                <h2 className="text-2xl md:text-4xl font-semibold mb-6 text-center text-[#2B2B2B]">
-                  {isLogin ? "Welcome back, User " : "Let's get you started!"}
+                <h2 className="text-3xl font-semibold mb-6 text-center text-[#2B2B2B]">
+                  {isLogin ? "Welcome back!" : "Let's get you started"}
                 </h2>
 
-                {/* Social Buttons */}
+                {/* SOCIAL BUTTONS */}
                 <div className="flex flex-col gap-3 mb-4">
                   <Button
                     icon={<GoogleOutlined />}
                     block
+                    loading={googleLoading}
                     onClick={handleGoogleLogin}
                     style={{ backgroundColor: "#E8E8E8", padding: "20px 0" }}
                   >
                     Continue with Google
                   </Button>
+
                   <Button
                     icon={<MobileOutlined />}
                     block
-                    onClick={handleMobileLogin}
                     style={{ backgroundColor: "#E8E8E8", padding: "20px 0" }}
                   >
                     {isLogin ? "Login" : "Sign Up"} with Mobile
                   </Button>
                 </div>
 
-                <div className="text-[#2B2B2B] py-[10px]">or {isLogin ? "login" : "sign up"} with email</div>
-                
+                <div className="text-center text-[#2B2B2B] py-2">
+                  or continue with email
+                </div>
+
                 <Form layout="vertical" onFinish={handleEmailSubmit}>
                   <Form.Item
                     name="email"
                     label="Email"
-                    rules={[
-                      // { required: true, message: "Please enter your email" },
-                      { type: "email", message: "Please enter a valid email" }
-                    ]}
+                    rules={[{ type: "email", message: "Enter a valid email" }]}
                   >
-                    <Input style={{
-                      backgroundColor: "#e8e8e8",
-                    }}
-                    //  prefix={<MailOutlined />}
-                    className="py-3"
-                      placeholder="Enter your email" size="large" />
+                    <Input
+                      size="large"
+                      placeholder="Enter your email"
+                      style={{ backgroundColor: "#e8e8e8" }}
+                    />
                   </Form.Item>
 
-                  <Form.Item>
-                    <Button
-                      type="primary"
-                      htmlType="submit"
-                      block
-                      size="large"
-                      style={{
-                        backgroundColor: "#2B2B2B",
-                        borderColor: "#2B2B2B",
-                        fontWeight: "500",
-                      }}
-                    >
-                      Continue
-                    </Button>
-                  </Form.Item>
                   {!isLogin && (
-                  <Form.Item
-                    name="agreement"
-                    valuePropName="checked"
-                    rules={[
-                      {
-                        validator: (_, value) =>
-                          value
-                            ? Promise.resolve()
-                            : Promise.reject(new Error("You must agree to the terms and conditions")),
-                      },
-                    ]}
+                    <Form.Item
+                      name="agreement"
+                      valuePropName="checked"
+                      rules={[
+                        {
+                          validator: (_, value) =>
+                            value
+                              ? Promise.resolve()
+                              : Promise.reject(
+                                  "You must accept Terms & Conditions"
+                                ),
+                        },
+                      ]}
+                    >
+                      <Checkbox>
+                        I agree to the{" "}
+                        <a
+                          href="/terms"
+                          target="_blank"
+                          className="text-[#2B2B2B]"
+                        >
+                          Terms & Conditions
+                        </a>
+                      </Checkbox>
+                    </Form.Item>
+                  )}
+
+                  <Button
+                    type="primary"
+                    htmlType="submit"
+                    block
+                    size="large"
+                    loading={loadingEmail}
+                    style={{ backgroundColor: "#2B2B2B" }}
                   >
-                    <Checkbox>
-                      I agree to the{" "}
-                      <a
-                        href="/terms"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-[#2B2B2B] "
-                      >
-                        Terms & Conditions
-                      </a>
-                    </Checkbox>
-                  </Form.Item>
-                )}
-                  <div className=" text-sm">
+                    Continue
+                  </Button>
+
+                  <div className="text-sm mt-4 text-center">
                     {isLogin ? (
                       <>
                         Don't have an account?{" "}
                         <span
-                          className="text-[#37B34A] cursor-pointer font-medium"
+                          className="text-[#37B34A] cursor-pointer"
                           onClick={() => navigate("/auth?mode=signup")}
                         >
                           Sign Up
@@ -231,7 +252,7 @@ export default function Auth() {
                       <>
                         Already have an account?{" "}
                         <span
-                          className="text-[#37B34A] cursor-pointer font-medium"
+                          className="text-[#37B34A] cursor-pointer"
                           onClick={() => navigate("/auth?mode=login")}
                         >
                           Login
@@ -240,148 +261,58 @@ export default function Auth() {
                     )}
                   </div>
                 </Form>
-                
               </motion.div>
             )}
 
-            {/* STEP 2: OTP Verification (Signup Only) */}
-            {step === 2 && !isLogin && (
+            {/* STEP 2 — OTP */}
+            {step === 2 && (
               <motion.div
-                key="step2"
+                key="otp"
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.3 }}
               >
-                <h2 className="text-2xl md:text-4xl font-semibold mb-4 text-center text-[#2B2B2B]">
-                  Verify Your Email
+                <h2 className="text-3xl font-semibold mb-4 text-center text-[#2B2B2B]">
+                  Enter OTP
                 </h2>
+
                 <p className="text-center text-gray-600 mb-6">
-                  Enter the 6-digit code sent to<br />
+                  We sent a 6-digit code to{" "}
                   <span className="font-medium">{email}</span>
                 </p>
 
-                <div className="mb-6">
-                  <Input.OTP
-                    length={6}
-                    value={otp}
-                    onChange={setOtp}
-                    size="large"
-                  />
-                </div>
+                <Input.OTP
+                  length={6}
+                  value={otp}
+                  onChange={setOtp}
+                  size="large"
+                  className="mb-6"
+                />
 
                 <Button
-                  type="primary"
                   block
                   size="large"
+                  loading={loadingOtp}
                   onClick={handleOTPSubmit}
-                  style={{
-                    backgroundColor: "#2B2B2B",
-                    borderColor: "#2B2B2B",
-                    fontWeight: "500",
-                  }}
+                  style={{ backgroundColor: "#2B2B2B", color: "#fff", marginTop: '20px' }}
                 >
                   Verify OTP
                 </Button>
 
                 <div className="text-center text-sm mt-4">
                   <span
-                    className="text-[#37B34A] cursor-pointer font-medium"
-                    onClick={() => message.info("OTP resent!")}
+                    onClick={resendOtp}
+                    className="text-[#37B34A] cursor-pointer"
                   >
-                    Resend OTP
+                    {loadingResend ? "Sending..." : "Resend OTP"}
                   </span>
                 </div>
-              </motion.div>
-            )}
-
-            {/* STEP 3: Passcode */}
-            {step === 3 && (
-              <motion.div
-                key="step3"
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.3 }}
-              >
-                <h2 className="text-2xl md:text-4xl font-semibold mb-4 text-center text-[#2B2B2B]">
-                  {isLogin ? "Enter Your Passcode" : "Set Your Passcode"}
-                </h2>
-                <p className="text-center text-gray-600 mb-6">
-                  {isLogin 
-                    ? "Enter your 4-digit passcode to continue"
-                    : "Create a 4-digit passcode to secure your account"}
-                </p>
-
-                <div className="space-y-4">
-                  <div className="">
-                    <label className="block text-sm font-medium mb-2 text-gray-700">
-                      {isLogin ? "Passcode" : "Create Passcode"}
-                    </label>
-                    <div className="w-full">
-                      <Input.OTP
-                        length={4}
-                        value={passcode}
-                        onChange={setPasscode}
-                        size="large"
-                        style={{
-                          // gap: '12px'
-                          // width: '96px'
-                          width: '100%'
-                        }}
-                        // className="large-otp"
-                      />
-                    </div>
-                  </div>
-
-                  {!isLogin && (
-                    <div>
-                      <label className="block text-sm font-medium mb-2 text-gray-700">
-                        Confirm Passcode
-                      </label>
-                      <Input.OTP
-                        length={4}
-                        value={confirmPasscode}
-                        onChange={setConfirmPasscode}
-                        size="large"
-                        
-                      />
-                    </div>
-                  )}
-                </div>
-
-                <Button
-                  type="primary"
-                  block
-                  size="large"
-                  onClick={handlePasscodeSubmit}
-                  className="mt-6"
-                  style={{
-                    backgroundColor: "#2B2B2B",
-                    borderColor: "#2B2B2B",
-                    fontWeight: "500",
-                  }}
-                >
-                  {isLogin ? "Login" : "Create Account"}
-                </Button>
-
-                {isLogin && (
-                  <div className="text-center text-sm mt-4">
-                    <span
-                      className="text-[#37B34A] cursor-pointer font-medium"
-                      onClick={() => message.info("Password reset coming soon!")}
-                    >
-                      Forgot Passcode?
-                    </span>
-                  </div>
-                )}
               </motion.div>
             )}
           </AnimatePresence>
         </motion.div>
       </div>
 
-      {/* Image Section */}
+      {/* RIGHT SIDE IMAGE */}
       <div className="hidden md:flex w-1/2 h-full bg-gradient-to-br from-[#37B34A] to-[#2B9C3C] items-center justify-center">
         <div className="text-white text-center p-8">
           <h1 className="text-5xl font-bold mb-4">MyDLV</h1>

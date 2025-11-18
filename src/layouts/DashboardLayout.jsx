@@ -21,15 +21,43 @@ import {
 import { motion } from "framer-motion";
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import Logos from "../assets/logo.png";
+import { api } from "../utils/api";
 const { Header, Sider, Content, Footer } = Layout;
 
 export default function DashboardLayout() {
   const [collapsed, setCollapsed] = React.useState(false);
   const [showBalance, setShowBalance] = React.useState(false);
   const [currentPath, setCurrentPath] = React.useState("explore");
+  const [userData, setUserData] = React.useState(null);
+  const [loading, setLoading] = React.useState(true);
   const navigate = useNavigate();
   const location = useLocation();
  
+  React.useEffect(() => {
+    // Fetch user data
+    const fetchUserData = async () => {
+      try {
+        const response = await api.get('/auth/me');
+        setUserData(response.data.data);
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
+  React.useEffect(() => {
+    // Extract the first part of the pathname (e.g. '/orders' -> 'orders')
+    const path = location.pathname.split("/")[1] || "explore";
+    setCurrentPath(path);
+  }, [location.pathname]);
+
+  const displayName = userData?.firstname || "User";
+  const walletBalance = userData?.wallet?.NGN || 0;
+  const profilePicture = userData?.profile_picture;
 
   // sidebar menu items
   const menuItems = [
@@ -59,11 +87,7 @@ export default function DashboardLayout() {
     const item = menuItems.find((i) => i.key === key);
     if (item) navigate(item.path);
   };
-  React.useEffect(() => {
-    // Extract the first part of the pathname (e.g. '/orders' -> 'orders')
-    const path = location.pathname.split("/")[1] || "explore";
-    setCurrentPath(path);
-  }, [location.pathname]);
+
   return (
     <Layout className="min-h-screen font-sans">
       {/* Desktop Sidebar */}
@@ -96,13 +120,19 @@ export default function DashboardLayout() {
           {/* Tablet Layout (md to lg) */}
           <div className="hidden md:flex lg:hidden justify-between items-center h-[72px]">
             {/* Left: User Greeting */}
-            <div className="flex items-center gap-3 relative bg-[#333] rounded-lg h-[50px]  px-3">
-                <div className="w-[25px] h-[25px] rounded-full bg-gray-700 flex items-center justify-center mt-[-10px] text-white ">
-                  <UserOutlined className="text-white text-xs" />
+            <div 
+               onClick={() => navigate("/profile")}
+              className="flex items-center gap-3 relative bg-[#333] rounded-lg h-[50px]  px-3 cursor-pointer">
+                <div className="w-[25px] h-[25px] rounded-full bg-gray-700 flex items-center justify-center mt-[-10px] text-white overflow-hidden">
+                  {profilePicture ? (
+                    <img src={profilePicture} alt="Profile" className="w-full h-full object-cover" />
+                  ) : (
+                    <UserOutlined className="text-white text-xs" />
+                  )}
                 </div>
                 <div className="relative">
                   <p className="text-xs text-gray-600 absolute top-0 text-white ">Hello</p>
-                  <p className="font-semibold text-gray-800 text-white text-xs mt-[15px]">Micheal</p>
+                  <p className="font-semibold text-gray-800 text-white text-xs mt-[15px]">{displayName}</p>
                 </div>
               </div>
 
@@ -136,7 +166,7 @@ export default function DashboardLayout() {
                     <EyeOutlined className="text-sm text-gray-600" />
                   )}
                 </button>
-                    {showBalance ? "₦500,000.00" : "₦******"}
+                    {showBalance ? `₦${walletBalance.toLocaleString()}.00` : "₦******"}
                   </p>
                 </div>
                 
@@ -159,13 +189,19 @@ export default function DashboardLayout() {
             {/* Top Row: Avatar, Location, Notification */}
             <div className="flex justify-between items-center mb-4">
               {/* Left: User Greeting */}
-              <div className="flex items-center gap-3 relative bg-[#333] rounded-lg h-[50px]  px-3">
-                <div className="w-[25px] h-[25px] rounded-full bg-gray-700 flex items-center justify-center mt-[-10px] text-white ">
-                  <UserOutlined className="text-white text-xs" />
+              <div 
+                onClick={() => navigate("/profile")}
+                className="flex items-center gap-3 relative bg-[#333] rounded-lg h-[50px]  px-3 cursor-pointer">
+                <div className="w-[25px] h-[25px] rounded-full bg-gray-700 flex items-center justify-center mt-[-10px] text-white overflow-hidden">
+                  {profilePicture ? (
+                    <img src={profilePicture} alt="Profile" className="w-full h-full object-cover" />
+                  ) : (
+                    <UserOutlined className="text-white text-xs" />
+                  )}
                 </div>
                 <div className="relative">
                   <p className="text-xs text-gray-600 absolute top-0 text-white ">Hello</p>
-                  <p className="font-semibold text-gray-800 text-white text-xs mt-[15px]">Micheal</p>
+                  <p className="font-semibold text-gray-800 text-white text-xs mt-[15px]">{displayName}</p>
                 </div>
               </div>
 
@@ -208,7 +244,7 @@ export default function DashboardLayout() {
                       
                       
                     </div>
-                    {showBalance ? "₦500,000.00" : "₦******"}
+                    {showBalance ? `₦${walletBalance.toLocaleString()}.00` : "₦******"}
                   </p>
                 </div>
               
@@ -256,7 +292,7 @@ export default function DashboardLayout() {
                       )}
                     </button>
                     <span className="font-semibold text-gray-800 text-xs">
-                      {showBalance ? "₦500,000.00" : "₦******"}
+                      {showBalance ? `₦${walletBalance.toLocaleString()}.00` : "₦******"}
                     </span>
                   </div>
                 </div>

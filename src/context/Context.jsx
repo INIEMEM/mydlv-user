@@ -2,7 +2,7 @@ import { useState, createContext } from "react";
 export const MainContext = createContext();
 const Context = (props) => {
   const [user, setUser] = useState({});
-  const [baseUrl, setBaseUrl] = useState('https://express-api-bloomzon.onrender.com/api/v1/');
+  const [baseUrl, setBaseUrl] = useState('https://mydlv.onrender.com/api/v1/');
   
   const getToken = () => {
     const tokenString = sessionStorage.getItem('token');

@@ -356,7 +356,7 @@ useEffect(() => {
               
             }}
             className="mt-2 shadow-md hover:shadow-lg "
-            onClick={()=> navigate('./shopping-list')}
+            onClick={()=> navigate('/shopping-list')}
           >
             Go to shopping list
           </Button>

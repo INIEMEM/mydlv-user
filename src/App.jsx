@@ -25,6 +25,8 @@ import AppLayout from "./layouts/RootLayout";
 import RestaurantListing from "./pages/resturant";
 import RestaurantDetailsPage from "./pages/resturant/ResturantDetails";
 import MyOrdersPage from "./pages/orders/MyOrdersPage";
+import ServicesPage from "./pages/serivices";
+import ProfilePage from "./pages/profile";
 
 function App() {
   const isLoggedIn = !!localStorage.getItem("token");
@@ -67,11 +69,14 @@ function App() {
           <Route path="orders" element={<AppLayout/>}>
             <Route index element={<MyOrdersPage/>}/>
           </Route>
-          <Route path="/handyman/:id" element={<HandymanProfile />} />
-          <Route path="/hire/:id" element={<HireHandyman />} />
+          {/* <Route path="/handyman/:id" element={<HandymanProfile />} />
+          <Route path="/hire/:id" element={<HireHandyman />} /> */}
           <Route path="/shopping-list" element={<ShoppingList />} />
           <Route path="/shopping-list/:item" element={<ItemsMatchingPage />} />
           <Route path="/products" element={<ProductSelection />} />
+          <Route path="/services" element={<ServicesPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
+
         </Route>
       </>
     )
