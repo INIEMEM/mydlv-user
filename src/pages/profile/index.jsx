@@ -225,7 +225,7 @@ export default function ProfilePage() {
       const token = localStorage.getItem("token");
   
       // 1️⃣ Request a signed URL from your backend
-      const signResponse = await fetch(`${baseUrl}auth/sign-s3`, {
+      const signResponse = await fetch(`https://mydlv.onrender.com/api/v1/auth/sign-s3`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -260,7 +260,7 @@ export default function ProfilePage() {
       const imageUrl = uploadResponse.url.split("?")[0];
   
       // 3️⃣ Update user profile with this image URL
-      const updateRes = await api.post("auth/profile-picture", {
+      const updateRes = await api.post("auth/profile/picture", {
         images: [imageUrl],
       });
   
@@ -303,6 +303,7 @@ export default function ProfilePage() {
       const data = res.data.data;
       
       setUserName(data.firstname);
+      
       setUserEmail(data.email);
       setUserPhone(data.phone);
       setProfilePic(data?.profile_picture);
@@ -377,6 +378,7 @@ export default function ProfilePage() {
               </div>
               <span className="text-xs md:text-sm text-gray-500">Upload Image</span>
             </div>
+            
             <h2 className="md:text-3xl font-semibold text-green-600 mt-4">{userName}</h2>
           </div>
 
