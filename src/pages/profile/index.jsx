@@ -218,14 +218,65 @@ export default function ProfilePage() {
   const handleProfileUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    
-    // Demo: Just set a preview
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setProfilePic(reader.result);
-    };
-    reader.readAsDataURL(file);
+  
+    setLoading(true);
+  
+    try {
+      const token = localStorage.getItem("token");
+  
+      // 1️⃣ Request a signed URL from your backend
+      const signResponse = await fetch(`${baseUrl}auth/sign-s3`, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          fileName: file.name,
+          fileType: file.type,
+        }),
+      });
+  
+      const signedUrl = await signResponse.json();
+  
+      if (!signedUrl) {
+        throw new Error("Failed to get signed URL");
+      }
+  
+      // 2️⃣ Upload the file directly to S3
+      const uploadResponse = await fetch(signedUrl, {
+        method: "PUT",
+        headers: {
+          "Content-Type": file.type,
+        },
+        body: file,
+      });
+  
+      if (!uploadResponse.ok) {
+        throw new Error("Failed to upload to S3");
+      }
+  
+      // Remove AWS query params to get the clean file URL
+      const imageUrl = uploadResponse.url.split("?")[0];
+  
+      // 3️⃣ Update user profile with this image URL
+      const updateRes = await api.post("auth/profile-picture", {
+        images: [imageUrl],
+      });
+  
+      // 4️⃣ Update UI preview instantly
+      setProfilePic(imageUrl);
+  
+      alert("Profile picture updated!");
+  
+    } catch (error) {
+      console.error("Upload error:", error);
+      alert("Failed to upload image");
+    } finally {
+      setLoading(false);
+    }
   };
+  
 
   const menuItems = [
     { id: 'account', label: 'Account', icon: User, hasArrow: true },
