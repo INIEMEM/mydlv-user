@@ -10,7 +10,7 @@ export default function Auth() {
   const navigate = useNavigate();
   const [params] = useSearchParams();
   const mode = params.get("mode") || "login";
-  const { baseUrl } = useContext(MainContext);
+  const { baseUrl, setToken, token } = useContext(MainContext);
 
   const [step, setStep] = useState(1);
   const [email, setEmail] = useState("");
@@ -99,6 +99,7 @@ export default function Auth() {
             JSON.stringify({ email, isAuthenticated: true })
           );
           localStorage.setItem("token", res.data.token);
+          setToken(res.data.token);
           navigate("/explore");
         }
       }

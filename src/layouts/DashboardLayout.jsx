@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useContext} from "react";
 import { Layout, Menu, Badge, Dropdown, Button } from "antd";
 import {
   HomeOutlined,
@@ -22,6 +22,7 @@ import { motion } from "framer-motion";
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import Logos from "../assets/logo.png";
 import { api } from "../utils/api";
+import { MainContext } from "../context/Context";
 const { Header, Sider, Content, Footer } = Layout;
 
 export default function DashboardLayout() {
@@ -32,9 +33,10 @@ export default function DashboardLayout() {
   const [loading, setLoading] = React.useState(true);
   const navigate = useNavigate();
   const location = useLocation();
- 
+  const { token } = useContext(MainContext);
   React.useEffect(() => {
     // Fetch user data
+  
     const fetchUserData = async () => {
       try {
         const response = await api.get('/auth/me');
@@ -45,9 +47,12 @@ export default function DashboardLayout() {
         setLoading(false);
       }
     };
+    console.log("Token in Layout:", token);
+    if (token){
 
-    fetchUserData();
-  }, []);
+      fetchUserData();
+    }
+  }, [token]);
 
   React.useEffect(() => {
     // Extract the first part of the pathname (e.g. '/orders' -> 'orders')

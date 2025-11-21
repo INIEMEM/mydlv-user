@@ -58,7 +58,7 @@ function App() {
             </ProtectedRoute>
           }
         >
-          <Route path="explore" element={<AppLayout/>}>
+          <Route path="explore" element={<AppLayout/>}> 
 
             <Route index element={<Explore />} />
             <Route path="resturants" element={<AppLayout/>}>

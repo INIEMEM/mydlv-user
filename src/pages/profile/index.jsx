@@ -288,7 +288,7 @@ export default function ProfilePage() {
       alert('Logged out successfully!');
       
       // Redirect to login page
-      navigate('/');
+      navigate("/auth", { replace: true })
     } catch (error) {
       console.error('Logout error:', error);
       alert('Failed to logout. Please try again.');
