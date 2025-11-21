@@ -21,7 +21,7 @@ import {
 import { motion } from "framer-motion";
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import Logos from "../assets/logo.png";
-import { api } from "../utils/api";
+import axios from "axios";
 import { MainContext } from "../context/Context";
 const { Header, Sider, Content, Footer } = Layout;
 
@@ -33,13 +33,17 @@ export default function DashboardLayout() {
   const [loading, setLoading] = React.useState(true);
   const navigate = useNavigate();
   const location = useLocation();
-  const { token } = useContext(MainContext);
+  const { token, baseUrl } = useContext(MainContext);
   React.useEffect(() => {
     // Fetch user data
   
     const fetchUserData = async () => {
       try {
-        const response = await api.get('/auth/me');
+        const response = await axios.get(`${baseUrl}auth/me`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         setUserData(response.data.data);
       } catch (error) {
         console.error('Error fetching user data:', error);
@@ -47,7 +51,7 @@ export default function DashboardLayout() {
         setLoading(false);
       }
     };
-    console.log("Token in Layout:", token);
+   
     if (token){
 
       fetchUserData();

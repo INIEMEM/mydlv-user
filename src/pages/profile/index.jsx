@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { ArrowLeft, ChevronRight, User, Mail, Phone, MapPin, CreditCard, Lock, Shield, HelpCircle, LogOut, X, Copy, Wallet } from 'lucide-react';
 import { api } from '../../utils/api';
 import { useNavigate } from 'react-router-dom';
 // Mock API for demo purposes
-
+import axios from 'axios';
+import { MainContext } from '../../context/Context';
 
 export default function ProfilePage() {
+  const { token, baseUrl } = useContext(MainContext);
   const [currentView, setCurrentView] = useState('main');
   const [userName, setUserName] = useState('');
   const [userEmail, setUserEmail] = useState('');
@@ -224,7 +226,7 @@ export default function ProfilePage() {
     setLoading(true);
   
     try {
-      const token = localStorage.getItem("token");
+     
   
       // 1️⃣ Request a signed URL from your backend
       const signResponse = await fetch(`https://mydlv.onrender.com/api/v1/auth/sign-s3`, {
@@ -316,7 +318,11 @@ export default function ProfilePage() {
   const fetchUser = async () => {
     setLoading(true);
     try {
-      const res = await api.get("auth/me");
+      const res = await axios.get(`${baseUrl}auth/me`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });;
       const data = res.data.data;
       
       setUserName(data.firstname);
