@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowLeft, ChevronRight, User, Mail, Phone, MapPin, CreditCard, Lock, Shield, HelpCircle, LogOut, X, Copy, Wallet } from 'lucide-react';
 import { api } from '../../utils/api';
+import { useNavigate } from 'react-router-dom';
 // Mock API for demo purposes
 
 
@@ -16,7 +17,7 @@ export default function ProfilePage() {
   const [loading, setLoading] = useState(false);
   const [userCards, setUserCards] = useState([]);
   const [walletBalance, setWalletBalance] = useState(0);
-  
+  const navigate = useNavigate();
   // Payment states
   const [selectedAmount, setSelectedAmount] = useState('N50,000');
   const [customAmount, setCustomAmount] = useState('');
@@ -81,6 +82,7 @@ export default function ProfilePage() {
         address: 'no 362 nwaniba road, uyo, nigeria'
       });
       setUserName(tempName);
+      
       setShowModal(false);
     } catch (error) {
       console.log("Update error:", error);
@@ -276,7 +278,22 @@ export default function ProfilePage() {
       setLoading(false);
     }
   };
-  
+  const handleLogout = () => {
+    try {
+      // Clear localStorage
+      localStorage.removeItem('user');
+      localStorage.removeItem('token');
+      
+      // Show success message (optional - you can use any notification system)
+      alert('Logged out successfully!');
+      
+      // Redirect to login page
+      navigate('/');
+    } catch (error) {
+      console.error('Logout error:', error);
+      alert('Failed to logout. Please try again.');
+    }
+  };
 
   const menuItems = [
     { id: 'account', label: 'Account', icon: User, hasArrow: true },
@@ -303,7 +320,6 @@ export default function ProfilePage() {
       const data = res.data.data;
       
       setUserName(data.firstname);
-      
       setUserEmail(data.email);
       setUserPhone(data.phone);
       setProfilePic(data?.profile_picture);
@@ -388,7 +404,14 @@ export default function ProfilePage() {
               return (
                 <button
                   key={item.id}
-                  onClick={() => item.id === 'account' && setCurrentView('account')}
+                  onClick={() => {
+                    if (item.id === "logout") {
+                      handleLogout();
+                    }
+                    if (item.id === "account") {
+                      setCurrentView("account");
+                    }
+                  }}
                   className="w-full flex items-center justify-between p-4 border-b border-b-[#999] hover:bg-[#e1e1e1] transition-colors"
                 >
                   <div className="flex items-center gap-3">

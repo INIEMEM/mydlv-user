@@ -30,7 +30,7 @@ import ProfilePage from "./pages/profile";
 
 function App() {
   const isLoggedIn = !!localStorage.getItem("token");
-
+  console.log("isLoggedIn:", isLoggedIn);
   const router = createBrowserRouter(
     createRoutesFromElements(
       <>
