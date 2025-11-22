@@ -27,6 +27,7 @@ import RestaurantDetailsPage from "./pages/resturant/ResturantDetails";
 import MyOrdersPage from "./pages/orders/MyOrdersPage";
 import ServicesPage from "./pages/serivices";
 import ProfilePage from "./pages/profile";
+import NotificationPage from "./pages/notification";
 
 function App() {
   const isLoggedIn = !!localStorage.getItem("token");
@@ -77,7 +78,7 @@ function App() {
           <Route path="/products" element={<ProductSelection />} />
           <Route path="/services" element={<ServicesPage />} />
           <Route path="/profile" element={<ProfilePage />} />
-
+          <Route path="/notification" element={<NotificationPage/>}/>
         </Route>
       </>
     )
