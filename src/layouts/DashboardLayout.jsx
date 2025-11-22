@@ -31,12 +31,13 @@ export default function DashboardLayout() {
   const [currentPath, setCurrentPath] = React.useState("explore");
   const [userData, setUserData] = React.useState(null);
   const [loading, setLoading] = React.useState(true);
+  const [unreadNotifications, setUnreadNotifications] = React.useState(0);
   const navigate = useNavigate();
   const location = useLocation();
   const { token, baseUrl } = useContext(MainContext);
+  
   React.useEffect(() => {
     // Fetch user data
-  
     const fetchUserData = async () => {
       try {
         const response = await axios.get(`${baseUrl}auth/me`, {
@@ -53,10 +54,32 @@ export default function DashboardLayout() {
     };
    
     if (token){
-
       fetchUserData();
     }
   }, [token]);
+
+  React.useEffect(() => {
+    // Fetch notification count
+    const fetchNotificationCount = async () => {
+      try {
+        const response = await axios.get(`${baseUrl}notification`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setUnreadNotifications(response.data.data.stat.unread || 0);
+      } catch (error) {
+        console.error('Error fetching notifications:', error);
+      }
+    };
+
+    if (token) {
+      fetchNotificationCount();
+      // Poll for new notifications every 30 seconds
+      const interval = setInterval(fetchNotificationCount, 30000);
+      return () => clearInterval(interval);
+    }
+  }, [token, baseUrl]);
 
   React.useEffect(() => {
     // Extract the first part of the pathname (e.g. '/orders' -> 'orders')
@@ -182,8 +205,11 @@ export default function DashboardLayout() {
               </div>
 
               {/* Notification */}
-              <Badge count={2} size="small" color="#37B34A" className="bg-white p-2 rounded-lg">
-                <BellOutlined className="text-2xl text-gray-700 cursor-pointer" />
+              <Badge count={unreadNotifications} size="small" color="#37B34A" className="bg-white p-2 rounded-lg">
+                <BellOutlined 
+                  className="text-2xl text-gray-700 cursor-pointer" 
+                  onClick={() => navigate("/notifications")}
+                />
               </Badge>
 
               {/* Cart */}
@@ -227,8 +253,11 @@ export default function DashboardLayout() {
               </Dropdown>
 
               {/* Right: Notification only */}
-              <Badge count={2} size="small" color="#37B34A" className="bg-white p-2 rounded-lg">
-                <BellOutlined className="text-2xl text-gray-700 cursor-pointer" />
+              <Badge count={unreadNotifications} size="small" color="#37B34A" className="bg-white p-2 rounded-lg">
+                <BellOutlined 
+                  className="text-2xl text-gray-700 cursor-pointer" 
+                  onClick={() => navigate("/notifications")}
+                />
               </Badge>
             </div>
 
@@ -305,6 +334,14 @@ export default function DashboardLayout() {
                     </span>
                   </div>
                 </div>
+              </div>
+              <div className="bg-[#fcfcfc] h-[50px] p-2 flex items-center justify-center rounded-lg">
+                <Badge count={unreadNotifications} size="small" offset={[-5, 5]} color="#37B34A">
+                  <BellOutlined 
+                    className="text-2xl text-gray-700 cursor-pointer" 
+                    onClick={() => navigate("/notifications")}
+                  />
+                </Badge>
               </div>
               <div className="bg-[#fcfcfc] h-[50px] p-2 flex items-center justify-center rounded-lg">
                 <Badge count={2} size="small" offset={[-5, 5]} color="#37B34A">
