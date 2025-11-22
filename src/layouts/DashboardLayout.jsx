@@ -70,7 +70,7 @@ export default function DashboardLayout() {
 
   // sidebar menu items
   const menuItems = [
-    { key: "explore", icon: <HomeOutlined />, label: "Explore", path: "/explore" },
+    { key: "explore", icon: <HomeOutlined />, label: "Explore", path: "/" },
     { key: "notifications", icon: <BellOutlined />, label: "Notifications", path: "/notifications" },
     { key: "shopping-list", icon: <ShoppingOutlined />, label: "Shopping List", path: "/shopping-list" },
     { key: "rider", icon: <CarOutlined />, label: "My Rider", path: "/rider" },
@@ -475,7 +475,7 @@ export default function DashboardLayout() {
       {/* Mobile Bottom Navigation */}
       <div className="lg:hidden fixed bottom-0 left-0 w-full bg-white shadow-[0_-2px_10px_rgba(0,0,0,0.1)] flex justify-around py-3 z-50">
         {[
-          { key: "explore", icon: <HomeOutlined />, label: "Explore", path: "/explore" },
+          { key: "explore", icon: <HomeOutlined />, label: "Explore", path: "/" },
           { key: "rider", icon: <CarOutlined />, label: "My Rider", path: "/rider", count: 12 },
           { key: "orders", icon: <OrderedListOutlined />, label: "My Orders", path: "/orders", count: 12 },
           { key: "services", icon: <ToolOutlined />, label: "Services", path: "/services" },

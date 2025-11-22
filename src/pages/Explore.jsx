@@ -235,12 +235,12 @@ useEffect(() => {
         }
 
         // Remove query params from URL
-        navigate("/explore", { replace: true });
+        navigate("/", { replace: true });
       })
       .catch((err) => {
         console.error("Google login error:", err);
         message.error("Error during Google login");
-        navigate("/explore", { replace: true });
+        navigate("/", { replace: true });
       });
   }
 }, [location, navigate]);

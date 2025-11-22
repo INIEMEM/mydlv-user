@@ -21,10 +21,10 @@ export default function Auth() {
   const [loadingResend, setLoadingResend] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
 
-  const storedUser = JSON.parse(localStorage.getItem("user") || "null");
-  const isLoggedIn = storedUser && storedUser.isAuthenticated;
+  // const storedUser = JSON.parse(localStorage.getItem("user") || "null");
+  // const isLoggedIn = storedUser && storedUser.isAuthenticated;
 
-  if (isLoggedIn) return <Navigate to="/explore" replace />;
+  // if (isLoggedIn) return <Navigate to="/" replace />;
 
   const isLogin = mode === "login";
 
@@ -100,7 +100,7 @@ export default function Auth() {
           );
           localStorage.setItem("token", res.data.token);
           setToken(res.data.token);
-          navigate("/explore");
+          navigate("/");
         }
       }
     } catch (error) {

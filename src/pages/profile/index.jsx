@@ -7,7 +7,7 @@ import axios from 'axios';
 import { MainContext } from '../../context/Context';
 
 export default function ProfilePage() {
-  const { token, baseUrl } = useContext(MainContext);
+  const {  baseUrl, token } = useContext(MainContext);
   const [currentView, setCurrentView] = useState('main');
   const [userName, setUserName] = useState('');
   const [userEmail, setUserEmail] = useState('');
@@ -227,9 +227,10 @@ export default function ProfilePage() {
   
     try {
      
-  
+      const token = localStorage.getItem('token');
       // 1️⃣ Request a signed URL from your backend
       const signResponse = await fetch(`https://mydlv.onrender.com/api/v1/auth/sign-s3`, {
+        
         method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -316,6 +317,7 @@ export default function ProfilePage() {
   ];
 
   const fetchUser = async () => {
+      const token = localStorage.getItem('token');
     setLoading(true);
     try {
       const res = await axios.get(`${baseUrl}auth/me`, {
@@ -374,7 +376,7 @@ export default function ProfilePage() {
       {/* Main Profile View */}
       {currentView === 'main' && (
         <div className="max-w-2xl mx-auto px-2 md:px-6 py-8">
-          <button className="mb-8 p-2 hover:bg-gray-100 flex items-center gap-4 rounded-lg transition-colors">
+          <button onClick={()=> navigate('/')} className="mb-8 p-2 hover:bg-gray-100 flex items-center gap-4 rounded-lg transition-colors">
             <ArrowLeft size={24} />
             <h1 className="text-xl font-bold">Profile</h1>
           </button>

@@ -35,18 +35,18 @@ function App() {
     createRoutesFromElements(
       <>
         {/* 🌱 Onboarding Route */}
-        <Route
+        {/* <Route
           path="/"
           element={
             isLoggedIn ? <Navigate to="/explore" replace /> : <Auth />
           }
-        />
+        /> */}
 
         {/* 🔐 Auth Route (/auth?mode=login or /auth?mode=signup) */}
         <Route
           path="/auth"
           element={
-            isLoggedIn ? <Navigate to="/explore" replace /> : <Auth />
+            <Auth />
           }
         />
 
@@ -57,15 +57,16 @@ function App() {
               <DashboardLayout />
             </ProtectedRoute>
           }
+          path="/"
         >
-          <Route path="explore" element={<AppLayout/>}> 
+         
 
             <Route index element={<Explore />} />
             <Route path="resturants" element={<AppLayout/>}>
               <Route index element={<RestaurantListing/>}/>
               <Route path=":resturant" element={<RestaurantDetailsPage/>}/>
             </Route>
-          </Route>
+         
           <Route path="orders" element={<AppLayout/>}>
             <Route index element={<MyOrdersPage/>}/>
           </Route>

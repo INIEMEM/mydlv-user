@@ -1,4 +1,4 @@
-import { useState, createContext } from "react";
+import { useState, createContext, useEffect } from "react";
 export const MainContext = createContext();
 const Context = (props) => {
   const [user, setUser] = useState({});
@@ -16,7 +16,18 @@ const Context = (props) => {
   // }; 
     
  
-    const [token, setToken] = useState(null);
+  const [token, setToken] = useState(() => {
+    return localStorage.getItem('token') || null;
+  });
+  
+  // Sync token with localStorage whenever it changes
+  useEffect(() => {
+    if (token) {
+      localStorage.setItem('token', token);
+    } else {
+      localStorage.removeItem('token');
+    }
+  }, [token]);
     
     
     const contextValue = 

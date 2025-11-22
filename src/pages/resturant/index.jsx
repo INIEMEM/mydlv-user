@@ -3,7 +3,9 @@ import { Input, Button, Drawer, Checkbox, Slider } from "antd";
 import { SearchOutlined, FilterOutlined, HeartOutlined, HeartFilled, ClockCircleOutlined, StarFilled, EnvironmentOutlined, ThunderboltOutlined } from "@ant-design/icons";
 import { Bike } from "lucide-react";
 import { motion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
+import Carousel from "react-multi-carousel";
+import "react-multi-carousel/lib/styles.css";
+
 const vendorsData = [
   {
     id: 1,
@@ -87,6 +89,24 @@ const vendorsData = [
   }
 ];
 
+const responsive = {
+  desktop: {
+    breakpoint: { max: 3000, min: 1024 },
+    items: 4,
+    slidesToSlide: 1
+  },
+  tablet: {
+    breakpoint: { max: 1024, min: 464 },
+    items: 2,
+    slidesToSlide: 1
+  },
+  mobile: {
+    breakpoint: { max: 464, min: 0 },
+    items: 1,
+    slidesToSlide: 1
+  }
+};
+
 export default function RestaurantListing() {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterDrawerOpen, setFilterDrawerOpen] = useState(false);
@@ -94,10 +114,11 @@ export default function RestaurantListing() {
   const [priceRange, setPriceRange] = useState([0, 5000]);
   const [selectedRatings, setSelectedRatings] = useState([]);
   const [selectedDistance, setSelectedDistance] = useState([]);
-  const [nearYouScroll, setNearYouScroll] = useState(0);
-  const [hotScroll, setHotScroll] = useState(0);
-  const [allProductsScroll, setAllProductsScroll] = useState(0);
-  const navigate = useNavigate()
+  
+  const nearYouCarouselRef = React.useRef(null);
+  const hotCarouselRef = React.useRef(null);
+  const allProductsCarouselRef = React.useRef(null);
+
   const toggleFavorite = (id) => {
     setFavorites((prev) =>
       prev.includes(id) ? prev.filter((fav) => fav !== id) : [...prev, id]
@@ -134,21 +155,50 @@ export default function RestaurantListing() {
     (selectedRatings.length > 0 ? 1 : 0) +
     (selectedDistance.length > 0 ? 1 : 0);
 
-  const scrollNearYou = (direction) => {
-    const newScroll = nearYouScroll + (direction === 'left' ? -300 : 300);
-    setNearYouScroll(Math.max(0, newScroll));
-  };
+  const VendorCard = ({ vendor }) => (
+    <motion.div
+      whileHover={{ y: -4 }}
+      className="rounded-2xl overflow-hidden hover:shadow-sm transition-all cursor-pointer mx-2"
+    >
+      <div className="relative">
+        <img
+          src={vendor.img}
+          alt={vendor.name}
+          className="w-full h-40 object-cover rounded-2xl"
+        />
+      </div>
 
-  const scrollHot = (direction) => {
-    const newScroll = hotScroll + (direction === 'left' ? -300 : 300);
-    setHotScroll(Math.max(0, newScroll));
-  };
-  const scrollAllProducts = (direction) => {
-    const newScroll = allProductsScroll + (direction === "left" ? -300 : 300);
-    setAllProductsScroll(Math.max(0, newScroll));
-  };
+      <div className="p-4">
+        <div className="flex items-start justify-between mb-2">
+          <h3 className="font-semibold text-gray-800 text-base">
+            {vendor.name}
+          </h3>
+          <div className="flex items-center gap-1 px-2 py-1 rounded-md">
+            <span className="text-sm font-medium text-gray-800">
+              {vendor.rating}
+            </span>
+            <span className="text-yellow-500 text-xs">
+              <StarFilled className="text-green-500 text-xs" />
+            </span>
+          </div>
+        </div>
+
+        <div className="flex items-center justify-between gap-3 text-xs text-gray-500">
+          <div className="flex items-center gap-1">
+            <ClockCircleOutlined className="text-gray-500" />
+            <span>{vendor.deliveryTime}</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <Bike size={12} className="" />
+            <span>From {vendor.priceFrom}</span>
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  );
+
   return (
-    <div className="min-h-screen ">
+    <div className="min-h-screen">
       {/* Breadcrumb & Search Section - MOBILE OPTIMIZED */}
       <div className="top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 py-4">
@@ -195,17 +245,16 @@ export default function RestaurantListing() {
                 placeholder="Search"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                // suffix={<SearchOutlined className="text-gray-400" />}
-                className="flex-1  rounded-none rounded-tl-lg rounded-bl-lg lg:rounded-none  hover:!border-none"
+                className="flex-1 rounded-none rounded-tl-lg rounded-bl-lg lg:rounded-none hover:!border-none"
               />
               <Button 
                 className="bg-[#222] h-[40px] rounded-none rounded-tr-lg rounded-br-lg hover:!text-[#fff] hover:!border-none hover:!bg-[#333]"
-                icon={<SearchOutlined className="text-gray-400 " />}
+                icon={<SearchOutlined className="text-gray-400" />}
               />
-              {  (
+              {activeFilterCount > 0 && (
                 <Button
                   size="large"
-                  className="bg-transparent text-[#222] rounded-none rounded-tl-lg rounded-bl-lg px-4 hover:bg-green-700 md"
+                  className="bg-transparent text-[#222] rounded-none rounded-tl-lg rounded-bl-lg px-4 hover:bg-green-700"
                 >
                   {activeFilterCount}
                 </Button>
@@ -255,13 +304,13 @@ export default function RestaurantListing() {
             </h2>
             <div className="flex gap-2">
               <button 
-                onClick={() => scrollNearYou('left')}
+                onClick={() => nearYouCarouselRef.current?.previous()}
                 className="w-6 h-6 rounded-lg border border-gray-300 flex items-center justify-center hover:bg-[#333] bg-[#111] text-[#fff]"
               >
                 ←
               </button>
               <button 
-                onClick={() => scrollNearYou('right')}
+                onClick={() => nearYouCarouselRef.current?.next()}
                 className="w-6 h-6 rounded-lg border border-gray-300 flex items-center justify-center hover:bg-[#333] bg-[#111] text-[#fff]"
               >
                 →
@@ -269,74 +318,25 @@ export default function RestaurantListing() {
             </div>
           </div>
 
-          <div className="overflow-x-hidden pb-2">
-            <div 
-              className="flex gap-4 transition-transform duration-300 ease-in-out" 
-              style={{ 
-                minWidth: 'max-content',
-                transform: `translateX(-${nearYouScroll}px)`
-              }}
-            >
-              {filteredVendors.slice(0, 6).map((vendor) => (
-                <motion.div
-                  key={vendor.id}
-                  whileHover={{ y: -4 }}
-                  className=" rounded-2xl overflow-hidden  hover:shadow-sm transition-all cursor-pointer"
-                  style={{ minWidth: '280px', maxWidth: '280px' }}
-                  onClick={()=>navigate(`./${vendor.id}`)}
-                >
-                  <div className="relative">
-                    <img
-                      src={vendor.img}
-                      alt={vendor.name}
-                      className="w-full h-40 object-cover rounded-2xl"
-                    />
-                    {/* <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        toggleFavorite(vendor.id);
-                      }}
-                      className="absolute top-3 right-3 bg-white rounded-full p-2 shadow-md hover:scale-110 transition-transform"
-                    >
-                      {favorites.includes(vendor.id) ? (
-                        <HeartFilled className="text-red-500" />
-                      ) : (
-                        <HeartOutlined className="text-gray-600" />
-                      )}
-                    </button> */}
-                  </div>
-
-                  <div className="p-4">
-                    <div className="flex items-start justify-between mb-2">
-                      <h3 className="font-semibold text-gray-800 text-base">
-                        {vendor.name}
-                      </h3>
-                      <div className="flex items-center gap-1  px-2 py-1 rounded-md">
-                        
-                        <span className="text-sm font-medium text-gray-800">
-                          {vendor.rating}
-                        </span>
-                        <span className="text-yellow-500 text-xs">
-                        <StarFilled className="text-green-500 text-xs" />
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center justify-between gap-3 text-xs text-gray-500">
-                      <div className="flex items-center gap-1">
-                      <ClockCircleOutlined className="text-gray-500" />
-                        <span>{vendor.deliveryTime}</span>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <Bike size={12} className="" />
-                        <span>From {vendor.priceFrom}</span>
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
+          <Carousel
+            ref={nearYouCarouselRef}
+            responsive={responsive}
+            swipeable={true}
+            draggable={true}
+            showDots={false}
+            infinite={true}
+            autoPlay={false}
+            keyBoardControl={true}
+            customTransition="transform 300ms ease-in-out"
+            transitionDuration={300}
+            containerClass="near-you-carousel"
+            arrows={false}
+            itemClass="px-2"
+          >
+            {filteredVendors.slice(0, 6).map((vendor) => (
+              <VendorCard key={vendor.id} vendor={vendor} />
+            ))}
+          </Carousel>
         </div>
 
         {/* Hot section */}
@@ -347,13 +347,13 @@ export default function RestaurantListing() {
             </h2>
             <div className="flex gap-2">
               <button 
-                onClick={() => scrollHot('left')}
+                onClick={() => hotCarouselRef.current?.previous()}
                 className="w-6 h-6 rounded-lg border border-gray-300 flex items-center justify-center hover:bg-[#333] bg-[#111] text-[#fff]"
               >
                 ←
               </button>
               <button 
-                onClick={() => scrollHot('right')}
+                onClick={() => hotCarouselRef.current?.next()}
                 className="w-6 h-6 rounded-lg border border-gray-300 flex items-center justify-center hover:bg-[#333] bg-[#111] text-[#fff]"
               >
                 →
@@ -361,73 +361,25 @@ export default function RestaurantListing() {
             </div>
           </div>
 
-          <div className="overflow-x-hidden pb-2">
-            <div 
-              className="flex gap-4 transition-transform duration-300 ease-in-out" 
-              style={{ 
-                minWidth: 'max-content',
-                transform: `translateX(-${hotScroll}px)`
-              }}
-            >
-              {filteredVendors.filter(v => v.rating >= 4.6).map((vendor) => (
-                <motion.div
-                  key={vendor.id}
-                  whileHover={{ y: -4 }}
-                  className=" rounded-2xl overflow-hidden hover:shadow-sm transition-all cursor-pointer"
-                  style={{ minWidth: '280px', maxWidth: '280px' }}
-                >
-                  <div className="relative">
-                    <img
-                      src={vendor.img}
-                      alt={vendor.name}
-                      className="w-full h-40 object-cover rounded-2xl"
-                    />
-                    {/* <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        toggleFavorite(vendor.id);
-                      }}
-                      className="absolute top-3 right-3 bg-white rounded-full p-2 shadow-md hover:scale-110 transition-transform"
-                    >
-                      {favorites.includes(vendor.id) ? (
-                        <HeartFilled className="text-red-500" />
-                      ) : (
-                        <HeartOutlined className="text-gray-600" />
-                      )}
-                    </button> */}
-                  </div>
-
-                  <div className="p-4">
-                    <div className="flex items-start justify-between mb-2">
-                      <h3 className="font-semibold text-gray-800 text-base">
-                        {vendor.name}
-                      </h3>
-                      <div className="flex items-center gap-1  px-2 py-1 rounded-md">
-                        
-                        <span className="text-sm font-medium text-gray-800">
-                          {vendor.rating}
-                        </span>
-                        <span className="text-yellow-500 text-xs">
-                        <StarFilled className="text-green-500 text-xs" />
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center justify-between gap-3 text-xs text-gray-500">
-                      <div className="flex items-center gap-1">
-                      <ClockCircleOutlined className="text-gray-500" />
-                        <span>{vendor.deliveryTime}</span>
-                      </div>
-                      <div className="flex items-center gap-1">
-                      <Bike size={12} className="" />
-                        <span>From {vendor.priceFrom}</span>
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
+          <Carousel
+            ref={hotCarouselRef}
+            responsive={responsive}
+            swipeable={true}
+            draggable={true}
+            showDots={false}
+            infinite={true}
+            autoPlay={false}
+            keyBoardControl={true}
+            customTransition="transform 300ms ease-in-out"
+            transitionDuration={300}
+            containerClass="hot-carousel"
+            arrows={false}
+            itemClass="px-2"
+          >
+            {filteredVendors.filter(v => v.rating >= 4.6).map((vendor) => (
+              <VendorCard key={vendor.id} vendor={vendor} />
+            ))}
+          </Carousel>
         </div>
 
         {/* All Products section */}
@@ -436,13 +388,13 @@ export default function RestaurantListing() {
             <h2 className="text-lg font-semibold text-gray-800">All Products</h2>
             <div className="flex gap-2">
               <button 
-                onClick={() => scrollAllProducts('left')}
+                onClick={() => allProductsCarouselRef.current?.previous()}
                 className="w-6 h-6 rounded-lg border border-gray-300 flex items-center justify-center hover:bg-[#333] bg-[#111] text-[#fff]"
               >
                 ←
               </button>
               <button 
-                onClick={() => scrollAllProducts('right')}
+                onClick={() => allProductsCarouselRef.current?.next()}
                 className="w-6 h-6 rounded-lg border border-gray-300 flex items-center justify-center hover:bg-[#333] bg-[#111] text-[#fff]"
               >
                 →
@@ -450,59 +402,25 @@ export default function RestaurantListing() {
             </div>
           </div>
 
-          <div className="overflow-x-hidden pb-2">
-            <div
-              className="flex gap-4 transition-transform duration-300 ease-in-out"
-              style={{
-                minWidth: "max-content",
-                transform: `translateX(-${allProductsScroll}px)`
-              }}
-            >
-              {filteredVendors.map((vendor) => (
-                <motion.div
-                  key={vendor.id}
-                  whileHover={{ y: -4 }}
-                  className="rounded-2xl overflow-hidden hover:shadow-sm transition-all cursor-pointer"
-                  style={{ minWidth: "280px", maxWidth: "280px" }}
-                >
-                  <div className="relative">
-                    <img
-                      src={vendor.img}
-                      alt={vendor.name}
-                      className="w-full h-40 object-cover rounded-2xl"
-                    />
-                  </div>
-
-                  <div className="p-4">
-                    <div className="flex items-start justify-between mb-2">
-                      <h3 className="font-semibold text-gray-800 text-base">
-                        {vendor.name}
-                      </h3>
-                      <div className="flex items-center gap-1 px-2 py-1 rounded-md">
-                        <span className="text-sm font-medium text-gray-800">
-                          {vendor.rating}
-                        </span>
-                        <span className="text-yellow-500 text-xs">
-                          <StarFilled className="text-green-500 text-xs" />
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center justify-between gap-3 text-xs text-gray-500">
-                      <div className="flex items-center gap-1">
-                        <ClockCircleOutlined className="text-gray-500" />
-                        <span>{vendor.deliveryTime}</span>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <Bike size={12} />
-                        <span>From {vendor.priceFrom}</span>
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
+          <Carousel
+            ref={allProductsCarouselRef}
+            responsive={responsive}
+            swipeable={true}
+            draggable={true}
+            showDots={false}
+            infinite={true}
+            autoPlay={false}
+            keyBoardControl={true}
+            customTransition="transform 300ms ease-in-out"
+            transitionDuration={300}
+            containerClass="all-products-carousel"
+            arrows={false}
+            itemClass="px-2"
+          >
+            {filteredVendors.map((vendor) => (
+              <VendorCard key={vendor.id} vendor={vendor} />
+            ))}
+          </Carousel>
 
           {filteredVendors.length === 0 && (
             <div className="text-center py-12">
@@ -519,7 +437,6 @@ export default function RestaurantListing() {
             </div>
           )}
         </div>
-
       </div>
 
       {/* Filter Drawer */}
