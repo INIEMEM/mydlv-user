@@ -16,17 +16,18 @@ import ElectronicsImage from '../assets/electronics.png';
 import ServicesImage from '../assets/services.png';
 import { useLocation } from "react-router-dom";
 import axios from "axios";
+import { link } from "framer-motion/client";
 // import { useNavigate } from "react-router-dom";
 const categories = [
   { name: "Restaurants", emoji: "🍽️", img: ResturantImages, link: 'resturants' },
-  { name: "Supermarkets", emoji: "🛒", img: SuperMarket },
-  { name: "Local Markets", emoji: "🥬", img: LocalMarketsImage },
-  { name: "Pharmacies", emoji: "💊", img: PharmImage },
-  { name: "Electronics", emoji: "⚡", img: ElectronicsImage },
-  { name: "Fashion", emoji: "👗", img: FashionImage },
-  { name: "Cosmetics", emoji: "🚚", img: CosmeticsImage },
-  { name: "Services", emoji: "➕", img: ServicesImage },
-  { name: "Drinks", emoji: "➕", img: DrinksImage },
+  { name: "Supermarkets", emoji: "🛒", img: SuperMarket, link: 'supermarkets' },
+  { name: "Local Markets", emoji: "🥬", img: LocalMarketsImage, link: 'supermarkets' },
+  { name: "Pharmacies", emoji: "💊", img: PharmImage, link: 'supermarkets' },
+  { name: "Electronics", emoji: "⚡", img: ElectronicsImage, link: 'supermarkets' },
+  { name: "Fashion", emoji: "👗", img: FashionImage, link: 'supermarkets' },
+  { name: "Cosmetics", emoji: "🚚", img: CosmeticsImage, link: 'supermarkets' },
+  { name: "Services", emoji: "➕", img: ServicesImage, link: 'services' },
+  { name: "Drinks", emoji: "➕", img: DrinksImage, link: 'supermarkets' },
 
 ];
 const bestSelling = [
@@ -299,7 +300,7 @@ useEffect(() => {
               whileHover={{ scale: 1.05 }}
               transition={{ type: "spring", stiffness: 200 }}
               className="relative rounded-2xl overflow-hidden  cursor-pointer"
-              onClick={()=> navigate(`./${cat?.link}`)}
+              onClick={()=> navigate(`./${cat?.link}`)} 
             >
               <div className="h-36 w-full object-cover brightness-75" />
               <div className="absolute inset-0 flex flex-col justify-center items-center text-[#222] font-semibold text-[14px]">
@@ -319,6 +320,7 @@ useEffect(() => {
               transition={{ type: "spring", stiffness: 200 }}
               style={{ width: "calc((100%/5) - 0.8rem)" }} /* give same visual width as col of 5 */
               className="relative rounded-2xl overflow-hidden  cursor-pointer"
+              onClick={()=> navigate(`./${cat?.link}`)} 
             >
               <div className="h-36 w-full object-cover brightness-75" />
               <div className="absolute inset-0 flex flex-col justify-center items-center text-[#222] font-semibold text-[14px]">

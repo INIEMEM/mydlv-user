@@ -208,12 +208,12 @@ export const Cart = ({
   onPlaceOrder,
   onAddNewOrder,
   showGroupByVendor = true,
-  // New props for customize modal
+  
   customizeModalOpen = false,
   onCustomizeModalClose,
   selectedItem = null,
   restaurantData = null,
-  onEditChoices, // New prop for editing choices
+  onEditChoices, 
 }) => {
   const { carts, updateQuantity, removeFromCart, getCartTotal, getCartItemCount, addToCart } = useCart();
   const cartItems = carts[cartType] || [];
@@ -352,7 +352,7 @@ export const Cart = ({
                     </div>
 
                     {/* Order Actions */}
-                    <div className="bg-gray-50 -mx-3 -mb-3 mt-3 p-3 rounded-b-lg">
+                    {cartType !== 'shoppingList' && <div className="bg-gray-50 -mx-3 -mb-3 mt-3 p-3 rounded-b-lg">
                       <div className="bg-white rounded-lg p-3 mb-2">
                         <div className="flex items-center justify-between mb-2">
                           <div className="text-xs font-semibold text-gray-900">Your choices</div>
@@ -396,7 +396,7 @@ export const Cart = ({
                           </svg>
                         </button>
                       </div>
-                    </div>
+                    </div>}
                   </div>
                 ))}
               </div>

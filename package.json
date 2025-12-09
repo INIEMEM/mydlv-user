@@ -12,6 +12,7 @@
   "dependencies": {
     "@ant-design/icons": "^5.6.1",
     "@fontsource/poppins": "^5.2.7",
+    "@iconify/react": "^6.0.2",
     "antd": "^5.27.6",
     "axios": "^1.12.2",
     "framer-motion": "^12.23.24",

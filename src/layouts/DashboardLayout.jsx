@@ -128,7 +128,7 @@ export default function DashboardLayout() {
         onCollapse={setCollapsed}
         breakpoint="lg"
         collapsedWidth="0"
-        className="hidden lg:block fixed h-screen bg-[#e8e8e8] border-none"
+        className="hidden lg:block fixed h-screen bg-[#e8e8e8] border-none flex"
         theme="light"
         width={240}
       >
@@ -143,6 +143,26 @@ export default function DashboardLayout() {
           onClick={handleMenuClick}
           style={{ fontSize: "15px" }}
         />
+
+        <div className="absolute left-10 bottom-10">
+            <div 
+               onClick={() => navigate("/profile")}
+              className="flex items-center gap-3 relative bg-[#333] rounded-lg h-[50px]  px-3 cursor-pointer">
+                <div className="w-[25px] h-[25px] rounded-full bg-gray-700 flex items-center justify-center mt-[-10px] text-white overflow-hidden">
+                  {profilePicture ? (
+                    <img src={profilePicture} alt="Profile" className="w-full h-full object-cover" />
+                  ) : (
+                    <UserOutlined className="text-white text-xs" />
+                  )
+                  }
+                </div>
+                <div className="relative">
+                  <p className="text-xs text-gray-600 absolute top-0 text-white ">Hello</p>
+                  <p className="font-semibold text-gray-800 text-white text-xs mt-[15px]">{displayName}</p>
+                </div>
+            </div>
+        </div>
+
       </Sider>
 
       {/* Main Layout */}
@@ -160,7 +180,8 @@ export default function DashboardLayout() {
                     <img src={profilePicture} alt="Profile" className="w-full h-full object-cover" />
                   ) : (
                     <UserOutlined className="text-white text-xs" />
-                  )}
+                  )
+                  }
                 </div>
                 <div className="relative">
                   <p className="text-xs text-gray-600 absolute top-0 text-white ">Hello</p>
@@ -371,9 +392,9 @@ export default function DashboardLayout() {
             {/* Logo & About */}
             <div className="col-span-2 md:col-span-1">
               <Logo />
-              <p className="text-gray-600 text-sm mt-4">
+              {/* <p className="text-gray-600 text-sm mt-4">
                 Your trusted delivery and service platform
-              </p>
+              </p> */}
             </div>
 
             {/* About Us */}

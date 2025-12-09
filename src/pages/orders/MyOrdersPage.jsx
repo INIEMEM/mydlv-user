@@ -85,7 +85,7 @@ export default function MyOrdersPage() {
           </div>
           
           <div className="flex gap-4 items-center">
-            <div className="w-24 h-24 bg-gray-700 rounded-lg flex-shrink-0"></div>
+            <div className="w-14 h-14 lg:w-24 lg:h-24 bg-gray-700 rounded-lg flex-shrink-0"></div>
             
             <div className="flex-1">
               <div className="flex justify-between items-start mb-2">
@@ -165,8 +165,11 @@ export default function MyOrdersPage() {
       {activeOrders.map((order) => (
         <div key={order.id}>
           {/* Top Card with Map */}
-          <div className=" rounded-lg shadow-sm overflow-hidden">
-            <div className="p-4">
+          <div className="lg:flex relative rounded-lg shadow-sm overflow-hidden">
+            
+            <div 
+              style={{ flex: 2 }}
+              className="p-4 ">
               <div className="flex items-start justify-between mb-3">
                 <div className="flex-1">
                   <h3 className="font-semibold text-gray-800 mb-1">{order.restaurant}</h3>
@@ -183,9 +186,7 @@ export default function MyOrdersPage() {
                   <p className="text-xs text-gray-500 mt-1">Order ID: {order.id}</p>
                   <p className="text-xs text-gray-500">Date: {order.date}</p>
                 </div>
-                <button className="ml-2 w-8 h-8 bg-red-500 rounded-full flex items-center justify-center hover:bg-red-600">
-                  <X size={18} className="text-white" />
-                </button>
+              
               </div>
 
               {/* Progress Steps */}
@@ -216,7 +217,7 @@ export default function MyOrdersPage() {
             {/* Map */}
             <button 
               onClick={() => openMapModal(order)}
-              className="w-full bg-gray-100 overflow-hidden h-64 flex items-center justify-center cursor-pointer hover:opacity-90 transition-opacity relative hidden"
+              className="w-full bg-gray-100 overflow-hidden h-[400px] flex items-center justify-center cursor-pointer hover:opacity-90 transition-opacity relative hidden lg:block flex-1"
             >
               <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200">
                 {/* Map-like background */}
@@ -247,6 +248,9 @@ export default function MyOrdersPage() {
                 {/* Black dot at bottom */}
                 <div className="absolute bottom-10 left-32 w-3 h-3 bg-black rounded-full"></div>
               </div>
+            </button>
+            <button className="ml-2 w-8 h-8 bg-red-500 rounded-full  items-center justify-center hover:bg-red-600 absolute right-0 top-0 hidden lg:flex">
+              <X size={18} className="text-white" />
             </button>
           </div>
 
@@ -349,7 +353,13 @@ export default function MyOrdersPage() {
               </div>
               
               {order.choices && (
-                <div className="text-sm text-gray-600 mb-3">
+                <div 
+                  style={{
+                    borderTop: '1px solid #6F6F6F',
+                    borderLeft: '1px solid #6F6F6F',
+                    borderRight: '1px solid #6F6F6F'
+                  }}
+                  className="text-sm text-gray-600 p-2 rounded-t-xl">
                   <p className="font-medium">Your choices:</p>
                   {order.choices.map((choice, idx) => (
                     <p key={idx}>{choice}</p>
@@ -357,7 +367,7 @@ export default function MyOrdersPage() {
                 </div>
               )}
               
-              <button className="w-full py-2 bg-green-600 text-white rounded hover:bg-green-700">
+              <button className="w-full py-2 bg-[#37B34A] text-white rounded-none rounded-b-xl hover:bg-green-700">
                 Quick Reorder
               </button>
             </div>

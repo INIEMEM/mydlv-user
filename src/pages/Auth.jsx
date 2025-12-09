@@ -5,13 +5,15 @@ import { GoogleOutlined, MobileOutlined } from "@ant-design/icons";
 import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
 import { MainContext } from "../context/Context";
-
+import { useToast } from "../context/ToastContext";
+import { Icon } from '@iconify/react';
+import Logo from '../assets/Logo.png';
 export default function Auth() {
   const navigate = useNavigate();
   const [params] = useSearchParams();
   const mode = params.get("mode") || "login";
   const { baseUrl, setToken, token } = useContext(MainContext);
-
+  const toast = useToast();
   const [step, setStep] = useState(1);
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
@@ -41,7 +43,7 @@ export default function Auth() {
         });
 
         if (res.data.success) {
-          message.success("OTP sent to your email.");
+          toast.success("OTP sent to your email.");
           setStep(2);
         }
       } else {
@@ -51,13 +53,13 @@ export default function Auth() {
         });
 
         if (res.data.success) {
-          message.success("OTP sent to your email.");
+          toast.success("OTP sent to your email.");
           setStep(2);
         }
       }
     } catch (error) {
       console.log(error?.response?.data?.error);
-      message.error("Something went wrong. Try again.");
+      toast.error(error?.response?.data?.error);
     } finally {
       setLoadingEmail(false);
     }
@@ -66,7 +68,7 @@ export default function Auth() {
   // STEP 2 — OTP SUBMIT
   const handleOTPSubmit = async () => {
     if (otp.length !== 6) {
-      message.warning("Enter the 6-digit OTP");
+      toast.warning("Enter the 6-digit OTP");
       return;
     }
 
@@ -79,7 +81,7 @@ export default function Auth() {
         });
 
         if (res.data.success) {
-          message.success("Account verified. Logging you in...");
+          toast.success("Account verified. Logging you in...");
           // localStorage.setItem(
           //   "user",
           //   JSON.stringify({ email, isAuthenticated: true })
@@ -93,7 +95,7 @@ export default function Auth() {
         });
 
         if (res.data.success) {
-          message.success("Login successful!");
+          toast.success("Login successful!");
           localStorage.setItem(
             "user",
             JSON.stringify({ email, isAuthenticated: true })
@@ -105,7 +107,7 @@ export default function Auth() {
       }
     } catch (error) {
       console.log(error);
-      message.error("Invalid OTP. Try again.");
+      toast.error("Invalid OTP. Try again.");
     } finally {
       setLoadingOtp(false);
     }
@@ -117,9 +119,9 @@ export default function Auth() {
 
     try {
       await axios.post(`${baseUrl}auth/sendotp`, { email });
-      message.success("OTP resent!");
+      toast.success("OTP resent!");
     } catch (err) {
-      message.error("Could not resend OTP.");
+      toast.error("Could not resend OTP.");
     } finally {
       setLoadingResend(false);
     }
@@ -135,14 +137,18 @@ export default function Auth() {
       );
       if (res.data.success && res.data.url) window.location.href = res.data.url;
     } catch {
-      message.error("Google login failed.");
+      toast.error("Google login failed.");
       setGoogleLoading(false);
     }
   };
 
   return (
-    <div className="flex flex-col md:flex-row h-screen bg-gray-50">
-      <div className="flex flex-1 items-center justify-center  md:p-6 bg-[#DDDCDC]">
+    <div className="relative flex flex-col md:flex-row h-screen bg-gray-50">
+      
+      <div className="relative flex flex-1 items-center justify-center  md:p-6 bg-[#DDDCDC]">
+      <div className="hidden lg:block absolute top-10 left-[130px] 2xl:left-[300px]">
+       <img src={Logo} className="h-[50px] w-[150px]  object-contain"/>
+      </div>
         <motion.div
           className="w-full max-w-md rounded-2xl p-8"
           initial={{ opacity: 0, y: 40 }}
@@ -157,45 +163,75 @@ export default function Auth() {
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
               >
-                <h2 className="text-3xl font-semibold mb-6 text-center text-[#2B2B2B]">
-                  {isLogin ? "Welcome back!" : "Let's get you started"}
+                <h2 className="text-3xl font-semibold mb-6  text-[#2B2B2B]">
+                  {isLogin ? "Welcome back" : "Create an account"}
                 </h2>
 
                 {/* SOCIAL BUTTONS */}
                 <div className="flex flex-col gap-3 mb-4">
-                  <Button
-                    icon={<GoogleOutlined />}
-                    block
-                    loading={googleLoading}
-                    onClick={handleGoogleLogin}
-                    style={{ backgroundColor: "#E8E8E8", padding: "20px 0" }}
-                  >
-                    Continue with Google
-                  </Button>
+                <Button
+                  icon={<Icon icon="flat-color-icons:google" width="30" height="30" />}
+                  block
+                  loading={googleLoading}
+                  onClick={handleGoogleLogin}
+                  style={{
+                    backgroundColor: "#E8E8E8",
+                    padding: "25px 20px",
+                    display: "flex",
+                    justifyContent: "flex-start",
+                    alignItems: "center",
+                    gap: "8px",
+                    borderRadius: '10px',
+                    color: '#666464',
+                    fontSize: '12px',
+                  }}
+              >
+                Continue with Google
+              </Button>
 
-                  <Button
-                    icon={<MobileOutlined />}
-                    block
-                    style={{ backgroundColor: "#E8E8E8", padding: "20px 0" }}
-                  >
-                    {isLogin ? "Login" : "Sign Up"} with Mobile
-                  </Button>
+              <Button
+                icon={<Icon icon="mdi:cellphone" width="30" height="30" />}
+                block
+                style={{
+                  backgroundColor: "#E8E8E8",
+                  padding: "25px 20px",
+                  display: "flex",
+                  justifyContent: "flex-start",
+                  alignItems: "center",
+                  gap: "8px",
+                  borderRadius: '10px',
+                  color: '#666464',
+                  fontSize: '12px',
+                }}
+              >
+                {isLogin ? "Login" : "Sign Up"} with Mobile
+              </Button>
+
                 </div>
 
-                <div className="text-center text-[#2B2B2B] py-2">
+                <div className=" text-[#2B2B2B] py-2">
                   or continue with email
                 </div>
 
                 <Form layout="vertical" onFinish={handleEmailSubmit}>
                   <Form.Item
                     name="email"
-                    label="Email"
+                
                     rules={[{ type: "email", message: "Enter a valid email" }]}
                   >
                     <Input
                       size="large"
-                      placeholder="Enter your email"
-                      style={{ backgroundColor: "#e8e8e8" }}
+                      placeholder="Enter email"
+                      style={{ 
+                        backgroundColor: "#E8E8E8",
+                        padding: " 10px",
+                        display: "flex",
+                        justifyContent: "flex-start",
+                        alignItems: "center",
+                        gap: "8px",
+                        borderRadius: '10px',
+                        color: '#666464',
+                      }}
                     />
                   </Form.Item>
 
@@ -238,7 +274,7 @@ export default function Auth() {
                     Continue
                   </Button>
 
-                  <div className="text-sm mt-4 text-center">
+                  <div className="text-sm mt-4 ">
                     {isLogin ? (
                       <>
                         Don't have an account?{" "}
@@ -286,7 +322,8 @@ export default function Auth() {
                   value={otp}
                   onChange={setOtp}
                   size="large"
-                  className="mb-6"
+                  className="mb-6 otp-field"
+                  
                 />
 
                 <Button

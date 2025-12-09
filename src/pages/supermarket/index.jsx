@@ -108,7 +108,7 @@ const responsive = {
   }
 };
 
-export default function RestaurantListing() {
+export default function SupermarketListing() {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterDrawerOpen, setFilterDrawerOpen] = useState(false);
   const [favorites, setFavorites] = useState([]);
@@ -210,7 +210,7 @@ export default function RestaurantListing() {
             <div className="flex items-center gap-2">
               <span className="text-green-600 font-medium cursor-pointer">Explore</span>
               <span className="text-gray-400">›</span>
-              <span className="text-gray-800 font-medium">Restaurant</span>
+              <span className="text-gray-800 font-medium">Supermarkets</span>
             </div>
             {/* Filter button visible only on mobile */}
             <div className="flex sm:hidden items-center gap-2">
@@ -241,7 +241,7 @@ export default function RestaurantListing() {
                 size="large"
                 className="bg-[#222] text-white rounded-none rounded-tl-lg rounded-bl-lg px-6 hover:bg-[#333] hover:!text-[#fff] hover:!border-none hover:!bg-[#333]"
               >
-                Restaurant
+                Supermarkets
               </Button>
               <Input
                 size="large"

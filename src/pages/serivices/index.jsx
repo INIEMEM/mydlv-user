@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import { Input, Button, Drawer, Badge } from "antd";
 import { SearchOutlined, FilterOutlined, StarFilled, ClockCircleOutlined } from "@ant-design/icons";
 import { motion } from "framer-motion";
-
+import { useNavigate } from "react-router-dom";
 const servicesData = [
   {
     id: 1,
@@ -162,10 +162,11 @@ export default function ServicesPage() {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [filterDrawerOpen, setFilterDrawerOpen] = useState(false);
   const [scrollPositions, setScrollPositions] = useState({});
-
+  const [showServicesCategories, setShowServicesCategories] = useState(false);
+  const navigate = useNavigate();
   const filteredServices = servicesData.filter((service) => {
-    const matchesSearch = service.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         service.description.toLowerCase().includes(searchQuery.toLowerCase());
+  const matchesSearch = service.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                        service.description.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = selectedCategory === "All" || service.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
@@ -192,16 +193,20 @@ export default function ServicesPage() {
     });
   };
 
-  const ServiceCard = ({ service }) => (
+  const ServiceCard = ({ service }) => 
+   
+
+    (
     <motion.div
       whileHover={{ y: -4 }}
-      className="flex-shrink-0 w-56 rounded-2xl overflow-hidden hover:shadow-lg transition-all cursor-pointer border border-gray-100 bg-white"
+      className="flex-shrink-0 w-56 rounded-2xl overflow-hidden hover:shadow-lg transition-all cursor-pointer  "
+      onClick={()=> navigate(`./${service.id}`)}
     >
       <div className="relative">
         <img
           src={service.img}
           alt={service.name}
-          className="block w-full h-44 object-cover"
+          className="block w-full h-44 object-cover rounded-2xl"
         />
       </div>
   
@@ -236,9 +241,9 @@ export default function ServicesPage() {
           </div>
         </div>
   
-        <button className="w-full mt-3 bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg text-sm font-medium transition-colors">
+        {/* <button className="w-full mt-3 bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg text-sm font-medium transition-colors">
           per service
-        </button>
+        </button> */}
       </div>
     </motion.div>
   );
@@ -259,7 +264,9 @@ export default function ServicesPage() {
     };
   
     return (
-      <div className="mb-8 relative group">
+      <div 
+        
+        className="mb-8 relative group">
         {/* Header */}
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-semibold text-gray-800">{title}</h2>
@@ -320,9 +327,9 @@ export default function ServicesPage() {
   
 
   return (
-    <div className="min-h-screen bg-white box-border">
+    <div className="min-h-screen  box-border">
       {/* Header Section */}
-      <div className="bg-white sticky top-0 z-10 border-b border-gray-200">
+      <div className="  ">
         <div className="max-w-7xl mx-auto px-4 py-4">
           {/* Breadcrumb */}
           <div className="flex items-center justify-between gap-2 text-sm mb-4">
@@ -346,25 +353,36 @@ export default function ServicesPage() {
           </div>
 
           {/* Search Bar */}
-          <div className="flex gap-2">
+          <div className="flex ">
             <Input
               size="large"
               placeholder="Search services..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="flex-1 rounded-l-md"
+              className="flex-1 rounded-none rounded-l-md"
             />
             <Button
               size="large"
               icon={<SearchOutlined />}
-              className="bg-[#222] text-white rounded-r-md px-6 hover:bg-[#333]"
+              className="bg-[#222] rounded-none text-white rounded-r-md px-6 hover:bg-[#333]"
             />
+            <div className="flex items-center justify-center border border-[#ccc] px-4 ml-3 rounded-none rounded-l-md">
+              {filteredServices.length}
+            </div>
+            <Button
+              size="large"
+              icon={<FilterOutlined />}
+              className="bg-[#222] rounded-none hidden lg:block text-white  rounded-r-md px-6 hover:bg-[#333]"
+              onClick={() => setShowServicesCategories(!showServicesCategories)}
+            >
+              Filter
+            </Button>
           </div>
 
           {/* Results count */}
-          <div className="mt-3 text-sm text-gray-600">
+          {/* <div className="mt-3 text-sm text-gray-600">
             {filteredServices.length} services found
-          </div>
+          </div> */}
         </div>
       </div>
 
@@ -413,59 +431,61 @@ export default function ServicesPage() {
           </div>
 
           {/* Categories Sidebar - Desktop */}
-          <div className="hidden lg:block w-80 flex-shrink-0">
-            <div className="sticky top-32">
-              <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-                <div className="bg-[#222] text-white px-4 py-3">
-                  <h2 className="font-semibold text-base">Service Categories</h2>
-                </div>
-                
-                <div className="max-h-[calc(100vh-200px)] overflow-y-auto">
-                  {/* All Categories Option */}
-                  <button
-                    onClick={() => setSelectedCategory("All")}
-                    className={`w-full flex items-center justify-between px-4 py-3 text-left hover:bg-gray-50 transition-colors border-b border-gray-100 ${
-                      selectedCategory === "All" ? "bg-green-50 text-green-700" : "text-gray-700"
-                    }`}
-                  >
-                    <div className="flex items-center gap-3">
-                      <span className="text-lg">📋</span>
-                      <span className="text-sm font-medium">All Services</span>
-                    </div>
-                    <Badge 
-                      count={servicesData.length} 
-                      style={{ 
-                        backgroundColor: selectedCategory === "All" ? "#16a34a" : "#e5e7eb",
-                        color: selectedCategory === "All" ? "#fff" : "#374151"
-                      }} 
-                    />
-                  </button>
-
-                  {categories.map((category, index) => (
+          {
+            showServicesCategories && (<div className="hidden lg:block w-80 flex-shrink-0">
+              <div className="sticky top-32">
+                <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+                  <div className="bg-[#222] text-white px-4 py-3">
+                    <h2 className="font-semibold text-base">Service Categories</h2>
+                  </div>
+                  
+                  <div className="max-h-[calc(100vh-200px)] overflow-y-auto">
+                    {/* All Categories Option */}
                     <button
-                      key={index}
-                      onClick={() => setSelectedCategory(category.name)}
+                      onClick={() => setSelectedCategory("All")}
                       className={`w-full flex items-center justify-between px-4 py-3 text-left hover:bg-gray-50 transition-colors border-b border-gray-100 ${
-                        selectedCategory === category.name ? "bg-green-50 text-green-700" : "text-gray-700"
+                        selectedCategory === "All" ? "bg-green-50 text-green-700" : "text-gray-700"
                       }`}
                     >
                       <div className="flex items-center gap-3">
-                        <span className="text-lg">{category.icon}</span>
-                        <span className="text-sm font-medium">{category.name}</span>
+                        <span className="text-lg">📋</span>
+                        <span className="text-sm font-medium">All Services</span>
                       </div>
                       <Badge 
-                        count={category.count} 
+                        count={servicesData.length} 
                         style={{ 
-                          backgroundColor: selectedCategory === category.name ? "#16a34a" : "#e5e7eb",
-                          color: selectedCategory === category.name ? "#fff" : "#374151"
+                          backgroundColor: selectedCategory === "All" ? "#16a34a" : "#e5e7eb",
+                          color: selectedCategory === "All" ? "#fff" : "#374151"
                         }} 
                       />
                     </button>
-                  ))}
+  
+                    {categories.map((category, index) => (
+                      <button
+                        key={index}
+                        onClick={() => setSelectedCategory(category.name)}
+                        className={`w-full flex items-center justify-between px-4 py-3 text-left hover:bg-gray-50 transition-colors border-b border-gray-100 ${
+                          selectedCategory === category.name ? "bg-green-50 text-green-700" : "text-gray-700"
+                        }`}
+                      >
+                        <div className="flex items-center gap-3">
+                          <span className="text-lg">{category.icon}</span>
+                          <span className="text-sm font-medium">{category.name}</span>
+                        </div>
+                        <Badge 
+                          count={category.count} 
+                          style={{ 
+                            backgroundColor: selectedCategory === category.name ? "#16a34a" : "#e5e7eb",
+                            color: selectedCategory === category.name ? "#fff" : "#374151"
+                          }} 
+                        />
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
+            </div>)
+          }
         </div>
       </div>
 

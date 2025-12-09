@@ -133,7 +133,7 @@ const menuData = {
   ]
 };
 
-export default function RestaurantDetailsPage() {
+export default function SuperMarketDetailsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("BURGERS & SANDWICHES");
   const [cartOpen, setCartOpen] = useState(false);
@@ -205,7 +205,7 @@ export default function RestaurantDetailsPage() {
           <div className="flex items-center gap-2 text-sm">
             <button className="text-green-600 font-medium hover:text-green-700 flex items-center gap-1">
               <ArrowLeft size={16} />
-              <span>Restaurants</span>
+              <span>Supermarket</span>
             </button>
             <span className="text-gray-400">›</span>
             <span className="text-gray-800 font-medium">Chicken Republic</span>
@@ -331,17 +331,17 @@ export default function RestaurantDetailsPage() {
             {Object.entries(filteredMenu).map(([category, items]) => (
               <div key={category} className="mb-8">
                 <h2 className="text-lg font-bold text-gray-900 mb-4">{category}</h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 sm:grid-cols-2 gap-4">
                   {items.map((item) => {
                     const isAdded = addedItems[item.id];
                     
                     return (
                       <div
                         key={item.id}
-                        className="rounded-xl p-2  border border-gray-700 overflow-hidden hover:shadow-sm transition-shadow"
+                        className="rounded-xl p-2  overflow-hidden hover:shadow-sm transition-shadow"
                       >
-                        <div className="flex gap-3 p">
-                          <div className="md:w-24 md:h-24 w-16 h-18 bg-gray-200 rounded-lg overflow-hidden flex-shrink-0">
+                        <div className=" gap-3 p">
+                          <div className="md:w-full md:h-[130px]  w-full h-[120px] bg-gray-200 rounded-lg overflow-hidden flex-shrink-0">
                             <img 
                               src={item.image} 
                               alt={item.name}

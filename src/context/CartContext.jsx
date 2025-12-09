@@ -44,43 +44,42 @@ export const CartProvider = ({ children }) => {
 
   const addToCart = (cartType, item) => {
     setCarts(prev => {
-      // If item is marked as duplicate, always add as new item
-      if (item.isDuplicate) {
-        const newItem = {
-          ...item,
-          quantity: item.quantity || 1,
-          addedAt: item.addedAt || Date.now()
-        };
-        return {
-          ...prev,
-          [cartType]: [...prev[cartType], newItem]
-        };
-      }
-
-      // For non-duplicate items, check if exists and increment
-      const existingItemIndex = prev[cartType].findIndex(
-        cartItem => cartItem.id === item.id && cartItem.vendorId === item.vendorId
+      const cartItems = prev[cartType] || [];
+  
+      const existingItemIndex = cartItems.findIndex(
+        cartItem => cartItem.id === item.id
       );
-
+  
+      // Item exists → increment
       if (existingItemIndex > -1) {
-        // Item exists - increment quantity
-        const updatedCart = [...prev[cartType]];
-        updatedCart[existingItemIndex].quantity += (item.quantity || 1);
+        const updatedCart = [...cartItems];
+  
+        // Ensure quantity exists and is a number
+        const currentQty = Number(updatedCart[existingItemIndex].quantity) || 1;
+        const addQty = Number(item.quantity) || 1;
+  
+        updatedCart[existingItemIndex] = {
+          ...updatedCart[existingItemIndex],
+          quantity: currentQty + addQty
+        };
+  
         return { ...prev, [cartType]: updatedCart };
-      } else {
-        // New item - add with specified quantity or default to 1
-        const newItem = {
-          ...item,
-          quantity: item.quantity || 1,
-          addedAt: item.addedAt || Date.now()
-        };
-        return {
-          ...prev,
-          [cartType]: [...prev[cartType], newItem]
-        };
       }
+  
+      // New item → ensure quantity always starts at 1
+      const newItem = {
+        ...item,
+        quantity: Number(item.quantity) || 1,
+        addedAt: item.addedAt || Date.now()
+      };
+  
+      return {
+        ...prev,
+        [cartType]: [...cartItems, newItem]
+      };
     });
   };
+  
 
   const removeFromCart = (cartType, itemId, vendorId) => {
     setCarts(prev => ({

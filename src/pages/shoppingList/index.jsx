@@ -272,6 +272,26 @@ export default function ShoppingList() {
     }
   };
   
+  const handleAddItemToViewedList = () => 
+{
+  if (!productName.trim()) return;
+
+  const newItem = {
+    product: productName,
+    unit: productQty || "1",
+    guage: productGuage,
+    query: `${productName} ${productQty || "1"} ${productGuage}`.trim()
+  };
+
+  setViewListItems((prev) => [...prev, newItem]);
+
+  // Clear fields
+  setProductName("");
+  setProductQty("");
+  setProductGuage("");
+};
+
+
   const handleUpdateList = async () => {
     if (!viewListData?._id) return;
   
@@ -395,15 +415,18 @@ export default function ShoppingList() {
               {/* Inputs: product name (with suggestions), qty, guage */}
               <div className="mb-4">
                 <div className="space-y-3 mb-4 flex items-center">
-                  <div className="relative">
+                  <div 
+                    className="relative"
+                    style={{flex: 2}}
+                  >
                     <input
                       type="text"
                       value={productName}
                       onChange={(e) => searchProducts(e.target.value)}
                       placeholder="name"
-                      className="w-full px-3 py-2 border border-gray-300 rounded text-sm bg-transparent mt-3"
+                      className="w-full  px-3 py-2 border border-gray-300 rounded text-sm bg-transparent mt-3 "
                     />
-                  
+
                   {productName.trim() !== "" && (
                     <div className="absolute z-20 bg-white border mt-1 rounded shadow md:w-[300px] w-[250px]">
                      {loadingSuggestions ? (
@@ -438,7 +461,7 @@ export default function ShoppingList() {
                     ) : null}
 
                     </div>
-)}
+                  )}
 
 
                   </div>
@@ -448,7 +471,7 @@ export default function ShoppingList() {
                     value={productQty}
                     onChange={(e) => setProductQty(e.target.value)}
                     placeholder="Qty(e.g. 2)"
-                    className="w-full px-3 py-2 border border-gray-300 rounded text-sm bg-transparent"
+                    className="w-full px-3 py-2 border border-gray-300 rounded text-sm bg-transparent flex-1"
                   />
 
                   <input
@@ -456,7 +479,7 @@ export default function ShoppingList() {
                     value={productGuage}
                     onChange={(e) => setProductGuage(e.target.value)}
                     placeholder="Unit(litres, kg, packs)"
-                    className="w-full px-3 py-2 border border-gray-300 rounded text-sm bg-transparent"
+                    className="w-full px-3 py-2 border border-gray-300 rounded text-sm bg-transparent flex-1"
                   />
 
                   
@@ -526,7 +549,7 @@ export default function ShoppingList() {
                 <div className="text-center text-gray-400 text-sm py-8">No saved lists yet</div>
               ) : (
                 savedLists.map((list) => (
-                  <div key={list.id} className="flex gap-3 rounded p-3 items-center border border-gray-100">
+                  <div key={list.id} className="flex gap-3 rounded p-3 items-center ">
                     <div className="flex-3 w-[120px] items-center">
                       <span className="text-sm font-medium break-words">{list.name}</span>
                     </div>
@@ -545,8 +568,12 @@ export default function ShoppingList() {
 
       {/* Save Modal */}
       {showSaveModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg p-6 w-full max-w-md shadow-xl">
+        <div 
+         
+         className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 ">
+          <div 
+            
+            className="bg-white rounded-lg p-6 w-full max-w-md shadow-xl ">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold">Save Shopping List</h3>
               <button onClick={() => setShowSaveModal(false)} className="text-gray-400 hover:text-gray-600"><X size={20} /></button>
@@ -563,8 +590,8 @@ export default function ShoppingList() {
       )}
 
       {showViewModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-          <div className="relative bg-white w-full max-w-lg mx-4 p-6 rounded-xl shadow-lg max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm pb-[70px] ">
+          <div className="relative bg-white w-full max-w-lg mx-4 p-6 rounded-xl shadow-lg max-h-[90vh] overflow-y-auto ">
 
             {/* TITLE */}
             <div className="mb-4">
@@ -648,6 +675,44 @@ export default function ShoppingList() {
                   )}
                 </div>
               ))
+            )}
+            {isEditingList && (
+              <div className="p-3 mb-4 border rounded bg-gray-100">
+                <h4 className="font-medium mb-2 text-sm">Add New Item</h4>
+
+                <div className="flex flex-col gap-2">
+                  <input
+                    type="text"
+                    className="border p-2 rounded"
+                    placeholder="Product name"
+                    value={productName}
+                    onChange={(e) => setProductName(e.target.value)}
+                  />
+
+                  <input
+                    type="text"
+                    className="border p-2 rounded"
+                    placeholder="Unit (e.g. 2)"
+                    value={productQty}
+                    onChange={(e) => setProductQty(e.target.value)}
+                  />
+
+                  <input
+                    type="text"
+                    className="border p-2 rounded"
+                    placeholder="Guage (pack, liter)"
+                    value={productGuage}
+                    onChange={(e) => setProductGuage(e.target.value)}
+                  />
+
+                  <button
+                    onClick={handleAddItemToViewedList}
+                    className="w-full bg-green-600 text-white py-2 rounded text-sm"
+                  >
+                    Add Item
+                  </button>
+                </div>
+              </div>
             )}
 
             {/* ACTION BUTTONS */}

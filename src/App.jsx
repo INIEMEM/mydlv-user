@@ -9,6 +9,8 @@ import {
 } from "react-router-dom";
 
 import Context from "./context/Context";
+import { ToastProvider } from "./context/ToastContext";
+
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import DashboardLayout from "./layouts/DashboardLayout";
@@ -28,6 +30,9 @@ import MyOrdersPage from "./pages/orders/MyOrdersPage";
 import ServicesPage from "./pages/serivices";
 import ProfilePage from "./pages/profile";
 import NotificationPage from "./pages/notification";
+import SupermarketListing from "./pages/supermarket";
+import SuperMarketDetailsPage from "./pages/supermarket/SupermarketDetails";
+import ServiceProviderDetailsPage from "./pages/serivices/ServicesDetails";
 
 function App() {
   const isLoggedIn = !!localStorage.getItem("token");
@@ -62,12 +67,15 @@ function App() {
         >
          
 
-            <Route index element={<Explore />} />
-            <Route path="resturants" element={<AppLayout/>}>
-              <Route index element={<RestaurantListing/>}/>
-              <Route path=":resturant" element={<RestaurantDetailsPage/>}/>
-            </Route>
-         
+          <Route index element={<Explore />} />
+          <Route path="resturants" element={<AppLayout/>}>
+            <Route index element={<RestaurantListing/>}/>
+            <Route path=":resturant" element={<RestaurantDetailsPage/>}/>
+          </Route>
+          <Route path="supermarkets" element={<AppLayout/>}>
+            <Route index element={<SupermarketListing/>}/>
+            <Route path=":supermarket" element={<SuperMarketDetailsPage/>}/>
+          </Route>
           <Route path="orders" element={<AppLayout/>}>
             <Route index element={<MyOrdersPage/>}/>
           </Route>
@@ -76,7 +84,11 @@ function App() {
           <Route path="/shopping-list" element={<ShoppingList />} />
           <Route path="/shopping-list/:item" element={<ItemsMatchingPage />} />
           <Route path="/products" element={<ProductSelection />} />
-          <Route path="/services" element={<ServicesPage />} />
+          {/* <Route path="/services" element={<ServicesPage />} /> */}
+          <Route path="/services" element={<AppLayout />} >
+            <Route index element={<ServicesPage />} />
+            <Route path=":service" element={<ServiceProviderDetailsPage/>}/>
+          </Route>
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/notifications" element={<NotificationPage/>}/>
         </Route>
@@ -87,7 +99,9 @@ function App() {
   return (
     <Context>
       <CartProvider>
+       <ToastProvider>
         <RouterProvider router={router} />
+       </ToastProvider>
       </CartProvider>
     </Context>
   );

@@ -55,22 +55,24 @@ export default function ItemsMatchingPage() {
   };
 
   const handleAddToCart = (product, vendor, vendorIndex, itemQuery) => {
+
+  
     const cartItem = {
-      id: `${product._id}-${vendor._id}-${vendorIndex}`,
+      id: `${product._id}-${vendor._id}`,
       productId: product._id,
       name: product.title,
       price: parseFloat(product.price),
       vendorId: vendor._id,
-      vendorName: vendor.business?.businessName || 'Unknown Vendor',
+      vendorName: product.business?.businessName || 'Unknown Vendor',
       image: product.images?.[0] || null,
       weight: product.weight || product.guage,
-      delivery: '5-10mins', // You might want to calculate this based on vendor location
+      delivery: '5-10mins', 
       query: itemQuery,
     };
 
     addToCart('shoppingList', cartItem);
 
-    const key = `${product._id}-${vendor._id}-${vendorIndex}`;
+    const key = `${product._id}-${vendor._id}`;
     setAddedItems(prev => ({ ...prev, [key]: true }));
 
     setTimeout(() => {
@@ -218,7 +220,7 @@ export default function ItemsMatchingPage() {
                         `}</style>
                         
                         {item.matchedVendors.map((product, vendorIndex) => {
-                          const itemKey = `${product._id}-${product.vendor._id}-${vendorIndex}`;
+                          const itemKey = `${product._id}-${product.vendor._id}`;
                           const isAdded = addedItems[itemKey];
 
                           return (
