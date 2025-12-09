@@ -7,7 +7,7 @@ import axios from "axios";
 import { MainContext } from "../context/Context";
 import { useToast } from "../context/ToastContext";
 import { Icon } from '@iconify/react';
-import Logo from '../assets/Logo.png';
+// import Logo from '../assets/Logo.png';
 export default function Auth() {
   const navigate = useNavigate();
   const [params] = useSearchParams();
@@ -147,7 +147,7 @@ export default function Auth() {
       
       <div className="relative flex flex-1 items-center justify-center  md:p-6 bg-[#DDDCDC]">
       <div className="hidden lg:block absolute top-10 left-[130px] 2xl:left-[300px]">
-       <img src={Logo} className="h-[50px] w-[150px]  object-contain"/>
+       {/* <img src={Logo} className="h-[50px] w-[150px]  object-contain"/> */}
       </div>
         <motion.div
           className="w-full max-w-md rounded-2xl p-8"
