@@ -19,13 +19,16 @@ export default function ProfilePage() {
   const [loading, setLoading] = useState(false);
   const [userCards, setUserCards] = useState([]);
   const [walletBalance, setWalletBalance] = useState(0);
+  const [phonePrefix, setPhonePrefix] = useState('+234');
+  const [verificationMethod, setVerificationMethod] = useState('SMS');
   const navigate = useNavigate();
   // Payment states
   const [selectedAmount, setSelectedAmount] = useState('N50,000');
   const [customAmount, setCustomAmount] = useState('');
   const [selectedCurrency, setSelectedCurrency] = useState('USDT');
   const [paymentType, setPaymentType] = useState('card'); // 'card' or 'crypto'
-  
+  const [newAddressLabel, setNewAddressLabel] = useState('Other');
+  const [newAddressValue, setNewAddressValue] = useState('');
   // Form states for add card
   const [cardNumber, setCardNumber] = useState('');
   const [expiryDate, setExpiryDate] = useState('');
@@ -35,7 +38,11 @@ export default function ProfilePage() {
   const [lastName, setLastName] = useState('');
   const [billingAddress, setBillingAddress] = useState('');
   const [postalCode, setPostalCode] = useState('');
-  
+  const [addresses, setAddresses] = useState([
+    { id: 1, label: 'Amanda crib', address: 'Number 5 Awolowo road', isEditing: false },
+    { id: 2, label: "Mum's Home", address: 'Number 5 Awolowo road', isEditing: false },
+    { id: 3, label: 'My Love', address: 'Number 5 Awolowo road', isEditing: false }
+  ]);
   // OTP and reference states
   const [cardReference, setCardReference] = useState('');
   const [otp, setOtp] = useState('');
@@ -378,7 +385,7 @@ export default function ProfilePage() {
         <div className="max-w-2xl mx-auto px-2 md:px-6 py-8">
           <button onClick={()=> navigate('/')} className="mb-8 p-2 hover:bg-gray-100 flex items-center gap-4 rounded-lg transition-colors">
             <ArrowLeft size={24} />
-            <h1 className="text-xl font-bold">Profile</h1>
+            <h1 className="text-xl font-bold" >Profile</h1>
           </button>
 
           <div className="text-center flex gap-2 items-center justify-center mb-12">
@@ -438,14 +445,14 @@ export default function ProfilePage() {
       {currentView === 'account' && (
         <div className="max-w-2xl mx-auto px-2 md:px-6 py-8">
           <div className="flex items-center gap-4 mb-8">
-            <button 
+            {/* <button 
               onClick={() => setCurrentView('main')}
               className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
             >
               <ArrowLeft size={24} />
-            </button>
+            </button> */}
             <div className="flex items-center gap-2 text-sm">
-              <span className="text-gray-500 cursor-pointer hover:text-gray-700">Profile</span>
+              <span className="text-gray-500 cursor-pointer hover:text-gray-700" onClick={() => setCurrentView('main')}>Profile</span>
               <ChevronRight size={16} className="text-gray-400" />
               <span className="text-gray-800 font-medium">Account</span>
             </div>
@@ -632,6 +639,232 @@ export default function ProfilePage() {
             >
               Save
             </button>
+          </div>
+        </div>
+      )}
+        {/* Modal for Change Phone Number */}
+        {showModal && modalType === 'phone' && (
+        <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl shadow-xl max-w-md w-full p-6">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl font-bold text-gray-800">Phone number</h2>
+              <button 
+                onClick={() => setShowModal(false)}
+                className="w-8 h-8 rounded-full bg-red-500 flex items-center justify-center hover:bg-red-600 transition-colors"
+              >
+                <X size={18} className="text-white" />
+              </button>
+            </div>
+
+            <div className="mb-4">
+              <p className="text-sm font-semibold mb-2">Your phone is verified.</p>
+              <p className="text-sm text-gray-600 mb-4">If you want to change your number, you will need to verify it again</p>
+              
+              <div className="flex gap-3 mb-4">
+                <div className="w-24">
+                  <label className="block text-sm text-gray-600 mb-2">Prefix</label>
+                  <input
+                    type="text"
+                    value={phonePrefix}
+                    onChange={(e) => setPhonePrefix(e.target.value)}
+                    className="w-full px-3 py-3 bg-gray-100 border-none rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                  />
+                </div>
+                <div className="flex-1">
+                  <label className="block text-sm text-gray-600 mb-2">Phone number</label>
+                  <input
+                    type="text"
+                    value={userPhone}
+                    onChange={(e) => setUserPhone(e.target.value)}
+                    className="w-full px-4 py-3 bg-gray-100 border-none rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                    placeholder="7064672749"
+                  />
+                </div>
+              </div>
+
+              <div className="mb-6">
+                <p className="text-sm text-gray-700 mb-3">Choose verification method</p>
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => setVerificationMethod('SMS')}
+                    className={`flex-1 py-3 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 ${
+                      verificationMethod === 'SMS'
+                        ? 'bg-gray-100 text-gray-800'
+                        : 'bg-white text-gray-600 border border-gray-200'
+                    }`}
+                  >
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="text-gray-600">
+                      <path d="M3 4h14a1 1 0 011 1v10a1 1 0 01-1 1H3a1 1 0 01-1-1V5a1 1 0 011-1z" stroke="currentColor" strokeWidth="1.5"/>
+                      <path d="M6 8h8M6 11h5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                    </svg>
+                    SMS
+                  </button>
+                  <button
+                    onClick={() => setVerificationMethod('Whatapp')}
+                    className={`flex-1 py-3 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 ${
+                      verificationMethod === 'Whatapp'
+                        ? 'bg-gray-100 text-gray-800'
+                        : 'bg-white text-gray-600 border border-gray-200'
+                    }`}
+                  >
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="text-gray-600">
+                      <path d="M10 2a8 8 0 00-6.92 12l-.88 2.64a.5.5 0 00.64.64l2.64-.88A8 8 0 1010 2z" stroke="currentColor" strokeWidth="1.5"/>
+                      <path d="M7 9.5c0 1.5 1 3 3 3s3-1.5 3-3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                    </svg>
+                    Whatapp
+                  </button>
+                </div>
+              </div>
+
+              <button
+                onClick={() => alert('Verification code sent!')}
+                className="w-full py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors"
+              >
+                Verify
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal for Location */}
+      {showModal && modalType === 'location' && (
+        <div className="fixed top-0 bottom-[-250px] left-0 right-0 bg-black bg-opacity-30 flex items-center justify-center z-50  overflow-y-auto">
+          <div  className="bg-white rounded-2xl shadow-xl max-w-2xl w-full p-6  ">
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h2 className="text-2xl font-bold text-gray-800">Location</h2>
+                <p className="text-sm text-gray-600 mt-1">Update delivery address</p>
+                <p className="text-xs text-gray-500">Add up to 5 address for quick delivery's to friends and family</p>
+              </div>
+              <button 
+                onClick={() => setShowModal(false)}
+                className="w-8 h-8 rounded-full bg-red-500 flex items-center justify-center hover:bg-red-600 transition-colors"
+              >
+                <X size={18} className="text-white" />
+              </button>
+            </div>
+
+            <button 
+              onClick={() => {
+                setNewAddressLabel('Other');
+                setNewAddressValue('');
+              }}
+              className="w-full mb-4 py-3 bg-gray-900 hover:bg-gray-800 text-white font-semibold rounded-full transition-colors flex items-center justify-center gap-2"
+            >
+              <span className="text-xl text-white bg-green-600 w-6 h-6 rounded-full flex items-center justify-center">+</span>
+              Add new address
+            </button>
+
+            <div className="mb-4">
+              <div className="flex gap-2 mb-4">
+                {['Home', 'Work', 'Other'].map((label) => (
+                  <button
+                    key={label}
+                    onClick={() => setNewAddressLabel(label)}
+                    className={`px-4 py-2 rounded-full font-medium transition-colors flex items-center gap-2 ${
+                      newAddressLabel === label
+                        ? 'bg-gray-900 text-white'
+                        : 'bg-white text-gray-600 border border-gray-200'
+                    }`}
+                  >
+                    <span className="text-green-500">+</span>
+                    {label}
+                  </button>
+                ))}
+              </div>
+
+              <div className="flex gap-2 mb-4">
+                <input
+                  type="text"
+                  value={newAddressValue}
+                  onChange={(e) => setNewAddressValue(e.target.value)}
+                  className="flex-1 px-4 py-3 bg-gray-100 border-none rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                  placeholder="Enter address"
+                />
+                <button className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors">
+                  Use location
+                </button>
+              </div>
+
+              <div className="flex gap-2 mb-4">
+                <input
+                  type="text"
+                  className="flex-1 px-4 py-3 bg-gray-100 border-none rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                  placeholder="Amanda crib"
+                />
+                <button 
+                  onClick={() => {
+                    if (newAddressValue) {
+                      setAddresses([...addresses, {
+                        id: addresses.length + 1,
+                        label: newAddressLabel,
+                        address: newAddressValue,
+                        isEditing: false
+                      }]);
+                      setNewAddressValue('');
+                      alert('Address added successfully!');
+                    }
+                  }}
+                  className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors">
+                  Add
+                </button>
+                <button className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors">
+                  Save Location
+                </button>
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              {addresses.map((addr) => (
+                <div key={addr.id} className="border border-gray-200 rounded-lg p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <button className="px-4 py-1.5 bg-gray-900 text-white text-sm rounded-full flex items-center gap-1">
+                      {addr.label}
+                      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                        <path d="M10 3.5L8.5 2 7 3.5m3.5 0L9 5m1.5-1.5L12 5M4 10.5L5.5 12 7 10.5m-3 0L5.5 9 4 10.5M2 9l1.5 1.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
+                      </svg>
+                    </button>
+                    <button 
+                      onClick={() => setAddresses(addresses.filter(a => a.id !== addr.id))}
+                      className="text-red-500 hover:text-red-600"
+                    >
+                      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M5 7h10M8 7V5a1 1 0 011-1h2a1 1 0 011 1v2m-5 3v4m4-4v4M7 7v8a1 1 0 001 1h4a1 1 0 001-1V7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                      </svg>
+                    </button>
+                  </div>
+                  <p className="text-sm text-gray-700">{addr.address}</p>
+                  <div className="flex gap-2 mt-3">
+                    <input
+                      type="text"
+                      defaultValue={addr.address}
+                      onChange={(e) => setEditAddressValue(e.target.value)}
+                      className="flex-1 px-4 py-2 bg-gray-100 border-none rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm"
+                      placeholder="Enter address"
+                    />
+                    <button className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-semibold rounded-lg transition-colors">
+                      Use location
+                    </button>
+                  </div>
+                  <div className="flex gap-2 mt-2">
+                    <input
+                      type="text"
+                      className="flex-1 px-4 py-2 bg-gray-100 border-none rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm"
+                      placeholder="Amanda crib"
+                    />
+                    <button className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-semibold rounded-lg transition-colors">
+                      Add
+                    </button>
+                    <button 
+                      onClick={() => alert('Location updated!')}
+                      className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-semibold rounded-lg transition-colors">
+                      Update location
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       )}

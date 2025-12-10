@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ArrowLeft, Star, Clock, Truck, Heart, Plus, Check, Search, ShoppingCart, MessageCircle, AlertTriangle, X, Send, Paperclip } from 'lucide-react';
-
+import { useNavigate } from 'react-router-dom';
 // Mock service provider data
 const serviceData = {
   id: 1,
@@ -95,12 +95,12 @@ export default function ServiceProviderDetailsPage() {
     {
       id: 1,
       sender: "provider",
-      text: "Rephrase 'This is an ai chatbot generated for better communication and simpler work flows'"
+      text: "Hello! How can I assist you today?"
     },
     {
       id: 2,
       sender: "provider",
-      text: "Rephrase 'This is an ai chatbot generated for better communication and simpler work flows'"
+      text: "Sure! I can help you with that."
     },
     {
       id: 3,
@@ -143,14 +143,14 @@ export default function ServiceProviderDetailsPage() {
         return acc;
       }, {})
     : servicesData;
-
+    const navigate = useNavigate();
   return (
     <div className="min-h-screen ">
       {/* Breadcrumb */}
       <div className="border-b border-gray-200 px-4 py-3">
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center gap-2 text-sm">
-            <button className="text-green-600 font-medium hover:text-green-700 flex items-center gap-1">
+            <button onClick={()=> navigate('/services')} className="text-gray-600 font-medium hover:text-gray-700 flex items-center gap-1">
               <ArrowLeft size={16} />
               <span>Services</span>
             </button>
@@ -317,7 +317,7 @@ export default function ServiceProviderDetailsPage() {
         </div>
 
         {/* Right Sidebar - Desktop Only */}
-        <div className="hidden lg:block w-96 border-l border-gray-200 p-6 space-y-6 shadow-md bg-[#fff] rounded-lg fixed right-0 ">
+        <div className="hidden lg:block w-96 border-l border-gray-200 p-6 space-y-6 shadow-md bg-[#fff] bg-opacity-25 rounded-lg fixed right-0 top-20">
           {/* Request Quote / Chat Button */}
           <button
             onClick={() => setChatOpen(true)}
@@ -345,13 +345,25 @@ export default function ServiceProviderDetailsPage() {
               </div>
             ))}
             
-            <div className="pt-2">
-              {/* <input
-                type="text"
-                placeholder="Type a new message here"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
-              /> */}
-            </div>
+            <div className="flex gap-2 border border-gray-200 rounded-lg bg-white px-1">
+                <input
+                  type="text"
+                  placeholder="Type a new message here"
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                  className="flex-1 px-4 py-2  rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                />
+                <button className="p-2 text-gray-400 hover:text-gray-600">
+                  <Paperclip size={20} />
+                </button>
+                <button
+                  onClick={handleSendMessage}
+                  className="p-2  text-gray-400 rounded-lg hover:bg-green-700"
+                >
+                  <Send size={20} />
+                </button>
+              </div>
           </div>
 
           {/* Reviews */}

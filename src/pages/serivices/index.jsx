@@ -1,8 +1,10 @@
 import React, { useState, useRef } from "react";
 import { Input, Button, Drawer, Badge } from "antd";
-import { SearchOutlined, FilterOutlined, StarFilled, ClockCircleOutlined } from "@ant-design/icons";
+import { SearchOutlined, FilterOutlined, StarFilled, ClockCircleOutlined,  } from "@ant-design/icons";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+
+import {  MapPin } from "lucide-react";
 const servicesData = [
   {
     id: 1,
@@ -13,7 +15,8 @@ const servicesData = [
     deliveryTime: "2hrs-3hrs",
     img: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=400",
     category: "Cleaning Services",
-    featured: true
+    featured: true,
+    location: "Lagos"
   },
   {
     id: 2,
@@ -24,7 +27,8 @@ const servicesData = [
     deliveryTime: "1-2 days",
     img: "https://images.unsplash.com/photo-1615874959474-d609969a20ed?w=400",
     category: "Building & Construction Services",
-    featured: true
+    featured: true,
+    location: "Lagos"
   },
   {
     id: 3,
@@ -35,7 +39,8 @@ const servicesData = [
     deliveryTime: "3hrs-5hrs",
     img: "https://images.unsplash.com/photo-1519167758481-83f29da8c012?w=400",
     category: "Party & Event Services",
-    featured: true
+    featured: true,
+    location: "Lagos"
   },
   {
     id: 4,
@@ -46,7 +51,8 @@ const servicesData = [
     deliveryTime: "1hr-2hrs",
     img: "https://images.unsplash.com/photo-1628177142898-93e36e4e3a50?w=400",
     category: "Cleaning Services",
-    featured: true
+    featured: true,
+    location: "Lagos"
   },
   {
     id: 5,
@@ -56,7 +62,8 @@ const servicesData = [
     rating: 4.5,
     deliveryTime: "2-4hrs",
     img: "https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=400",
-    category: "Automotive Services"
+    category: "Automotive Services",
+    location: "Lagos"
   },
   {
     id: 6,
@@ -66,7 +73,8 @@ const servicesData = [
     rating: 4.9,
     deliveryTime: "4-6hrs",
     img: "https://images.unsplash.com/photo-1555244162-803834f70033?w=400",
-    category: "Catering services"
+    category: "Catering services",
+    location: "Lagos"
   },
   {
     id: 7,
@@ -76,7 +84,8 @@ const servicesData = [
     rating: 4.8,
     deliveryTime: "All day",
     img: "https://images.unsplash.com/photo-1606800052052-a08af7148866?w=400",
-    category: "Photography & Video Services"
+    category: "Photography & Video Services",
+    location: "Lagos"
   },
   {
     id: 8,
@@ -86,7 +95,8 @@ const servicesData = [
     rating: 4.4,
     deliveryTime: "3-5hrs",
     img: "https://images.unsplash.com/photo-1558904541-efa843a96f01?w=400",
-    category: "Landscaping & Gardening Services"
+    category: "Landscaping & Gardening Services",
+    location: "Lagos"
   },
   {
     id: 9,
@@ -96,7 +106,8 @@ const servicesData = [
     rating: 4.6,
     deliveryTime: "1-2hrs",
     img: "https://images.unsplash.com/photo-1601362840469-51e4d8d58785?w=400",
-    category: "Automotive Services"
+    category: "Automotive Services",
+    location: "Lagos"
   },
   {
     id: 10,
@@ -106,7 +117,8 @@ const servicesData = [
     rating: 4.7,
     deliveryTime: "2-3hrs",
     img: "https://images.unsplash.com/photo-1560066984-138dadb4c035?w=400",
-    category: "Beauty Services"
+    category: "Beauty Services",
+    location: "Lagos"
   },
   {
     id: 11,
@@ -116,7 +128,8 @@ const servicesData = [
     rating: 4.9,
     deliveryTime: "6-8hrs",
     img: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400",
-    category: "Catering services"
+    category: "Catering services",
+    location: "Lagos"
   },
   {
     id: 12,
@@ -126,7 +139,8 @@ const servicesData = [
     rating: 4.5,
     deliveryTime: "3-4hrs",
     img: "https://images.unsplash.com/photo-1585421514738-01798e348b17?w=400",
-    category: "Cleaning Services"
+    category: "Cleaning Services",
+    location: "Lagos"
   }
 ];
 
@@ -229,8 +243,8 @@ export default function ServicesPage() {
   
         <div className="flex items-center justify-between gap-3 text-xs">
           <div className="flex items-center gap-1 text-gray-500">
-            <ClockCircleOutlined />
-            <span>{service.deliveryTime}</span>
+            <MapPin size={12}/>
+            <span>{service.location}</span>
           </div>
           <div className="flex items-center gap-1 text-green-600 font-semibold">
             {service.price === "Request Quote" ? (
@@ -275,14 +289,14 @@ export default function ServicesPage() {
    
           <button
             onClick={() => scrollRow("left")}
-            className="p-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 transition hidden lg:flex"
+            className="p-1 rounded-lg bg-[#333] hover:bg-[#555] text-white transition hidden lg:flex"
           >
             ←
           </button>
 
           <button
             onClick={() => scrollRow("right")}
-            className="p-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 transition hidden lg:flex"
+            className="p-1 rounded-lg bg-[#333] hover:bg-[#555] text-white transition hidden lg:flex"
           >
             →
           </button>
@@ -334,9 +348,9 @@ export default function ServicesPage() {
           {/* Breadcrumb */}
           <div className="flex items-center justify-between gap-2 text-sm mb-4">
             <div className="flex items-center gap-2">
-              <span className="text-green-600 font-medium cursor-pointer">Explore</span>
+              <span className="text-gray-800 font-medium cursor-pointer" onClick={()=> navigate('/')}>Explore</span>
               <span className="text-gray-400">›</span>
-              <span className="text-gray-800 font-medium">Services</span>
+              <span className=" text-green-600  font-medium">Services</span>
             </div>
             
             {/* Mobile Filter Button */}
@@ -434,7 +448,7 @@ export default function ServicesPage() {
           {
             showServicesCategories && (<div className="hidden lg:block w-80 flex-shrink-0">
               <div className="sticky top-32">
-                <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+                <div className="bg-[#fcfcfc] rounded-xl border border-gray-200 overflow-hidden">
                   <div className="bg-[#222] text-white px-4 py-3">
                     <h2 className="font-semibold text-base">Service Categories</h2>
                   </div>
