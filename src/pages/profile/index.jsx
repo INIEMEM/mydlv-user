@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { ArrowLeft, ChevronRight, User, Mail, Phone, MapPin, CreditCard, Lock, Shield, HelpCircle, LogOut, X, Copy, Wallet } from 'lucide-react';
+import { ArrowLeft, ChevronRight, User, Mail, Phone, MapPin, CreditCard, Lock, Shield, HelpCircle, LogOut, X, Copy, Wallet, Edit, Edit2Icon } from 'lucide-react';
 import { api } from '../../utils/api';
 import { useNavigate } from 'react-router-dom';
 // Mock API for demo purposes
 import axios from 'axios';
 import { MainContext } from '../../context/Context';
-
+import { Dropdown, Space, Menu } from 'antd';
 export default function ProfilePage() {
   const {  baseUrl, token } = useContext(MainContext);
   const [currentView, setCurrentView] = useState('main');
@@ -46,7 +46,23 @@ export default function ProfilePage() {
   // OTP and reference states
   const [cardReference, setCardReference] = useState('');
   const [otp, setOtp] = useState('');
-  
+  const addressLabels = ['Home', 'Work', 'Other'];
+  const labelMenuItems = (
+    <Menu
+      onClick={({ key }) => setNewAddressLabel(key)}
+      selectedKeys={[newAddressLabel]}
+      items={addressLabels.map(label => ({
+        key: label,
+        label: (
+          <div className="flex items-center gap-2">
+            <span className="text-xl flex justify-center items-center p-1 bg-green-500 text-white rounded-xl h-[20px] w-[20px]">+</span>
+            <span>{label}</span>
+          </div>
+        ),
+      }))}
+      className='bg-white bg-opacity-25'
+    />
+  );
   // Crypto wallet states
   const [cryptoNetwork, setCryptoNetwork] = useState('TRON');
   const [cryptoAddress, setCryptoAddress] = useState('');
@@ -729,17 +745,19 @@ export default function ProfilePage() {
 
       {/* Modal for Location */}
       {showModal && modalType === 'location' && (
-        <div className="fixed top-0 bottom-[-250px] left-0 right-0 bg-black bg-opacity-30 flex items-center justify-center z-50  overflow-y-auto">
-          <div  className="bg-white rounded-2xl shadow-xl max-w-2xl w-full p-6  ">
+        <div className="fixed top-0 bottom-[0px] left-0 right-0 bg-black bg-opacity-30 flex items-center justify-center z-50  ">
+          <div  
+            style={{height: '100vh'}}
+            className="bg-white relative rounded-2xl shadow-xl max-w-2xl w-full px-1 pb-[100px] md:pb-6 lg:p-6  overflow-y-auto ">
             <div className="flex items-center justify-between mb-6">
               <div>
                 <h2 className="text-2xl font-bold text-gray-800">Location</h2>
-                <p className="text-sm text-gray-600 mt-1">Update delivery address</p>
+                <p className="text-sm text-gray-800 font-bold mt-2">Update delivery address</p>
                 <p className="text-xs text-gray-500">Add up to 5 address for quick delivery's to friends and family</p>
               </div>
               <button 
                 onClick={() => setShowModal(false)}
-                className="w-8 h-8 rounded-full bg-red-500 flex items-center justify-center hover:bg-red-600 transition-colors"
+                className="w-8 h-8 rounded-full bg-red-500 flex items-center justify-center hover:bg-red-600 transition-colors absolute right-2 top-2"
               >
                 <X size={18} className="text-white" />
               </button>
@@ -750,66 +768,75 @@ export default function ProfilePage() {
                 setNewAddressLabel('Other');
                 setNewAddressValue('');
               }}
-              className="w-full mb-4 py-3 bg-gray-900 hover:bg-gray-800 text-white font-semibold rounded-full transition-colors flex items-center justify-center gap-2"
+              className=" mb-4 py-3 bg-[#333] hover:bg-gray-800 text-gray-200 font-semibold rounded-full transition-colors flex items-center justify-center gap-2 px-2 text-[12px] lg:text-[14px]"
             >
-              <span className="text-xl text-white bg-green-600 w-6 h-6 rounded-full flex items-center justify-center">+</span>
+              <span className="text-xl text-gray-200 bg-green-600 w-6 h-6 rounded-full flex items-center justify-center">+</span>
               Add new address
             </button>
 
             <div className="mb-4">
-              <div className="flex gap-2 mb-4">
-                {['Home', 'Work', 'Other'].map((label) => (
-                  <button
-                    key={label}
-                    onClick={() => setNewAddressLabel(label)}
-                    className={`px-4 py-2 rounded-full font-medium transition-colors flex items-center gap-2 ${
-                      newAddressLabel === label
-                        ? 'bg-gray-900 text-white'
-                        : 'bg-white text-gray-600 border border-gray-200'
-                    }`}
-                  >
-                    <span className="text-green-500">+</span>
-                    {label}
-                  </button>
-                ))}
-              </div>
+           
 
               <div className="flex gap-2 mb-4">
+              <Dropdown 
+                  overlay={labelMenuItems} 
+                  trigger={['click']}
+                  className="w-full flex-1 text-white text-[10px] md:text-[14px]  !bg-[#333] shrink-1" 
+                  dropdownStyle={{ backgroundColor: '#333' }} 
+
+              >
+                  <button
+                      className="w-full px-1 md:px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-left font-medium text-gray-800 flex items-center justify-between hover:bg-gray-100 transition-colors"
+                      onClick={(e) => e.preventDefault()}
+                  >
+                      <Space>
+                          {/* Optional: You can keep the green '+' icon if you wish */}
+                          {/* <span className="text-xl text-green-500">+</span> */}
+                          {newAddressLabel}
+                      </Space>
+                      {/* Ant Design will handle the Chevron icon for the dropdown */}
+                      <ChevronRight size={16} className="text-gray-400 rotate-90" />
+                  </button>
+              </Dropdown>
                 <input
                   type="text"
                   value={newAddressValue}
                   onChange={(e) => setNewAddressValue(e.target.value)}
-                  className="flex-1 px-4 py-3 bg-gray-100 border-none rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="flex-1 px-1 md:px-4 py-3 bg-gray-100 border-none text-[10px] md:text-[14px] rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 shrink-1"
                   placeholder="Enter address"
+                  style={{flex: 3}}
                 />
-                <button className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors">
+                <button className="px-1 md:px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors flex-1 text-[10px] md:text-[14px] shrink-1">
                   Use location
                 </button>
               </div>
 
-              <div className="flex gap-2 mb-4">
-                <input
-                  type="text"
-                  className="flex-1 px-4 py-3 bg-gray-100 border-none rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-                  placeholder="Amanda crib"
-                />
-                <button 
-                  onClick={() => {
-                    if (newAddressValue) {
-                      setAddresses([...addresses, {
-                        id: addresses.length + 1,
-                        label: newAddressLabel,
-                        address: newAddressValue,
-                        isEditing: false
-                      }]);
-                      setNewAddressValue('');
-                      alert('Address added successfully!');
-                    }
-                  }}
-                  className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors">
-                  Add
-                </button>
-                <button className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors">
+              <div className="flex gap-2 mb-4 justify-end">
+                <div className='bg-gray-100 px-1 md:px-1 text-[10px] py-2 flex gap-1 rounded-lg'>
+                  <input
+                    type="text"
+                    className="flex-1 px-1 py-1 bg-gray-200  border-none rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                    placeholder="Amanda crib"
+                  />
+                  <button 
+                    onClick={() => {
+                      if (newAddressValue) {
+                        setAddresses([...addresses, {
+                          id: addresses.length + 1,
+                          label: newAddressLabel,
+                          address: newAddressValue,
+                          isEditing: false
+                        }]);
+                        setNewAddressValue('');
+                        alert('Address added successfully!');
+                      }
+                    }}
+                    className="px-1 md:px-6 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors">
+                    Add
+                  </button>
+                </div>
+                
+                <button className="px-1  lg:px-6 py-1 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors text-[10px]">
                   Save Location
                 </button>
               </div>
@@ -817,14 +844,15 @@ export default function ProfilePage() {
 
             <div className="space-y-3">
               {addresses.map((addr) => (
-                <div key={addr.id} className="border border-gray-200 rounded-lg p-4">
+                <div key={addr.id} className=" rounded-lg p-1 md:p-4">
                   <div className="flex items-center justify-between mb-2">
-                    <button className="px-4 py-1.5 bg-gray-900 text-white text-sm rounded-full flex items-center gap-1">
-                      {addr.label}
-                      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                        <path d="M10 3.5L8.5 2 7 3.5m3.5 0L9 5m1.5-1.5L12 5M4 10.5L5.5 12 7 10.5m-3 0L5.5 9 4 10.5M2 9l1.5 1.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
-                      </svg>
-                    </button>
+                   <div className='flex gap-2 items-center'>
+                      <button className="px-1 text-[10px] md:text-[12px] md:px-4 py-1.5 bg-[#333] text-white  rounded-full flex items-center gap-1">
+                        {addr.label}
+                        <Edit2Icon size={16} className="text-white" />
+                      </button>
+                      <p className="text-[10px] text-gray-700">{addr.address}</p>
+                   </div>
                     <button 
                       onClick={() => setAddresses(addresses.filter(a => a.id !== addr.id))}
                       className="text-red-500 hover:text-red-600"
@@ -834,31 +862,33 @@ export default function ProfilePage() {
                       </svg>
                     </button>
                   </div>
-                  <p className="text-sm text-gray-700">{addr.address}</p>
+                  
                   <div className="flex gap-2 mt-3">
                     <input
                       type="text"
                       defaultValue={addr.address}
                       onChange={(e) => setEditAddressValue(e.target.value)}
-                      className="flex-1 px-4 py-2 bg-gray-100 border-none rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm"
+                      className="flex-1 px-1 md:px-4  py-2 bg-gray-100 border-none rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-[10px] md:text-[12px]"
                       placeholder="Enter address"
                     />
-                    <button className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-semibold rounded-lg transition-colors">
+                    <button className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-[10px] md:text-[12px] font-semibold rounded-lg transition-colors">
                       Use location
                     </button>
                   </div>
-                  <div className="flex gap-2 mt-2">
-                    <input
-                      type="text"
-                      className="flex-1 px-4 py-2 bg-gray-100 border-none rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm"
-                      placeholder="Amanda crib"
-                    />
-                    <button className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-semibold rounded-lg transition-colors">
-                      Add
-                    </button>
+                  <div className="flex gap-2 mt-2 justify-end">
+                    <div className='gap-1 flex bg-gray-100 px-2 py-2 rounded-lg '>
+                      <input
+                        type="text"
+                        className="flex-1 px-1 md:px-2 py-2 bg-gray-200 border-none rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-[10px] md:text-[12px]"
+                        placeholder="Amanda crib"
+                      />
+                      <button className="px-1 md:px-1 py-2 bg-green-600 hover:bg-green-700 text-white text-[10px] md:text-[12px] font-semibold rounded-lg transition-colors">
+                        Add
+                      </button>
+                    </div>
                     <button 
                       onClick={() => alert('Location updated!')}
-                      className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-semibold rounded-lg transition-colors">
+                      className="px-1 md:px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-[10px] md:text-[12px] font-semibold rounded-lg transition-colors">
                       Update location
                     </button>
                   </div>

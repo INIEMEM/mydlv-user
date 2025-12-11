@@ -33,6 +33,8 @@ import NotificationPage from "./pages/notification";
 import SupermarketListing from "./pages/supermarket";
 import SuperMarketDetailsPage from "./pages/supermarket/SupermarketDetails";
 import ServiceProviderDetailsPage from "./pages/serivices/ServicesDetails";
+import SupportPage from "./pages/support";
+
 
 function App() {
   const isLoggedIn = !!localStorage.getItem("token");
@@ -91,6 +93,7 @@ function App() {
           </Route>
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/notifications" element={<NotificationPage/>}/>
+          <Route path="/support" element={<SupportPage/>}/>
         </Route>
       </>
     )
