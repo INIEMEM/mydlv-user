@@ -242,80 +242,126 @@ export default function DashboardLayout() {
 
           {/* Mobile Layout (< md) */}
           <div className="md:hidden py-4">
-            {/* Top Row: Avatar, Location, Notification */}
-            <div className="flex justify-between items-center mb-4">
-              {/* Left: User Greeting */}
-              <div 
-                onClick={() => navigate("/profile")}
-                className="flex items-center gap-3 relative bg-[#333] rounded-lg h-[50px]  px-3 cursor-pointer">
-                <div className="w-[25px] h-[25px] rounded-full bg-gray-700 flex items-center justify-center mt-[-10px] text-white overflow-hidden">
-                  {profilePicture ? (
-                    <img src={profilePicture} alt="Profile" className="w-full h-full object-cover" />
-                  ) : (
-                    <UserOutlined className="text-white text-xs" />
-                  )}
-                </div>
-                <div className="relative">
-                  <p className="text-xs text-gray-600 absolute top-0 text-white ">Hello</p>
-                  <p className="font-semibold text-gray-800 text-white text-xs mt-[15px]">{displayName}</p>
-                </div>
-              </div>
-
-              {/* Center: Location */}
-              <Dropdown overlay={locationMenu} trigger={["click"]}>
-                <Button
-                  type="text"
-                  className="flex items-center gap-1 font-semibold bg-white   h-[45px] text-[#37B34A] px-2"
-                >
-                  <EnvironmentOutlined className="text-lg text-[#333]" />
-                  Home
-                  <DownOutlined className="text-xs text-[#333]" />
-                </Button>
-              </Dropdown>
-
-              {/* Right: Notification only */}
-              <Badge count={unreadNotifications} size="small" color="#37B34A" className="bg-white p-2 rounded-lg">
-                <BellOutlined 
-                  className="text-2xl text-gray-700 cursor-pointer" 
-                  onClick={() => navigate("/notifications")}
-                />
-              </Badge>
-            </div>
-
-            {/* Bottom Row: Wallet & Cart */}
-            <div className=" flex items-center justify-between gap-3">
-              <div className="h-[50px] flex-1  bg-white rounded-lg p-4 flex items-center gap-3">
-                <WalletOutlined className="text-2xl text-gray-700" />
-                <div>
-                  <p className="text-xs text-gray-600">Wallet Balance</p>
-                  <p className="font-bold text-sm text-gray-800 flex">
-                    <div className="flex items-center  gap-3">
-                      <button
-                        onClick={() => setShowBalance(!showBalance)}
-                        className="hover:text-[#37B34A] transition-colors"
-                      >
-                        {showBalance ? (
-                          <EyeInvisibleOutlined className="text-xl text-gray-600" />
-                        ) : (
-                          <EyeOutlined className="text-xl text-gray-600" />
-                        )}
-                      </button>
-                      
-                      
-                    </div>
-                    {showBalance ? `₦${walletBalance.toLocaleString()}.00` : "₦******"}
-                  </p>
-                </div>
-              
-              </div>
-              
-              
-             <div className="p-2 rounded-lg bg-white h-[50px] flex items-center justify-center"> <Badge count={2} size="small" color="#37B34A">
-                  <ShoppingCartOutlined className="text-2xl text-gray-700 cursor-pointer" />
-                </Badge></div>
-            </div>
+  {/* Conditional rendering based on current path */}
+  {currentPath === 'explore' || currentPath === 'shopping-list' ? (
+    // Original header for '/' (explore) and 'shopping-list'
+    <>
+      <div className="flex justify-between items-center mb-4">
+        <div 
+          onClick={() => navigate("/profile")}
+          className="flex items-center gap-3 relative bg-[#333] rounded-lg h-[50px] px-3 cursor-pointer">
+          <div className="w-[25px] h-[25px] rounded-full bg-gray-700 flex items-center justify-center mt-[-10px] text-white overflow-hidden">
+            {profilePicture ? (
+              <img src={profilePicture} alt="Profile" className="w-full h-full object-cover" />
+            ) : (
+              <UserOutlined className="text-white text-xs" />
+            )}
           </div>
+          <div className="relative">
+            <p className="text-xs text-gray-600 absolute top-0 text-white">Hello</p>
+            <p className="font-semibold text-gray-800 text-white text-xs mt-[15px]">{displayName}</p>
+          </div>
+        </div>
 
+        <Dropdown overlay={locationMenu} trigger={["click"]}>
+          <Button
+            type="text"
+            className="flex items-center gap-1 font-semibold bg-white h-[45px] text-[#37B34A] px-2"
+          >
+            <EnvironmentOutlined className="text-lg text-[#333]" />
+            Home
+            <DownOutlined className="text-xs text-[#333]" />
+          </Button>
+        </Dropdown>
+
+        <Badge count={unreadNotifications} size="small" color="#37B34A" className="bg-white p-2 rounded-lg">
+          <BellOutlined 
+            className="text-2xl text-gray-700 cursor-pointer" 
+            onClick={() => navigate("/notifications")}
+          />
+        </Badge>
+      </div>
+
+      <div className="flex items-center justify-between gap-3">
+        <div className="h-[50px] flex-1 bg-white rounded-lg p-4 flex items-center gap-3">
+          <WalletOutlined className="text-2xl text-gray-700" />
+          <div>
+            <p className="text-xs text-gray-600">Wallet Balance</p>
+            <p className="font-bold text-sm text-gray-800 flex">
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => setShowBalance(!showBalance)}
+                  className="hover:text-[#37B34A] transition-colors"
+                >
+                  {showBalance ? (
+                    <EyeInvisibleOutlined className="text-xl text-gray-600" />
+                  ) : (
+                    <EyeOutlined className="text-xl text-gray-600" />
+                  )}
+                </button>
+              </div>
+              {showBalance ? `₦${walletBalance.toLocaleString()}.00` : "₦******"}
+            </p>
+          </div>
+        </div>
+        
+        <div className="p-2 rounded-lg bg-white h-[50px] flex items-center justify-center">
+          <Badge count={2} size="small" color="#37B34A">
+            <ShoppingCartOutlined className="text-2xl text-gray-700 cursor-pointer" />
+          </Badge>
+        </div>
+      </div>
+    </>
+  ) : (
+    // New simplified header for all other pages
+    <div className="flex items-center justify-between gap-2">
+      {/* Wallet Balance */}
+      <div className="bg-white rounded-lg p-1 flex items-center gap-2 flex-1 h-[40px] flex items-center">
+        <WalletOutlined className="text-xl text-gray-700" />
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setShowBalance(!showBalance)}
+            className="hover:text-[#37B34A] transition-colors"
+          >
+            {showBalance ? (
+              <EyeInvisibleOutlined className="text-base text-gray-600" />
+            ) : (
+              <EyeOutlined className="text-base text-gray-600" />
+            )}
+          </button>
+          <span className="font-semibold text-[10px] text-gray-800">
+            {showBalance ? `₦${walletBalance.toLocaleString()}` : "₦***,***"}
+          </span>
+        </div>
+      </div>
+
+      {/* Cart */}
+      <div className="bg-white p-1 rounded-lg h-[40px] flex items-center">
+        <Badge count={2} size="small" color="#37B34A">
+          <ShoppingCartOutlined className="text-2xl text-gray-700 cursor-pointer" />
+        </Badge>
+      </div>
+
+      {/* Customer Service */}
+      <div className="bg-white p-1 rounded-lg h-[40px] flex items-center">
+        <Badge count={2} size="small" color="#37B34A">
+          <QuestionCircleOutlined className="text-2xl text-gray-700 cursor-pointer" />
+        </Badge>
+      </div>
+
+      {/* Notification */}
+      <div className="bg-white flex items-center p-1 rounded-lg h-[40px]">
+        <Badge count={unreadNotifications} size="small" color="#37B34A">
+          <BellOutlined 
+            className="text-2xl text-gray-700 cursor-pointer" 
+            onClick={() => navigate("/notifications")}
+          />
+        </Badge>
+      </div>
+    </div>
+  )}
+</div>
+                        
           {/* Desktop Layout */}
           <div className="hidden lg:flex justify-between items-center h-[72px]">
             <div className="flex items-center gap-4">
