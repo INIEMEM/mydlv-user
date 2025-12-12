@@ -150,12 +150,14 @@ export default function MyOrdersPage() {
           <span className="font-semibold text-lg">Total</span>
           <span className="font-semibold text-lg">₦16,600.00</span>
         </div>
-        <button className="w-full bg-green-600 text-white py-3 rounded-lg font-medium hover:bg-green-700">
+        <button className="w-full bg-green-600 text-white py-3 rounded-none rounded-b-lg font-medium hover:bg-green-700">
           PLACE ORDER
         </button>
-        <button className="w-full mt-2  bg-white text-gray-900 py-2 rounded-lg font-medium  flex items-center justify-center gap-2">
-          <span className="text-xl">+</span> Add new order
+        <div className='flex justify-center'>
+        <button className="w-1/2 mt-2  bg-white text-gray-900 py-2 rounded-lg font-medium  flex items-center justify-center gap-2">
+          <span className="text-xl text-green-500">+</span> Add new order
         </button>
+        </div>
       </div>
     </div>
   );

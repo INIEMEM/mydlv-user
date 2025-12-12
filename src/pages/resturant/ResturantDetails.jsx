@@ -329,7 +329,7 @@ export default function RestaurantDetailsPage() {
           {/* Menu Items */}
           <div className="">
             {Object.entries(filteredMenu).map(([category, items]) => (
-              <div key={category} className="mb-8">
+              <div key={category} className="mb-8 px-2 lg:px-0">
                 <h2 className="text-lg font-bold text-gray-900 mb-4">{category}</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {items.map((item) => {
