@@ -8,7 +8,28 @@
   font-family: "Inter", sans-serif;
   /* font-family: "Poppins", sans-serif; */
 }
+.input-margin-top
+{
+  margin-top: 30px !important;
+}
 
+@media screen and (max-width: 768px) {
+  .input-margin-top
+  {
+    margin-top: 10px !important;
+  }
+  .cta-text
+  {
+    text-align: center !important;
+  }
+}
+@media screen and (max-width: 308px) {
+  
+  .cta-text
+  {
+    font-size: 17px;
+  }
+}
 /* .main-layout
 {
   margin-left: 220px;

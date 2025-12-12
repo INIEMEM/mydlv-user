@@ -254,7 +254,7 @@ useEffect(() => {
       {/* <h1 className="text-2xl font-semibold text-gray-800 text-[#444]">Explore</h1> */}
 
       {/* 🔍 Search Bar */}
-      <div className="flex ">
+      <div className="flex  md:hidden">
         <div className="bg-[#222] hidden md:flex  text-white p-2  items-center justify-center font-semibold rounded-tl-lg rounded-bl-lg">
           Categories
         </div>
@@ -262,27 +262,29 @@ useEffect(() => {
           size="large"
           placeholder="Search Categories"
           // prefix={<SearchOutlined className="text-gray-400" />}
-          className="max-w-xl border-gray-300 rounded-none rounded-tl-lg rounded-bl-lg lg:rounded-none bg-white"
+          className="max-w-xl border-[#ccc] rounded-none rounded-tl-lg rounded-bl-lg lg:rounded-none bg-[#EAEAEA]"
         />
         <Button icon={<SearchOutlined/>} className="p-5  rounded-none bg-[#222] text-white rounded-tr-lg rounded-br-lg"/>
       </div>
 
       {/* 🟩 Categories + CTA */}
-      <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-8 mt-6 items-start">
+      <div 
+        // style={{marginTop: '-20px'}}
+        className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-8 input-margin-top  items-end">
         {/* LEFT */}
           {/* Categories (responsive, stable) */}
           {/* Small screens: single grid with 3 cols */}
-          <div className="md:hidden grid grid-cols-3 gap-4">
+          <div className="md:hidden grid grid-cols-3 lg:gap-4  px-2">
             {categories?.map((cat, index) => (
               <motion.div
                 key={index}
                 whileHover={{ scale: 1.05 }}
                 transition={{ type: "spring", stiffness: 200 }}
                 onClick={()=> navigate(`./${cat?.link}`)} 
-                className="relative rounded-2xl overflow-hidden shadow-sm cursor-pointer"
+                className="relative  cursor-pointer"
               >
-                <div className="h-36 w-full object-cover brightness-75" />
-                <div className="absolute inset-0 flex flex-col justify-center items-center text-[#222] font-semibold text-[14px]">
+                <div className=" h-24 lg:h-36 w-full object-cover brightness-75" />
+                <div className="absolute inset-0 flex flex-col justify-center items-center text-[#222] font-semibold md:text-[14px] text-[12px] text-center">
                   <img src={cat?.img} alt={cat?.name} className="w-[80px] h-[50px] object-contain" />
                   {cat.name}
                 </div>
@@ -291,9 +293,21 @@ useEffect(() => {
           </div>
 
       {/* Medium+ screens: explicit two-row layout */}
-      <div className="hidden md:block">
+      <div className="hidden md:block  w-full ">
+      <div className="hidden md:flex  ">
+        <div className="bg-[#222] hidden md:flex  text-white p-2  items-center justify-center font-semibold rounded-tl-lg rounded-bl-lg">
+          Categories
+        </div>
+        <Input
+          size="large"
+          placeholder="Search Categories"
+          // prefix={<SearchOutlined className="text-gray-400" />}
+          className="max-w-xl border-[#ccc] rounded-none rounded-tl-lg rounded-bl-lg lg:rounded-none bg-[#EAEAEA]"
+        />
+        <Button icon={<SearchOutlined/>} className="p-5  rounded-none bg-[#222] text-white rounded-tr-lg rounded-br-lg"/>
+      </div>
         {/* First row: exactly 5 columns */}
-        <div className="grid grid-cols-5 gap-4">
+        <div className="grid grid-cols-5 gap-4 ">
           {categories.slice(0, 5).map((cat, idx) => (
             <motion.div
               key={idx}
@@ -338,10 +352,11 @@ useEffect(() => {
           initial={{ opacity: 0, x: 40 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6 }}
-          className=" rounded-2xl p-8 flex flex-col justify-center  "
+          className=" rounded-2xl p-2 md:p-8 flex flex-col justify-center "
         >
-          <h2 className="text-xl font-light mb-4 leading-snug text-gray-800 text-[#444]">
-            IMPROVE YOUR SHOPPING <br /> EXPERIENCE WITH
+          <h2 className="text-lg md:text-xl font-light mb-4 cta-text leading-snug text-gray-800 text-[#444]  ">
+            IMPROVE YOUR SHOPPING <br /> 
+            EXPERIENCE WITH
             AI POWERED  <span className="text-[#37B34A] font-bold">
             <br /> SHOPPING LIST </span>
           </h2>
@@ -391,7 +406,7 @@ useEffect(() => {
               <img
                 src={item.img}
                 alt={item.title}
-                className="h-64 w-full object-cover brightness-75"
+                className="h-40 lg:h-64 w-full object-cover brightness-75"
                 loading="lazy"
               />
               <div className="absolute inset-0 bg-black bg-opacity-30 flex flex-col justify-end p-4 text-white">

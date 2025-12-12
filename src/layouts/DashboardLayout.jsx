@@ -274,9 +274,9 @@ export default function DashboardLayout() {
           </Button>
         </Dropdown>
 
-        <Badge count={unreadNotifications} size="small" color="#37B34A" className="bg-white p-2 rounded-lg">
+        <Badge count={unreadNotifications} size="small" color="#37B34A" className="bg-white flex justify-center items-center p-2 h-[40px] rounded-lg">
           <BellOutlined 
-            className="text-2xl text-gray-700 cursor-pointer" 
+            className="text-2xl text-gray-700 cursor-pointer " 
             onClick={() => navigate("/notifications")}
           />
         </Badge>
