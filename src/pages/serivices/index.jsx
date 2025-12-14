@@ -450,7 +450,7 @@ export default function ServicesPage() {
               <div className="sticky top-32">
                 <div className="bg-[#fcfcfc] rounded-xl border border-gray-200 overflow-hidden">
                   <div className="bg-[#222] text-white px-4 py-3">
-                    <h2 className="font-semibold text-base">Service Categories</h2>
+                    <h2 className="font-semibold text-base text-center">Service Categories</h2>
                   </div>
                   
                   <div className="max-h-[calc(100vh-200px)] overflow-y-auto">

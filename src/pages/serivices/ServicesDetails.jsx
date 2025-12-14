@@ -160,7 +160,7 @@ export default function ServiceProviderDetailsPage() {
         </div>
       </div>
 
-      <div className="flex max-w-7xl relative lg:w-[calc(100vh-100px)] 2xl:w-full">
+      <div className="flex  max-w-7xl relative lg:w-[calc(100vh-100px)] 2xl:w-full">
         {/* Main Content */}
         <div className="flex-1 px-4">
           {/* Service Provider Header */}
@@ -207,22 +207,24 @@ export default function ServiceProviderDetailsPage() {
               </div>
             </div>
              {/* Action Buttons - Mobile/Tablet Only */}
-             <div className="flex gap-2 lg:hidden">
+             <div 
+             
+              className="flex gap-2 lg:hidden ">
                   <button
                     onClick={() => setChatOpen(true)}
-                    className="px-4 py-2 bg-green-600 text-white text-sm font-medium rounded hover:bg-green-700 transition-colors"
+                    className="px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-b-lg hover:bg-green-700 transition-colors flex-1"
                   >
                     Chat
                   </button>
                   <button
                     onClick={() => setReviewsOpen(true)}
-                    className="px-4 py-2 bg-white border border-gray-300 text-gray-700 text-sm font-medium rounded hover:bg-gray-50 transition-colors"
+                    className="px-4 py-2 bg-white border border-gray-300 text-gray-700 text-sm font-medium rounded-b-lg hover:bg-gray-50 transition-colors flex-1"
                   >
                     See Reviews
                   </button>
                   <button
                     onClick={() => setSafetyTipsOpen(true)}
-                    className="px-4 py-2 bg-orange-500 text-white text-sm font-medium rounded hover:bg-orange-600 transition-colors"
+                    className="px-4 py-2 bg-orange-500 text-white text-sm font-medium rounded-b-lg hover:bg-orange-600 transition-colors flex-1"
                   >
                     Safety Tips
                   </button>
@@ -249,7 +251,7 @@ export default function ServiceProviderDetailsPage() {
           <div className="pb-8">
             {Object.entries(filteredServices).map(([category, items]) => (
               <div key={category} className="mb-8">
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
+                <div className="grid grid-cols-2 sm:grid-cols-2 xs:grid-cols-1 lg:grid-cols-2 gap-2">
                   {items.map((item) => {
                     const isAdded = addedItems[item.id];
                     
@@ -293,8 +295,10 @@ export default function ServiceProviderDetailsPage() {
                           </p>
                           
                           <div className="flex items-center justify-between">
-                            <div className="flex flex-col">
-                              <span className="text-xs text-gray-500">{item.condition}</span>
+                            <div 
+                              
+                              className="flex w-full justify-between items-center ">
+                              <span className="text-xs text-gray-500 bg-[#fcfcfc] p-1 rounded">{item.condition}</span>
                               <span className="text-sm font-bold text-gray-900">
                                 {item.requestQuote ? "Request Quote" : `N${item.price.toLocaleString()}`}
                               </span>
@@ -317,7 +321,9 @@ export default function ServiceProviderDetailsPage() {
         </div>
 
         {/* Right Sidebar - Desktop Only */}
-        <div className="hidden lg:block w-96 border-l border-gray-200 p-6 space-y-6 shadow-md bg-[#fff] bg-opacity-25 rounded-lg fixed right-0 top-20">
+        <div  
+          style={{zIndex: 10}}
+          className="hidden lg:block w-96 border-l border-gray-200 p-6 space-y-6 shadow-md bg-[#fcfcfc]  rounded-b-lg fixed right-6 top-[73px] ">
           {/* Request Quote / Chat Button */}
           <button
             onClick={() => setChatOpen(true)}

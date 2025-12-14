@@ -381,7 +381,7 @@ export default function MyOrdersPage() {
 
   return (
     <div className="min-h-screen  ">
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-4xl ">
         {/* Tabs */}
         <div className=" rounded-lg shadow-sm mb-6">
           <div className="flex border-b">

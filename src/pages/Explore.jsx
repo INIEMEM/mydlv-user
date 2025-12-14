@@ -105,113 +105,12 @@ const featuredItems = [
   },
 ];
 
-const handymanServices = [
-  {
-    name: "Electrician",
-    icon: "💡",
-    img: "https://images.unsplash.com/photo-1581091012184-7d92f0a0cf02",
-  },
-  {
-    name: "Plumber",
-    icon: "🔧",
-    img: "https://images.unsplash.com/photo-1581579188871-45ea61f2a0c8",
-  },
-  {
-    name: "Cleaner",
-    icon: "🧹",
-    img: "https://images.unsplash.com/photo-1590402494682-3d5a262c9a2c",
-  },
-  {
-    name: "Painter",
-    icon: "🎨",
-    img: "https://images.unsplash.com/photo-1590099543480-9d5c9b3fda3e",
-  },
-  {
-    name: "Mechanic",
-    icon: "🔩",
-    img: "https://images.unsplash.com/photo-1581093588401-22b5b6a5b91b",
-  },
-];
-const tophandymanServices = [
-  {
-    id: 1,
-    name: "John E.",
-    role: "Electrician",
-    rating: 4.9,
-    jobs: 124,
-    priceFrom: "₦3,500",
-    distance: "1.2km",
-    img: "https://images.unsplash.com/photo-1581091012184-7d92f0a0cf02",
-  },
-  {
-    id: 2,
-    name: "Aisha K.",
-    role: "Plumber",
-    rating: 4.8,
-    jobs: 98,
-    priceFrom: "₦2,800",
-    distance: "0.8km",
-    img: "https://images.unsplash.com/photo-1581579188871-45ea61f2a0c8",
-  },
-  {
-    id: 3,
-    name: "Emmanuel O.",
-    role: "Cleaner",
-    rating: 4.7,
-    jobs: 210,
-    priceFrom: "₦1,500",
-    distance: "2.0km",
-    img: "https://images.unsplash.com/photo-1590402494682-3d5a262c9a2c",
-  },
-  {
-    id: 4,
-    name: "Grace T.",
-    role: "Painter",
-    rating: 4.6,
-    jobs: 55,
-    priceFrom: "₦4,000",
-    distance: "3.4km",
-    img: "https://images.unsplash.com/photo-1590099543480-9d5c9b3fda3e",
-  },
-  {
-    id: 5,
-    name: "Sam U.",
-    role: "Mechanic",
-    rating: 4.5,
-    jobs: 72,
-    priceFrom: "₦4,500",
-    distance: "1.9km",
-    img: "https://images.unsplash.com/photo-1581093588401-22b5b6a5b91b",
-  },
-];
 
-const moreFood = [
-  {
-    title: "Grilled Fish & Chips",
-    price: "₦3,000",
-    img: "https://images.unsplash.com/photo-1571091718767-18b5b1457add",
-  },
-  {
-    title: "Spaghetti Bolognese",
-    price: "₦2,800",
-    img: "https://images.unsplash.com/photo-1504674900247-0877df9cc836",
-  },
-  {
-    title: "Vegetable Soup & Fufu",
-    price: "₦2,000",
-    img: "https://images.unsplash.com/photo-1599021655144-1b6a34e0bde7",
-  },
-  {
-    title: "Fried Rice Special",
-    price: "₦2,700",
-    img: "https://images.unsplash.com/photo-1565958011705-44e21147d44c",
-  },
-];
 
 const responsive = {
   desktop: { breakpoint: { max: 3000, min: 1024 }, items: 1.5 },
   tablet: { breakpoint: { max: 1024, min: 464 }, items: 1.5 },
-  mobile: { breakpoint: { max: 464, min: 0 }, items: 1 },
+  mobile: { breakpoint: { max: 464, min: 0 }, items: 1.5 },
 };
 
 export default function Explore() {
@@ -254,7 +153,7 @@ useEffect(() => {
       {/* <h1 className="text-2xl font-semibold text-gray-800 text-[#444]">Explore</h1> */}
 
       {/* 🔍 Search Bar */}
-      <div className="flex  md:hidden">
+      <div className="flex  md:hidden px-4">
         <div className="bg-[#222] hidden md:flex  text-white p-2  items-center justify-center font-semibold rounded-tl-lg rounded-bl-lg">
           Categories
         </div>
@@ -264,13 +163,13 @@ useEffect(() => {
           // prefix={<SearchOutlined className="text-gray-400" />}
           className="max-w-xl border-[#ccc] rounded-none rounded-tl-lg rounded-bl-lg lg:rounded-none bg-[#EAEAEA]"
         />
-        <Button icon={<SearchOutlined/>} className="p-5  rounded-none bg-[#222] text-white rounded-tr-lg rounded-br-lg"/>
+        <Button size="large" icon={<SearchOutlined/>} className="p-5  rounded-none bg-[#222] text-white rounded-tr-lg rounded-br-lg"/>
       </div>
 
       {/* 🟩 Categories + CTA */}
       <div 
-        // style={{marginTop: '-20px'}}
-        className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-8 input-margin-top  items-end">
+       
+        className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-8 input-margin-top  items-start  px-4 md:px-6  ">
         {/* LEFT */}
           {/* Categories (responsive, stable) */}
           {/* Small screens: single grid with 3 cols */}
@@ -283,7 +182,7 @@ useEffect(() => {
                 onClick={()=> navigate(`./${cat?.link}`)} 
                 className="relative  cursor-pointer"
               >
-                <div className=" h-24 lg:h-36 w-full object-cover brightness-75" />
+                <div className=" h-20 lg:h-36 w-full object-cover brightness-75" />
                 <div className="absolute inset-0 flex flex-col justify-center items-center text-[#222] font-semibold md:text-[14px] text-[12px] text-center">
                   <img src={cat?.img} alt={cat?.name} className="w-[80px] h-[50px] object-contain" />
                   {cat.name}
@@ -302,12 +201,12 @@ useEffect(() => {
           size="large"
           placeholder="Search Categories"
           // prefix={<SearchOutlined className="text-gray-400" />}
-          className="max-w-xl border-[#ccc] rounded-none rounded-tl-lg rounded-bl-lg lg:rounded-none bg-[#EAEAEA]"
+          className=" border-[#ccc] rounded-none rounded-tl-lg rounded-bl-lg lg:rounded-none bg-[#EAEAEA]"
         />
-        <Button icon={<SearchOutlined/>} className="p-5  rounded-none bg-[#222] text-white rounded-tr-lg rounded-br-lg"/>
+        <Button icon={<SearchOutlined/>} size="large" className="py-5  rounded-none bg-[#222] text-white rounded-tr-lg rounded-br-lg"/>
       </div>
         {/* First row: exactly 5 columns */}
-        <div className="grid grid-cols-5 gap-4 ">
+        <div className="grid grid-cols-5 gap-2 mt-10 ">
           {categories.slice(0, 5).map((cat, idx) => (
             <motion.div
               key={idx}
@@ -316,9 +215,9 @@ useEffect(() => {
               className="relative rounded-2xl overflow-hidden  cursor-pointer"
               onClick={()=> navigate(`./${cat?.link}`)} 
             >
-              <div className="h-36 w-full object-cover brightness-75" />
+              <div className="h-24 w-full object-cover brightness-75" />
               <div className="absolute inset-0 flex flex-col justify-center items-center text-[#222] font-semibold text-[14px]">
-                <img src={cat.img} alt={cat.name} className="w-[80px] h-[50px] object-contain" />
+                <img src={cat.img} alt={cat.name} className="w-[80px] h-[50px] object-cover" />
                 {cat.name}
               </div>
             </motion.div>
@@ -326,7 +225,7 @@ useEffect(() => {
         </div>
 
         {/* Second row: center remaining items */}
-        <div className="mt-4 flex justify-center gap-4">
+        <div className="mt-4 flex justify-center gap-2">
           {categories.slice(5).map((cat, idx) => (
             <motion.div
               key={`second-${idx}`}
@@ -336,9 +235,9 @@ useEffect(() => {
               className="relative rounded-2xl overflow-hidden  cursor-pointer"
               onClick={()=> navigate(`./${cat?.link}`)} 
             >
-              <div className="h-36 w-full object-cover brightness-75" />
+              <div className="h-24 w-full object-cover brightness-75" />
               <div className="absolute inset-0 flex flex-col justify-center items-center text-[#222] font-semibold text-[14px]">
-                <img src={cat.img} alt={cat.name} className="w-[80px] h-[50px] object-contain" />
+                <img src={cat.img} alt={cat.name} className="w-[80px] h-[50px] object-cover" />
                 {cat.name}
               </div>
             </motion.div>
@@ -352,7 +251,8 @@ useEffect(() => {
           initial={{ opacity: 0, x: 40 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6 }}
-          className=" rounded-2xl p-2 md:p-8 flex flex-col justify-center "
+          className=" rounded-2xl p-2 md:p- flex flex-col justify-end h-full"
+          
         >
           <h2 className="text-lg md:text-xl font-light mb-4 cta-text leading-snug text-gray-800 text-[#444]  ">
             IMPROVE YOUR SHOPPING <br /> 
@@ -383,9 +283,9 @@ useEffect(() => {
    
       {/* 🌀 Carousel: Discover More */}
       <div>
-        <h2 className="text-xl font-semibold text-gray-800 mb-3 text-[#444]">
+        {/* <h2 className="text-xl font-semibold text-gray-800 mb-3 text-[#444]">
           Discover More
-        </h2>
+        </h2> */}
         <Carousel
           responsive={responsive}
           infinite
@@ -394,8 +294,14 @@ useEffect(() => {
           keyBoardControl
           customTransition="all 0.7s ease"
           transitionDuration={800}
-          containerClass="px-4" // add a little horizontal padding
-          itemClass="pr-4" // space between items
+          containerClass="px-4" 
+          itemClass="pr-1" 
+          arrows={false}
+          showDots
+          dotListClass="custom-dot-list-style"
+          swipeable={true}
+          draggable={true}
+          renderDotsOutside 
         >
           {featuredItems.map((item, index) => (
             <motion.div
@@ -406,7 +312,7 @@ useEffect(() => {
               <img
                 src={item.img}
                 alt={item.title}
-                className="h-40 lg:h-64 w-full object-cover brightness-75"
+                className="h-[150px] lg:h-[200px] w-full object-cover brightness-75"
                 loading="lazy"
               />
               <div className="absolute inset-0 bg-black bg-opacity-30 flex flex-col justify-end p-4 text-white">

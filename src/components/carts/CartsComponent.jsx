@@ -89,7 +89,7 @@ const CustomizeOrderModal = ({ isOpen, onClose, item, restaurantData, onAddToCar
     <div className="fixed inset-0 bg-black bg-opacity-50 z-[60] flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden flex flex-col">
         {/* Header */}
-        <div className="flex items-center  justify-end p-4 border-b border-gray-200">
+        <div className="flex items-center  justify-end p-4 ">
           {/* <h2 className="text-lg font-bold text-gray-900">
             {item?.name || "Big Boyz Combo"}
           </h2> */}
@@ -107,7 +107,7 @@ flex lg:flex-row">
           {/* Customization Options */}
           <div className="space-y-4 md:w-[400px] flex-2">
             {Object.entries(customizationOptions).map(([key, option]) => (
-              <div key={key} className="border border-gray-200 rounded-xl p-4">
+              <div key={key} className=" rounded-xl p-4">
                 <div className="flex items-center justify-between mb-3">
                   <div>
                     <h4 className="font-semibold text-gray-900">{option.title}</h4>
@@ -141,28 +141,35 @@ flex lg:flex-row">
                 </div>
               </div>
             ))}
+             <button
+            onClick={handleAddToCart}
+            className="lg:hidden w-full bg-green-500 text-white py-3 rounded-lg font-semibold hover:bg-green-600 transition-colors"
+          >
+            Add for ₦{((item?.price || 7000) * quantity).toLocaleString()}
+          </button>
           </div>
 
           {/* Item Preview */}
           <div className="flex-1 rounded-xl p-4 mb-4">
             <div className="gap-4">
-              <div className="w-24 h-24 bg-gray-200 rounded-lg overflow-hidden flex-shrink-0">
+              <div className="w-full   h-30 bg-gray-200 rounded-lg overflow-hidden flex-shrink-0">
                 {item?.image && (
                   <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
                 )}
               </div>
               <div className="flex-1">
                 <h3 className="font-semibold text-gray-900 mb-1">{item?.name || "Big Boyz Combo"}</h3>
+                <p className="text-lg font-light text-gray-900">₦{((item?.price || 7000) * quantity).toLocaleString()}</p>
                 <p className="text-xs text-gray-500 mb-2">
                   {item?.description || "1 Chief Burger, Potato fries (Regular), Take-away pack (1,000ml with lid) included, beverage drink"}
                 </p>
-                <p className="text-lg font-bold text-gray-900">₦{((item?.price || 7000) * quantity).toLocaleString()}</p>
+                
               </div>
             </div>
-            <div className="border-t border-gray-200 p-4">
-          <div className="flex items-center justify-between mb-4">
+            <div className=" p-4">
+          <div className="flex items-center justify-center mb-4">
             {/* <span className="text-sm text-gray-600">Quantity</span> */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center  gap-3">
               <button
                 onClick={() => setQuantity(Math.max(1, quantity - 1))}
                 className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200"
@@ -181,7 +188,7 @@ flex lg:flex-row">
 
           <button
             onClick={handleAddToCart}
-            className="w-full bg-green-500 text-white py-3 rounded-lg font-semibold hover:bg-green-600 transition-colors"
+            className="hidden lg:block w-full bg-green-500 text-white py-3 rounded-lg font-semibold hover:bg-green-600 transition-colors"
           >
             Add for ₦{((item?.price || 7000) * quantity).toLocaleString()}
           </button>
@@ -258,8 +265,10 @@ export const Cart = ({
   };
   const CartContent = () => (
     <>
-      <div className="bg-[#2B2B2B] text-white px-4 py-3 rounded-t-lg text-sm font-semibold flex items-center justify-between">
-        <span>Cart ({getCartItemCount(cartType)})</span>
+      <div className="bg-[#2B2B2B] text-white px-4 py-3 rounded-tr-lg text-sm font-semibold flex items-center justify-end">
+        <span>Cart
+           {/* ({getCartItemCount(cartType)}) */}
+        </span>
         {onClose && isMobile && (
           <button onClick={onClose} className="hover:text-gray-300">
             <X size={20} />
@@ -475,7 +484,7 @@ export const Cart = ({
   return (
     <>
       <div className={`w-80 flex-shrink-0 ${className}`}>
-        <div className="fixed top-20 w-80 max-h-[calc(100vh-5rem)] overflow-hidden">
+        <div className="fixed top-[72px] w-80 max-h-[calc(100vh-5rem)] overflow-hidden">
           <CartContent />
         </div>
       </div>

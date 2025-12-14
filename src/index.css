@@ -12,6 +12,25 @@
 {
   margin-top: 30px !important;
 }
+.custom-dot-list-style {
+  position: static !important;   /* ⬅️ KEY FIX */
+  display: flex;
+  justify-content: center;
+  margin-top: 12px;              /* space BELOW the carousel */
+  padding-bottom: 8px;
+}
+
+.custom-dot-list-style li button {
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  background: #cfcfcf;
+  border: none;
+}
+
+.custom-dot-list-style li.react-multi-carousel-dot--active button {
+  background: #1f2937; /* dark active dot */
+}
 
 @media screen and (max-width: 768px) {
   .input-margin-top

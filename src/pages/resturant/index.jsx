@@ -91,22 +91,10 @@ const vendorsData = [
 ];
 
 const responsive = {
-  desktop: {
-    breakpoint: { max: 3000, min: 1024 },
-    items: 4,
-    slidesToSlide: 1
-  },
-  tablet: {
-    breakpoint: { max: 1024, min: 464 },
-    items: 2,
-    slidesToSlide: 1
-  },
-  mobile: {
-    breakpoint: { max: 464, min: 0 },
-    items: 1,
-    slidesToSlide: 1
-  }
-};
+  desktop: { breakpoint: { max: 3000, min: 1024 }, items: 3.5 },
+  tablet: { breakpoint: { max: 1024, min: 464 }, items:2.5 },
+  mobile: { breakpoint: { max: 464, min: 0 }, items: 1.5 },
+}
 
 export default function RestaurantListing() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -334,7 +322,7 @@ export default function RestaurantListing() {
             transitionDuration={300}
             containerClass="near-you-carousel"
             arrows={false}
-            itemClass="px-2"
+            itemClass="px-0"
           >
             {filteredVendors.slice(0, 6).map((vendor) => (
               <VendorCard key={vendor.id} vendor={vendor} />

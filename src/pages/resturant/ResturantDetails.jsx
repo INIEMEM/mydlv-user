@@ -200,7 +200,7 @@ export default function RestaurantDetailsPage() {
   return (
     <div className="min-h-screen">
       {/* Breadcrumb */}
-      <div className="border-b border-gray-200 px- py-3">
+      <div className="border-b border-gray-200 px-4  py-3">
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center gap-2 text-sm">
             <button className="text-green-600 font-medium hover:text-green-700 flex items-center gap-1">
@@ -217,7 +217,7 @@ export default function RestaurantDetailsPage() {
         {/* Main Content */}
         <div className="flex-1 min-w-0 ">
           {/* Restaurant Header */}
-          <div className="border-b border-gray-200">
+          <div className="border-b border-gray-200 px-4">
             <div className="px- py-6 ">
               <div className="flex gap-4">
                 <div className="w-20 h-26 md:w-24 md:h-24 bg-gray-200 rounded-lg overflow-hidden flex-shrink-0">
@@ -329,7 +329,7 @@ export default function RestaurantDetailsPage() {
           {/* Menu Items */}
           <div className="">
             {Object.entries(filteredMenu).map(([category, items]) => (
-              <div key={category} className="mb-8 px-2 lg:px-0">
+              <div key={category} className="mb-8 px-4 lg:px-0">
                 <h2 className="text-lg font-bold text-gray-900 mb-4">{category}</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {items.map((item) => {

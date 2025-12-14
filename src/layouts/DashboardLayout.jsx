@@ -119,58 +119,14 @@ export default function DashboardLayout() {
     const item = menuItems.find((i) => i.key === key);
     if (item) navigate(item.path);
   };
-
+ 
   return (
-    <Layout className="min-h-screen font-sans">
-      {/* Desktop Sidebar */}
-      <Sider
-        collapsed={collapsed}
-        onCollapse={setCollapsed}
-        breakpoint="lg"
-        collapsedWidth="0"
-        className="hidden lg:block fixed h-screen bg-[#e8e8e8] border-none flex"
-        theme="light"
-        width={240}
-      >
-        <div className="flex justify-center items-center py-6 border-b border-gray-200">
-          <Logo />
-        </div>
-        <Menu
-          mode="inline"
-          selectedKeys={[currentPath]}
-          items={menuItems}
-          className="custom-menu border-none text-gray-700 bg-[#e8e8e8] mt-4"
-          onClick={handleMenuClick}
-          style={{ fontSize: "15px" }}
-        />
-
-        <div className="absolute left-10 bottom-10">
-            <div 
-               onClick={() => navigate("/profile")}
-              className="flex items-center gap-3 relative bg-[#333] rounded-lg h-[50px]  px-3 cursor-pointer">
-                <div className="w-[25px] h-[25px] rounded-full bg-gray-700 flex items-center justify-center mt-[-10px] text-white overflow-hidden">
-                  {profilePicture ? (
-                    <img src={profilePicture} alt="Profile" className="w-full h-full object-cover" />
-                  ) : (
-                    <UserOutlined className="text-white text-xs" />
-                  )
-                  }
-                </div>
-                <div className="relative">
-                  <p className="text-xs text-gray-600 absolute top-0 text-white ">Hello</p>
-                  <p className="font-semibold text-gray-800 text-white text-xs mt-[15px]">{displayName}</p>
-                </div>
-            </div>
-        </div>
-
-      </Sider>
-
-      {/* Main Layout */}
-      <Layout className="main-layout ml-0 lg:ml-[240px]">
-        {/* Header */}
-        <Header className="bg-[#e8e8e8] shadow-sm px-4 md:px-6 sticky top-0 z-50 h-auto lg:h-[72px]">
+    <Layout className="min-h-screen ">
+       {/* Header */}
+      <Header className="bg-[#e8e8e8]  lg:border-b-[0.5px] lg:border-solid lg:border-[#6F6F6F] px-0 md:px-6 sticky top-0 z-50 h-auto lg:h-[72px]">
           {/* Tablet Layout (md to lg) */}
           <div className="hidden md:flex lg:hidden justify-between items-center h-[72px]">
+            
             {/* Left: User Greeting */}
             <div 
                onClick={() => navigate("/profile")}
@@ -226,7 +182,7 @@ export default function DashboardLayout() {
               </div>
 
               {/* Notification */}
-              <Badge count={unreadNotifications} size="small" color="#37B34A" className="bg-white p-2 rounded-lg">
+              <Badge count={unreadNotifications} size="small" color="#37B34A" className="bg-white  p-2 rounded-lg">
                 <BellOutlined 
                   className="text-2xl text-gray-700 cursor-pointer" 
                   onClick={() => navigate("/notifications")}
@@ -242,129 +198,135 @@ export default function DashboardLayout() {
 
           {/* Mobile Layout (< md) */}
           <div className="md:hidden py-4">
-  {/* Conditional rendering based on current path */}
-  {currentPath === 'explore' || currentPath === 'shopping-list' ? (
-    // Original header for '/' (explore) and 'shopping-list'
-    <>
-      <div className="flex justify-between items-center mb-4">
-        <div 
-          onClick={() => navigate("/profile")}
-          className="flex items-center gap-3 relative bg-[#333] rounded-lg h-[50px] px-3 cursor-pointer">
-          <div className="w-[25px] h-[25px] rounded-full bg-gray-700 flex items-center justify-center mt-[-10px] text-white overflow-hidden">
-            {profilePicture ? (
-              <img src={profilePicture} alt="Profile" className="w-full h-full object-cover" />
+            {/* Conditional rendering based on current path */}
+            {currentPath === 'explore' || currentPath === 'shopping-list' ? (
+              // Original header for '/' (explore) and 'shopping-list'
+              <>
+                <div className="flex gap-2 justify-between items-center mb-4">
+                  <div 
+                    onClick={() => navigate("/profile")}
+                    className="flex  items-center gap-3 relative bg-[#333] rounded-lg h-[50px] px-3 cursor-pointer">
+                    <div className="w-[25px] h-[25px] rounded-full bg-gray-700 flex items-center justify-center mt-[-10px] text-white overflow-hidden">
+                      {profilePicture ? (
+                        <img src={profilePicture} alt="Profile" className="w-full h-full object-cover" />
+                      ) : (
+                        <UserOutlined className="text-white text-xs" />
+                      )}
+                    </div>
+                    <div className="relative">
+                      <p className="text-xs text-gray-600 absolute top-0 text-white">Hello</p>
+                      <p className="font-semibold text-gray-800 text-white text-xs mt-[15px]">{displayName}</p>
+                    </div>
+                  </div>
+
+                  <Dropdown overlay={locationMenu} trigger={["click"]} className="flex-1">
+                    <Button
+                      type="text"
+                      className="flex items-center gap-1 font-semibold bg-white h-[45px] text-[#37B34A] px-2"
+                    >
+                      <EnvironmentOutlined className="text-lg text-[#333]" />
+                      Home
+                      <DownOutlined className="text-xs text-[#333]" />
+                    </Button>
+                  </Dropdown>
+
+                  <Badge count={unreadNotifications} size="small" color="#37B34A" className="bg-white flex justify-center items-center p-2 h-[40px]  rounded-lg">
+                    <BellOutlined 
+                      className="text-2xl text-gray-700 cursor-pointer " 
+                      onClick={() => navigate("/notifications")}
+                    />
+                  </Badge>
+                </div>
+
+                <div className="flex items-center justify-between gap-3">
+                  <div className="h-[50px] flex-1 bg-white rounded-lg p-4 flex items-center gap-3">
+                    <WalletOutlined className="text-2xl text-gray-700" />
+                    <div>
+                      <p className="text-xs text-gray-600">Wallet Balance</p>
+                      <p className="font-bold text-sm text-gray-800 flex">
+                        <div className="flex items-center gap-3">
+                          <button
+                            onClick={() => setShowBalance(!showBalance)}
+                            className="hover:text-[#37B34A] transition-colors"
+                          >
+                            {showBalance ? (
+                              <EyeInvisibleOutlined className="text-xl text-gray-600" />
+                            ) : (
+                              <EyeOutlined className="text-xl text-gray-600" />
+                            )}
+                          </button>
+                        </div>
+                        {showBalance ? `₦${walletBalance.toLocaleString()}.00` : "₦******"}
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <div className="p-2 rounded-lg bg-white h-[50px] flex items-center justify-center">
+                    <Badge count={2} size="small" color="#37B34A">
+                      <ShoppingCartOutlined className="text-2xl text-gray-700 cursor-pointer" />
+                    </Badge>
+                  </div>
+                </div>
+              </>
             ) : (
-              <UserOutlined className="text-white text-xs" />
-            )}
-          </div>
-          <div className="relative">
-            <p className="text-xs text-gray-600 absolute top-0 text-white">Hello</p>
-            <p className="font-semibold text-gray-800 text-white text-xs mt-[15px]">{displayName}</p>
-          </div>
-        </div>
+              // New simplified header for all other pages
+              <div className="flex items-center justify-between gap-2">
+                {/* Wallet Balance */}
+                <div className="h-[50px] flex-1 bg-white rounded-lg p-4 flex items-center gap-3">
+                    <WalletOutlined className="text-2xl text-gray-700" />
+                    <div className="">
+                      <p className="text-xs text-gray-600 ">Wallet Balance</p>
+                      <p className="font-bold text-sm text-gray-800 flex">
+                        <div className="flex items-center gap-3">
+                          <button
+                            onClick={() => setShowBalance(!showBalance)}
+                            className="hover:text-[#37B34A] transition-colors"
+                          >
+                            {showBalance ? (
+                              <EyeInvisibleOutlined className="text-xl text-gray-600" />
+                            ) : (
+                              <EyeOutlined className="text-xl text-gray-600" />
+                            )}
+                          </button>
+                        </div>
+                        {showBalance ? `₦${walletBalance.toLocaleString()}.00` : "₦******"}
+                      </p>
+                    </div>
+                  </div>
 
-        <Dropdown overlay={locationMenu} trigger={["click"]}>
-          <Button
-            type="text"
-            className="flex items-center gap-1 font-semibold bg-white h-[45px] text-[#37B34A] px-2"
-          >
-            <EnvironmentOutlined className="text-lg text-[#333]" />
-            Home
-            <DownOutlined className="text-xs text-[#333]" />
-          </Button>
-        </Dropdown>
+                {/* Cart */}
+                <div className="bg-white p-1 rounded-lg h-[40px] flex items-center">
+                  <Badge count={2} size="small" color="#37B34A">
+                    <ShoppingCartOutlined className="text-2xl text-gray-700 cursor-pointer" />
+                  </Badge>
+                </div>
 
-        <Badge count={unreadNotifications} size="small" color="#37B34A" className="bg-white flex justify-center items-center p-2 h-[40px] rounded-lg">
-          <BellOutlined 
-            className="text-2xl text-gray-700 cursor-pointer " 
-            onClick={() => navigate("/notifications")}
-          />
-        </Badge>
-      </div>
+                {/* Customer Service */}
+                <div className="bg-white p-1 rounded-lg h-[40px] flex items-center">
+                  <Badge count={2} size="small" color="#37B34A">
+                    <QuestionCircleOutlined className="text-2xl text-gray-700 cursor-pointer" />
+                  </Badge>
+                </div>
 
-      <div className="flex items-center justify-between gap-3">
-        <div className="h-[50px] flex-1 bg-white rounded-lg p-4 flex items-center gap-3">
-          <WalletOutlined className="text-2xl text-gray-700" />
-          <div>
-            <p className="text-xs text-gray-600">Wallet Balance</p>
-            <p className="font-bold text-sm text-gray-800 flex">
-              <div className="flex items-center gap-3">
-                <button
-                  onClick={() => setShowBalance(!showBalance)}
-                  className="hover:text-[#37B34A] transition-colors"
-                >
-                  {showBalance ? (
-                    <EyeInvisibleOutlined className="text-xl text-gray-600" />
-                  ) : (
-                    <EyeOutlined className="text-xl text-gray-600" />
-                  )}
-                </button>
+                {/* Notification */}
+                <div className="bg-white flex items-center p-1 rounded-lg  h-[40px]">
+                  <Badge count={unreadNotifications} size="small" color="#37B34A">
+                    <BellOutlined 
+                      className="text-2xl text-gray-700 cursor-pointer" 
+                      onClick={() => navigate("/notifications")}
+                    />
+                  </Badge>
+                </div>
               </div>
-              {showBalance ? `₦${walletBalance.toLocaleString()}.00` : "₦******"}
-            </p>
-          </div>
-        </div>
-        
-        <div className="p-2 rounded-lg bg-white h-[50px] flex items-center justify-center">
-          <Badge count={2} size="small" color="#37B34A">
-            <ShoppingCartOutlined className="text-2xl text-gray-700 cursor-pointer" />
-          </Badge>
-        </div>
-      </div>
-    </>
-  ) : (
-    // New simplified header for all other pages
-    <div className="flex items-center justify-between gap-2">
-      {/* Wallet Balance */}
-      <div className="bg-white rounded-lg p-1 flex items-center gap-2 flex-1 h-[40px] flex items-center">
-        <WalletOutlined className="text-xl text-gray-700" />
-        <div className="flex items-center gap-2">
-          <button
-            onClick={() => setShowBalance(!showBalance)}
-            className="hover:text-[#37B34A] transition-colors"
-          >
-            {showBalance ? (
-              <EyeInvisibleOutlined className="text-base text-gray-600" />
-            ) : (
-              <EyeOutlined className="text-base text-gray-600" />
             )}
-          </button>
-          <span className="font-semibold text-[10px] text-gray-800">
-            {showBalance ? `₦${walletBalance.toLocaleString()}` : "₦***,***"}
-          </span>
-        </div>
-      </div>
-
-      {/* Cart */}
-      <div className="bg-white p-1 rounded-lg h-[40px] flex items-center">
-        <Badge count={2} size="small" color="#37B34A">
-          <ShoppingCartOutlined className="text-2xl text-gray-700 cursor-pointer" />
-        </Badge>
-      </div>
-
-      {/* Customer Service */}
-      <div className="bg-white p-1 rounded-lg h-[40px] flex items-center">
-        <Badge count={2} size="small" color="#37B34A">
-          <QuestionCircleOutlined className="text-2xl text-gray-700 cursor-pointer" />
-        </Badge>
-      </div>
-
-      {/* Notification */}
-      <div className="bg-white flex items-center p-1 rounded-lg h-[40px]">
-        <Badge count={unreadNotifications} size="small" color="#37B34A">
-          <BellOutlined 
-            className="text-2xl text-gray-700 cursor-pointer" 
-            onClick={() => navigate("/notifications")}
-          />
-        </Badge>
-      </div>
-    </div>
-  )}
-</div>
+          </div>
                         
           {/* Desktop Layout */}
           <div className="hidden lg:flex justify-between items-center h-[72px]">
-            <div className="flex items-center gap-4">
+            <div className="flex gap-10 items-center ">
+              <Logo />
+              <div className="flex items-center gap-4">
+
               <Dropdown overlay={locationMenu} trigger={["click"]}>
                 <Button
                   type="text"
@@ -372,10 +334,12 @@ export default function DashboardLayout() {
                 >
                   <EnvironmentOutlined className="text-gray-700" />
                   Home
-                  <DownOutlined className="text-xs" />
+                  <DownOutlined className="text-xs text-gray-700" />
                 </Button>
               </Dropdown>
             </div>
+            </div>
+            
             <div className="flex items-center gap-6">
               <div className="flex items-center gap-1 bg-[#fcfcfc] rounded-lg h-[50px] px-2">
                 <div>
@@ -402,7 +366,7 @@ export default function DashboardLayout() {
                   </div>
                 </div>
               </div>
-              <div className="bg-[#fcfcfc] h-[50px] p-2 flex items-center justify-center rounded-lg">
+              <div className="bg-[#fcfcfc] h-[50px] lg:hidden p-2 flex items-center justify-center rounded-lg">
                 <Badge count={unreadNotifications} size="small" offset={[-5, 5]} color="#37B34A">
                   <BellOutlined 
                     className="text-2xl text-gray-700 cursor-pointer" 
@@ -417,15 +381,59 @@ export default function DashboardLayout() {
               </div>
             </div>
           </div>
-        </Header>
+        </Header>           
+      {/* Main Layout */}
+      <Layout className="main-layout ml-0">
+       
+        {/* Desktop Sidebar */}
+      <Sider
+        collapsed={collapsed}
+        onCollapse={setCollapsed}
+        breakpoint="lg"
+        collapsedWidth="0"
+        className="hidden lg:block relative  h- bg-[#e8e8e8] border-none flex "
+        theme="light"
+        width={240}
+      >
+        
+        <Menu
+          mode="inline"
+          selectedKeys={[currentPath]}
+          items={menuItems}
+          className="custom-menu border-none relative text-gray-700 bg-[#e8e8e8] mt-4"
+          onClick={handleMenuClick}
+          style={{ fontSize: "15px", 
+           }}
+        />
+
+        <div className="w-full px-10 ">
+            <div 
+               onClick={() => navigate("/profile")}
+              className="flex items-center gap-3 relative bg-[#333] rounded-lg h-[50px]  px-3 cursor-pointer">
+                <div className="w-[25px] h-[25px] rounded-full bg-gray-700 flex items-center justify-center mt-[-10px] text-white overflow-hidden">
+                  {profilePicture ? (
+                    <img src={profilePicture} alt="Profile" className="w-full h-full object-cover" />
+                  ) : (
+                    <UserOutlined className="text-white text-xs" />
+                  )
+                  }
+                </div>
+                <div className="relative">
+                  <p className="text-xs text-gray-600 absolute top-0 text-white ">Hello</p>
+                  <p className="font-semibold text-gray-800 text-white text-xs mt-[15px]">{displayName}</p>
+                </div>
+            </div>
+        </div>
+
+      </Sider>
 
         {/* Content */}
-        <Content className="p-0 bg-[#e8e8e8] min-h-[calc(100vh-72px-200px)]">
+        <Content className="p-0 bg-[#e8e8e8]  ml-0 lg:ml-[0px]">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
-            className="p-2 md:p-6"
+            className="py-2 md:py-6"
           >
             {/* Sample Content */}
             <Outlet/>
@@ -433,7 +441,9 @@ export default function DashboardLayout() {
         </Content>
 
         {/* Footer */}
-        <Footer className="border-t border-gray-200 py-8 px-6 bg-[#e8e8e8]">
+        
+      </Layout>
+      <Footer className="border-t border-gray-200 py-8 px-6 bg-[#e8e8e8]">
           <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-5 gap-8">
             {/* Logo & About */}
             <div className="col-span-2 md:col-span-1">
@@ -573,9 +583,7 @@ export default function DashboardLayout() {
           <div className="text-center text-gray-500 text-sm mt-8 pt-6 border-t border-gray-200">
             © {new Date().getFullYear()} MyDLV. All rights reserved.
           </div>
-        </Footer>
-      </Layout>
-
+      </Footer>
       {/* Mobile Bottom Navigation */}
       <div className="lg:hidden fixed bottom-0 left-0 w-full bg-white shadow-[0_-2px_10px_rgba(0,0,0,0.1)] flex justify-around py-3 z-50">
         {[
@@ -609,7 +617,8 @@ export default function DashboardLayout() {
         /* Custom Menu Styling */
         .custom-menu {
           background: #e8e8e8 !important;
-          padding: 0 30px
+          padding: 0 30px;
+          border: none !important;
         }
 
         .custom-menu .ant-menu-item {
