@@ -391,7 +391,7 @@ export default function ShoppingList() {
     <div className="p-0 md:p-1 min-h-screen">
       <div className="max-w-6xl mx-auto">
         {/* Mobile Tabs */}
-        <div className="flex gap-2 mb-4 lg:hidden">
+        <div className="flex px-4 lg:px-0 gap-2 mb-4 lg:hidden">
           <button
             onClick={() => setActiveTab('create')}
             className={`flex-1 py-2 px-4 rounded font-medium text-sm ${activeTab === 'create' ? 'bg-[#333] text-white' : ' text-gray-700 border border-gray-300'}`}>
