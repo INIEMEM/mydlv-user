@@ -423,7 +423,7 @@ export default function ShoppingList() {
                       type="text"
                       value={productName}
                       onChange={(e) => searchProducts(e.target.value)}
-                      placeholder="name"
+                      placeholder="Item"
                       className="w-full  px-3 py-2 border border-gray-300 rounded text-sm bg-transparent mt-3 "
                     />
 
@@ -465,8 +465,8 @@ export default function ShoppingList() {
 
 
                   </div>
-
-                  <input
+                  
+                  {/* <input
                     type="number"
                     value={productQty}
                     onChange={(e) => setProductQty(e.target.value)}
@@ -480,7 +480,7 @@ export default function ShoppingList() {
                     onChange={(e) => setProductGuage(e.target.value)}
                     placeholder="Unit(litres, kg, packs)"
                     className="w-full px-3 py-2 border border-gray-300 rounded text-sm bg-transparent flex-1"
-                  />
+                  /> */}
 
                   
                 </div>
@@ -493,22 +493,24 @@ export default function ShoppingList() {
                     ) : (
                       <>
                         <button onClick={addItem} className="flex-1 px-4 py-2 bg-[#444] text-white rounded text-sm flex items-center justify-center"><Plus size={16} /> Add</button>
-                        <button onClick={() => { setProductName(''); setProductQty(''); setProductGuage(''); setSuggestions([]); }} className="flex-1 px-4 py-2 border border-gray-300 rounded text-sm">Clear</button>
+                        {/* <button onClick={() => { setProductName(''); setProductQty(''); setProductGuage(''); setSuggestions([]); }} className="flex-1 px-4 py-2 border border-gray-300 rounded text-sm">Clear</button> */}
                       </>
                     )}
                   </div>
 
                 {/* Scrollable Items List */}
-                <div className="border border-gray-200 rounded h-48 md:h-64 overflow-y-auto bg-gray-50 ">
+                <div className="border border-gray-200 rounded h-48 md:h-64 overflow-y-auto bg-[#fcfcfc] ">
                   {items.length === 0 ? (
                     <div className="flex items-center justify-center h-full text-gray-400 text-xs md:text-sm px-4 text-center ">Start adding items to your list</div>
                   ) : (
                     <div className="p-2 space-y-1">
                       {items.map((item) => (
-                        <div key={item.id} className="flex items-center justify-between px-3 py-2 bg-white border border-gray-200 rounded text-sm hover:bg-gray-50">
-                          <div className="flex-1 pr-2">
+                        <div key={item.id} 
+                          style={{borderBottom: '0.5px solid #6F6F6F'}}
+                          className="flex items-center justify-between px-3 py-2   text-sm hover:bg-gray-50">
+                          <div className="flex-1 pr-2 flex items-center gap-2">
                             <div className="font-medium break-words">{item.product}</div>
-                            <div className="text-xs text-gray-500">{item.unit} {item.guage}</div>
+                            <div className="font-medium break-words">{item.unit} {item.guage}</div>
                           </div>
 
                           <div className="flex items-center gap-2">
