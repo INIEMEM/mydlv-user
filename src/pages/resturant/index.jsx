@@ -365,7 +365,7 @@ export default function RestaurantListing() {
             transitionDuration={300}
             containerClass="hot-carousel"
             arrows={false}
-            itemClass="px-2"
+            itemClass="px-0"
           >
             {filteredVendors.filter(v => v.rating >= 4.6).map((vendor) => (
               <VendorCard key={vendor.id} vendor={vendor} />
@@ -406,7 +406,7 @@ export default function RestaurantListing() {
             transitionDuration={300}
             containerClass="all-products-carousel"
             arrows={false}
-            itemClass="px-2"
+            itemClass="px-0"
           >
             {filteredVendors.map((vendor) => (
               <VendorCard key={vendor.id} vendor={vendor} />

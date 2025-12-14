@@ -299,7 +299,7 @@ export default function ServiceProviderDetailsPage() {
                               
                               className="flex w-full justify-between items-center ">
                               <span className="text-xs text-gray-500 bg-[#fcfcfc] p-1 rounded">{item.condition}</span>
-                              <span className="text-sm font-bold text-gray-900">
+                              <span className="text-xs font-bold text-gray-900">
                                 {item.requestQuote ? "Request Quote" : `N${item.price.toLocaleString()}`}
                               </span>
                             </div>
